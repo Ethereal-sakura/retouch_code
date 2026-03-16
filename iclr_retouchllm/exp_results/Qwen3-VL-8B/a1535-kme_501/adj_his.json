@@ -1,0 +1,231 @@
+{
+  "target": "./samples/gt_a1535-kme_501.tif",
+  "diff": [
+    "Candidate 1\nThe target image exhibits a moderate increase in overall brightness, with the pixel mean rising by approximately 10-20% compared to the source. The contrast is noticeably enhanced, as indicated by the higher laplacian variance (increase of ~55%) and wider dynamic range (pixel percentile 10% decreased from 19 to 8, while 90% increased to 192). Highlights are significantly brighter, with the 90th percentile value increasing by about 30%, suggesting a boost in luminance in the brightest areas. Shadows appear deeper and more pronounced, though the shadow detail is not quantified directly, it\u2019s implied by the increased contrast. Saturation has been moderately increased, with the saturation mean rising by roughly 10-20%. Temperature appears unchanged as the b-channel mean remains nearly identical. Texture sharpness is enhanced due to the increased contrast and sharper edges.\n\nCandidate 2\nThe target image shows a slight increase in exposure, with the pixel mean elevated by approximately 5-10%. Contrast is moderately increased, as seen in the rise of laplacian variance (~55%) and the shift in pixel percentiles indicating a broader dynamic range. Highlights are subtly brightened, with the 90th percentile value increasing slightly. Shadows are deepened but not drastically so, consistent with the moderate contrast adjustment. Saturation is moderately increased, with the saturation mean rising by about 10-20%. Temperature is maintained as the b-channel mean is unchanged. Texture appears slightly more defined due to the contrast enhancement.\n\nCandidate 3\nThe target image demonstrates a significant increase in exposure, with the pixel mean rising by approximately 10-20%. Contrast is substantially increased, evidenced by the large jump in laplacian variance (~55%) and the extreme shift in pixel percentiles (10th percentile dropping sharply). Highlights are markedly brighter, with the 90th percentile value rising considerably. Shadows are also deepened, though this is less quantifiable. Saturation is moderately increased, with the saturation mean rising by about 10-20%. Temperature is maintained as the b-channel mean remains stable. Texture is significantly sharpened due to the strong contrast boost.",
+    "Candidate 1\nThe target image is slightly brighter than the source image, with an exposure increase of approximately 1-3%. The contrast is noticeably reduced, decreasing by about 5-10%, resulting in softer transitions between light and dark areas. Highlights are moderately increased by 3-5%, making some sunlit surfaces appear more washed out. Shadows are slightly darker, decreasing by 1-3%, which enhances depth but reduces overall shadow detail. Saturation is significantly lowered by 5-10%, making colors appear less vivid. Temperature remains largely unchanged. Texture appears slightly smoother due to the reduction in contrast and sharpening.\n\nCandidate 2\nThe target image shows a modest increase in exposure by 1-3%, brightening the overall scene slightly. Contrast is decreased by 3-5%, softening the image\u2019s dynamic range. Highlights are increased by 1-3%, making some reflective surfaces slightly overexposed. Shadows are slightly darkened by 1-3%, adding more depth to recessed areas. Saturation is reduced by 3-5%, leading to a more muted color palette. Temperature is maintained. Texture is slightly less defined due to the lowered contrast and saturation.\n\nCandidate 3\nThe target image has a slight exposure increase of 1-3%, enhancing brightness subtly. Contrast is decreased by 5-10%, creating a flatter appearance. Highlights are moderately increased by 3-5%, causing some loss of detail in bright areas. Shadows are slightly darkened by 1-3%, deepening shadows but reducing texture visibility. Saturation is reduced by 5-10%, dulling the vibrancy. Temperature is unchanged. Texture is slightly diminished due to the combined effect of lower contrast and saturation.",
+    "Candidate 1\nThe target image is slightly brighter than the source, with a 1-3% increase in overall exposure. The contrast has been noticeably reduced, decreasing by approximately 5-10%, which makes the transitions between light and dark areas softer. Highlights are slightly increased by 1-3%, making the brightest parts of the building more pronounced. Shadows are decreased by 1-3%, reducing their depth. Saturation is reduced by 5-10%, resulting in a less vivid color palette. Temperature remains largely unchanged, with no significant shift in color tone. Texture appears slightly smoother due to the reduction in contrast.\n\nCandidate 2\nThe target image shows a slight increase in exposure by 1-3%, making the scene marginally brighter. Contrast is significantly lowered by 5-10%, softening the edges and reducing the visual sharpness. Highlights are boosted by 1-3%, enhancing the brightness on sunlit surfaces. Shadows are subtly lightened by 1-3%, reducing their intensity. Saturation is decreased by 5-10%, leading to a more muted appearance. Temperature is maintained at a similar level. Texture appears less detailed due to the lower contrast and smoother tonal transitions.\n\nCandidate 3\nThe target image exhibits a minor increase in exposure (1-3%), contributing to a slightly brighter overall look. Contrast is reduced by 5-10%, creating a more even-toned image. Highlights are elevated by 1-3%, adding brightness to reflective surfaces. Shadows are slightly diminished by 1-3%, softening their impact. Saturation is decreased by 5-10%, resulting in a more subdued color scheme. Temperature remains consistent with the source. Texture appears less defined due to the combined effect of reduced contrast and lower saturation.",
+    "Candidate 1\nThe target image exhibits a slight increase in overall brightness, with the pixel mean rising by approximately 1.5% (from 79.98 to 81.26). The contrast is noticeably reduced, as indicated by the significant drop in laplacian variance (from 227.79 to 111.42), suggesting a decrease of about 50%. Highlights are slightly brighter, with the 90th percentile value decreasing from 207.00 to 192.00, indicating a reduction of roughly 7%. Shadows appear darker and more pronounced, with the 10th percentile value increasing from 7.00 to 8.00, representing a 1.4% increase. Saturation is decreased, with the mean saturation dropping from 75.86 to 66.62, a reduction of about 12%. Temperature appears largely unchanged, as the L-channel and B-channel means show minimal variation. Texture detail is reduced due to the lower laplacian variance.\n\nCandidate 2\nThe target image shows a marginal increase in exposure, with the pixel mean rising by 1.5% (from 79.98 to 81.26). Contrast is moderately lowered, as evidenced by the laplacian variance dropping from 227.79 to 111.42, which corresponds to a decrease of approximately 50%. Highlights are slightly less intense, with the 90th percentile value decreasing from 207.00 to 192.00, a reduction of about 7%. Shadows are slightly darker, with the 10th percentile value increasing from 7.00 to 8.00, an increase of 1.4%. Saturation is reduced, with the mean saturation falling from 75.86 to 66.62, a decrease of around 12%. Temperature remains nearly identical, with negligible changes in L- and B-channel means. Texture detail is diminished due to the substantial drop in laplacian variance.\n\nCandidate 3\nThe target image demonstrates a minor increase in exposure, with the pixel mean rising by 1.5% (from 79.98 to 81.26). Contrast is significantly reduced, as shown by the laplacian variance plummeting from 227.79 to 111.42, indicating a decrease of approximately 50%. Highlights are slightly dimmed, with the 90th percentile value decreasing from 207.00 to 192.00, a reduction of about 7%. Shadows are marginally darker, with the 10th percentile value increasing from 7.00 to 8.00, an increase of 1.4%. Saturation is notably decreased, with the mean saturation dropping from 75.86 to 66.62, a reduction of roughly 12%. Temperature remains stable, with no significant shifts in L- or B-channel means. Texture detail is substantially reduced due to the drastic decline in laplacian variance."
+  ],
+  "code": [
+    "adjusted_img_00 = filter.exposure(0.15)\nadjusted_img_00 = filter.contrast(0.55)\nadjusted_img_00 = filter.highlight(0.3)\nadjusted_img_00 = filter.shadow(0.2)\nadjusted_img_00 = filter.saturation(0.15)",
+    "",
+    "",
+    ""
+  ],
+  "stat": [
+    [
+      {
+        "pixel mean": 72.69,
+        "pixel median": 55.0,
+        "pixel std": 57.24,
+        "pixel percentail 10%": 19.0,
+        "pixel percentail 90%": 156.0,
+        "rgb mean": [
+          73.81,
+          73.87,
+          70.4
+        ],
+        "laplacian variance": 71.52,
+        "saturation mean": 37.24,
+        "saturation std": 42.76,
+        "saturation min": 0,
+        "saturation max": 255,
+        "l-channel mean": 76.39,
+        "b-channel mean": 130.0
+      },
+      {
+        "pixel mean": 81.26,
+        "pixel median": 60.0,
+        "pixel std": 71.23,
+        "pixel percentail 10%": 8.0,
+        "pixel percentail 90%": 192.0,
+        "rgb mean": [
+          82.58,
+          82.84,
+          78.36
+        ],
+        "laplacian variance": 111.42,
+        "saturation mean": 66.62,
+        "saturation std": 85.22,
+        "saturation min": 0.0,
+        "saturation max": 255.0,
+        "l-channel mean": 85.16,
+        "b-channel mean": 130.22
+      }
+    ],
+    [
+      {
+        "pixel mean": 79.98,
+        "pixel median": 59.0,
+        "pixel std": 73.34,
+        "pixel percentail 10%": 7.0,
+        "pixel percentail 90%": 207.0,
+        "rgb mean": [
+          81.64,
+          81.72,
+          76.58
+        ],
+        "laplacian variance": 227.79,
+        "saturation mean": 75.86,
+        "saturation std": 91.07,
+        "saturation min": 0,
+        "saturation max": 255,
+        "l-channel mean": 83.86,
+        "b-channel mean": 130.58
+      },
+      {
+        "pixel mean": 81.26,
+        "pixel median": 60.0,
+        "pixel std": 71.23,
+        "pixel percentail 10%": 8.0,
+        "pixel percentail 90%": 192.0,
+        "rgb mean": [
+          82.58,
+          82.84,
+          78.36
+        ],
+        "laplacian variance": 111.42,
+        "saturation mean": 66.62,
+        "saturation std": 85.22,
+        "saturation min": 0.0,
+        "saturation max": 255.0,
+        "l-channel mean": 85.16,
+        "b-channel mean": 130.22
+      }
+    ],
+    [
+      {
+        "pixel mean": 79.98,
+        "pixel median": 59.0,
+        "pixel std": 73.34,
+        "pixel percentail 10%": 7.0,
+        "pixel percentail 90%": 207.0,
+        "rgb mean": [
+          81.64,
+          81.72,
+          76.58
+        ],
+        "laplacian variance": 227.79,
+        "saturation mean": 75.86,
+        "saturation std": 91.07,
+        "saturation min": 0,
+        "saturation max": 255,
+        "l-channel mean": 83.86,
+        "b-channel mean": 130.58
+      },
+      {
+        "pixel mean": 81.26,
+        "pixel median": 60.0,
+        "pixel std": 71.23,
+        "pixel percentail 10%": 8.0,
+        "pixel percentail 90%": 192.0,
+        "rgb mean": [
+          82.58,
+          82.84,
+          78.36
+        ],
+        "laplacian variance": 111.42,
+        "saturation mean": 66.62,
+        "saturation std": 85.22,
+        "saturation min": 0.0,
+        "saturation max": 255.0,
+        "l-channel mean": 85.16,
+        "b-channel mean": 130.22
+      }
+    ],
+    [
+      {
+        "pixel mean": 79.98,
+        "pixel median": 59.0,
+        "pixel std": 73.34,
+        "pixel percentail 10%": 7.0,
+        "pixel percentail 90%": 207.0,
+        "rgb mean": [
+          81.64,
+          81.72,
+          76.58
+        ],
+        "laplacian variance": 227.79,
+        "saturation mean": 75.86,
+        "saturation std": 91.07,
+        "saturation min": 0,
+        "saturation max": 255,
+        "l-channel mean": 83.86,
+        "b-channel mean": 130.58
+      },
+      {
+        "pixel mean": 81.26,
+        "pixel median": 60.0,
+        "pixel std": 71.23,
+        "pixel percentail 10%": 8.0,
+        "pixel percentail 90%": 192.0,
+        "rgb mean": [
+          82.58,
+          82.84,
+          78.36
+        ],
+        "laplacian variance": 111.42,
+        "saturation mean": 66.62,
+        "saturation std": 85.22,
+        "saturation min": 0.0,
+        "saturation max": 255.0,
+        "l-channel mean": 85.16,
+        "b-channel mean": 130.22
+      }
+    ],
+    [
+      {
+        "pixel mean": 79.98,
+        "pixel median": 59.0,
+        "pixel std": 73.34,
+        "pixel percentail 10%": 7.0,
+        "pixel percentail 90%": 207.0,
+        "rgb mean": [
+          81.64,
+          81.72,
+          76.58
+        ],
+        "laplacian variance": 227.79,
+        "saturation mean": 75.86,
+        "saturation std": 91.07,
+        "saturation min": 0,
+        "saturation max": 255,
+        "l-channel mean": 83.86,
+        "b-channel mean": 130.58
+      },
+      {
+        "pixel mean": 81.26,
+        "pixel median": 60.0,
+        "pixel std": 71.23,
+        "pixel percentail 10%": 8.0,
+        "pixel percentail 90%": 192.0,
+        "rgb mean": [
+          82.58,
+          82.84,
+          78.36
+        ],
+        "laplacian variance": 111.42,
+        "saturation mean": 66.62,
+        "saturation std": 85.22,
+        "saturation min": 0.0,
+        "saturation max": 255.0,
+        "l-channel mean": 85.16,
+        "b-channel mean": 130.22
+      }
+    ]
+  ],
+  "r": 3,
+  "init_score": [
+    22.89,
+    0.922,
+    0.036,
+    5.71
+  ],
+  "final_score": [
+    18.48,
+    0.887,
+    0.05,
+    4.08
+  ],
+  "re_list": []
+}

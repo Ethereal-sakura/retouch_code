@@ -1,0 +1,119 @@
+{
+  "tools": [
+    {
+      "name": "exposure_tool",
+      "priority": 1,
+      "description": "Adjust global exposure and brightness. Use this first to fix under/overexposure.",
+      "parameters": {
+        "exposure": {
+          "type": "float",
+          "range": [-100, 100],
+          "description": "Overall exposure adjustment. Positive = brighter, negative = darker."
+        },
+        "brightness": {
+          "type": "float",
+          "range": [-100, 100],
+          "description": "Filmic brightness adjustment. Fine-tunes midtone brightness."
+        }
+      }
+    },
+    {
+      "name": "tone_tool",
+      "priority": 2,
+      "description": "Shape the tonal curve: contrast, highlights, shadows, whites, blacks.",
+      "parameters": {
+        "contrast": {
+          "type": "float",
+          "range": [-100, 100],
+          "description": "Global contrast. Positive = more contrast."
+        },
+        "highlights": {
+          "type": "float",
+          "range": [-120, 120],
+          "description": "Recover or boost highlight areas."
+        },
+        "shadows": {
+          "type": "float",
+          "range": [-120, 120],
+          "description": "Lift or crush shadow areas."
+        },
+        "whites": {
+          "type": "float",
+          "range": [-30, 30],
+          "description": "Set the white point."
+        },
+        "blacks": {
+          "type": "float",
+          "range": [-70, 70],
+          "description": "Set the black point."
+        }
+      }
+    },
+    {
+      "name": "white_balance_tool",
+      "priority": 3,
+      "description": "Correct color temperature (warm/cool) and tint (green/magenta).",
+      "parameters": {
+        "temperature": {
+          "type": "float",
+          "range": [-500, 500],
+          "description": "Color temperature. Positive = warmer (yellow), negative = cooler (blue)."
+        },
+        "tint": {
+          "type": "float",
+          "range": [-100, 100],
+          "description": "Color tint. Positive = magenta shift, negative = green shift."
+        }
+      }
+    },
+    {
+      "name": "saturation_tool",
+      "priority": 4,
+      "description": "Adjust global color saturation and vibrance.",
+      "parameters": {
+        "saturation": {
+          "type": "float",
+          "range": [-100, 100],
+          "description": "Global saturation. Positive = more colorful, negative = desaturated."
+        },
+        "vibrance": {
+          "type": "float",
+          "range": [-100, 100],
+          "description": "Smart saturation boost that protects already-saturated colors."
+        }
+      }
+    },
+    {
+      "name": "hsl_tool",
+      "priority": 5,
+      "description": "Fine-tune individual color ranges (reds, oranges, yellows, greens, aquas, blues, purples, magentas). Each adjustment is independent.",
+      "parameters": {
+        "adjustments": {
+          "type": "array",
+          "description": "List of per-color-band adjustments. Each element: {color, hue, saturation, luminance}.",
+          "items": {
+            "color": {
+              "type": "string",
+              "enum": ["reds", "oranges", "yellows", "greens", "aquas", "blues", "purples", "magentas"]
+            },
+            "hue": {
+              "type": "float",
+              "range": [-100, 100],
+              "description": "Hue shift for this color band."
+            },
+            "saturation": {
+              "type": "float",
+              "range": [-100, 100],
+              "description": "Saturation adjustment for this color band."
+            },
+            "luminance": {
+              "type": "float",
+              "range": [-100, 100],
+              "description": "Luminance adjustment for this color band."
+            }
+          }
+        }
+      }
+    }
+  ]
+}

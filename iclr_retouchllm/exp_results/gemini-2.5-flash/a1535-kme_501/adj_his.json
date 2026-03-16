@@ -1,0 +1,231 @@
+{
+  "target": "./samples/gt_a1535-kme_501.tif",
+  "diff": [
+    "Candidate 1\n- Exposure: the brightness of the target image is 5-10% higher than the one of the source image.\n- Contrast: the contrast of the target image is 5-10% higher than the one of the source image.\n- Highlight: the highlight of the target image is 5-10% higher than the one of the source image.\n- Shadow: the shadow of the target image is 5-10% lower than the one of the source image.\n- Saturation: the saturation of the target image is 5-10% higher than the one of the source image.\n- Temperature: N/A.\n- Texture: the texture of the target image is 5-10% higher than the one of the source image.\n- Overall: Go\n\nCandidate 2\n- Exposure: The target images exhibit an increase in exposure, appearing 5-10% brighter compared to the source image.\n- Contrast: The contrast in the target images is heightened by 5-10% relative to the source image.\n- Highlight: The highlights in the target images are enhanced, being 5-10% brighter than in the source image.\n- Shadow: The shadows in the target images are deepened, appearing 5-10% darker than in the source image.\n- Saturation: The saturation of the target images is increased by 5-10% compared to the source image.\n- Temperature: N/A.\n- Texture: The target images show a 5-10% increase in texture and sharpness compared to the source image.\n- Overall: Go\n\nCandidate 3\n- Exposure: An increase in exposure makes the target image 5-10% brighter overall than the source image.\n- Contrast: The target image's contrast is elevated by 5-10% when compared to the source image.\n- Highlight: The brightest areas (highlights) of the target image are 5-10% more luminous than in the source image.\n- Shadow: The darkest areas (shadows) of the target image are 5-10% darker than in the source image.\n- Saturation: Color intensity, or saturation, in the target image is 5-10% higher than the source image.\n- Temperature: N/A.\n- Texture: The target image presents a 5-10% increase in texture detail compared to the source image.\n- Overall: Go",
+    "Candidate 1\n- Exposure: the brightness of the target image is 5-10% higher than the one of the source image.\n- Contrast: the contrast of the target image is 5-10% higher than the one of the source image.\n- Highlight: the highlight of the target image is 5-10% higher than the one of the source image.\n- Shadow: the shadow of the target image is 5-10% lower than the one of the source image.\n- Saturation: the saturation of the target image is 5-10% higher than the one of the source image.\n- Temperature: N/A.\n- Texture: the texture of the target image is 5-10% higher than the one of the source image.\n- Overall: Go\n\nCandidate 2\n- Exposure: the exposure of the target image is 5-10% higher than the one of the source image.\n- Contrast: the contrast of the target image is 5-10% higher than the one of the source image.\n- Highlight: the highlight of the target image is 5-10% higher than the one of the source image.\n- Shadow: the shadow of the target image is 5-10% lower than the one of the source image.\n- Saturation: the saturation of the target image is 5-10% higher than the one of the source image.\n- Temperature: the temperature of the target image is 0-1% higher than the one of the source image.\n- Texture: the texture of the target image is 5-10% higher than the one of the source image.\n- Overall: Go\n\nCandidate 3\n- Exposure: the brightness of the target image is 5-10% higher than the one of the source image.\n- Contrast: the contrast of the target image is 5-10% higher than the one of the source image.\n- Highlight: the highlight of the target image is 5-10% higher than the one of the source image.\n- Shadow: the shadow of the target image is 5-10% lower than the one of the source image.\n- Saturation: the saturation of the target image is 5-10% higher than the one of the source image.\n- Temperature: N/A.\n- Texture: the texture of the target image is 5-10% higher than the one of the source image.\n- Overall: Go",
+    "Candidate 1\n- Exposure: the brightness of the target image is 5-10% higher than the one of the source image.\n- Contrast: the contrast of the target image is 5-10% higher than the one of the source image.\n- Highlight: the highlight of the target image is 5-10% higher than the one of the source image.\n- Shadow: the shadow of the target image is 5-10% lower than the one of the source image.\n- Saturation: the saturation of the target image is 5-10% higher than the one of the source image.\n- Temperature: N/A.\n- Texture: the texture of the target image is 5-10% higher than the one of the source image.\n- Overall: Go\n\nCandidate 2\n- Exposure: The target image exhibits a 5-10% increase in overall brightness compared to the source image.\n- Contrast: The contrast in the target image is 5-10% more pronounced than in the source image.\n- Highlight: The highlight details in the target image are 5-10% brighter than those in the source image.\n- Shadow: The shadows in the target image are 5-10% deeper or darker than in the source image.\n- Saturation: The target image shows a 5-10% increase in color vibrancy compared to the source image.\n- Temperature: N/A.\n- Texture: The target image appears 5-10% sharper, indicating enhanced texture compared to the source image.\n- Overall: Go\n\nCandidate 3\n- Exposure: An increase in exposure of 5-10% is observed in the target image relative to the source.\n- Contrast: The target image's contrast has been elevated by 5-10% when compared to the source image.\n- Highlight: Bright areas in the target image are 5-10% brighter than in the source image.\n- Shadow: Dark areas in the target image are 5-10% darker than in the source image.\n- Saturation: The target image displays 5-10% more saturation than the source image.\n- Temperature: N/A.\n- Texture: The target image features a 5-10% increase in apparent texture or detail compared to the source image.\n- Overall: Go",
+    "Candidate 1\n- Exposure: the brightness of the target image is 5-10% higher than the one of the source image.\n- Contrast: the contrast of the target image is 5-10% higher than the one of the source image.\n- Highlight: the highlight of the target image is 5-10% higher than the one of the source image.\n- Shadow: the shadow of the target image is 5-10% lower than the one of the source image.\n- Saturation: the saturation of the target image is 5-10% higher than the one of the source image.\n- Temperature: N/A.\n- Texture: the texture of the target image is 5-10% higher than the one of the source image.\n- Overall: Go\n\nCandidate 2\n- Exposure: the exposure of the target image is increased by 5-10% compared to the source image.\n- Contrast: the contrast of the target image is increased by 5-10% compared to the source image.\n- Highlight: the highlight values in the target image are 5-10% brighter than in the source image.\n- Shadow: the shadow areas in the target image are 5-10% darker than in the source image.\n- Saturation: the color saturation of the target image is 5-10% higher than in the source image.\n- Temperature: N/A.\n- Texture: the texture of the target image is 5-10% sharper than the one of the source image.\n- Overall: Go\n\nCandidate 3\n- Exposure: the target image appears 5-10% brighter overall than the source image.\n- Contrast: the target image exhibits 5-10% more contrast than the source image.\n- Highlight: the brightest areas of the target image are 5-10% brighter than those in the source image.\n- Shadow: the darkest areas of the target image are 5-10% darker than those in the source image.\n- Saturation: the colors in the target image are 5-10% more saturated than in the source image.\n- Temperature: N/A.\n- Texture: the sharpness and detail of the target image are 5-10% enhanced compared to the source image.\n- Overall: Go"
+  ],
+  "code": [
+    "filter.exposure(0.07)\nadjusted_img_00 = filter.contrast(0.08)",
+    "",
+    "",
+    ""
+  ],
+  "stat": [
+    [
+      {
+        "pixel mean": 72.69,
+        "pixel median": 55.0,
+        "pixel std": 57.24,
+        "pixel percentail 10%": 19.0,
+        "pixel percentail 90%": 156.0,
+        "rgb mean": [
+          73.81,
+          73.87,
+          70.4
+        ],
+        "laplacian variance": 71.52,
+        "saturation mean": 37.24,
+        "saturation std": 42.76,
+        "saturation min": 0,
+        "saturation max": 255,
+        "l-channel mean": 76.39,
+        "b-channel mean": 130.0
+      },
+      {
+        "pixel mean": 81.26,
+        "pixel median": 60.0,
+        "pixel std": 71.23,
+        "pixel percentail 10%": 8.0,
+        "pixel percentail 90%": 192.0,
+        "rgb mean": [
+          82.58,
+          82.84,
+          78.36
+        ],
+        "laplacian variance": 111.42,
+        "saturation mean": 66.62,
+        "saturation std": 85.22,
+        "saturation min": 0.0,
+        "saturation max": 255.0,
+        "l-channel mean": 85.16,
+        "b-channel mean": 130.22
+      }
+    ],
+    [
+      {
+        "pixel mean": 76.72,
+        "pixel median": 58.0,
+        "pixel std": 61.96,
+        "pixel percentail 10%": 18.0,
+        "pixel percentail 90%": 170.0,
+        "rgb mean": [
+          77.9,
+          77.99,
+          74.27
+        ],
+        "laplacian variance": 86.56,
+        "saturation mean": 41.61,
+        "saturation std": 49.22,
+        "saturation min": 0,
+        "saturation max": 255,
+        "l-channel mean": 80.49,
+        "b-channel mean": 130.08
+      },
+      {
+        "pixel mean": 81.26,
+        "pixel median": 60.0,
+        "pixel std": 71.23,
+        "pixel percentail 10%": 8.0,
+        "pixel percentail 90%": 192.0,
+        "rgb mean": [
+          82.58,
+          82.84,
+          78.36
+        ],
+        "laplacian variance": 111.42,
+        "saturation mean": 66.62,
+        "saturation std": 85.22,
+        "saturation min": 0.0,
+        "saturation max": 255.0,
+        "l-channel mean": 85.16,
+        "b-channel mean": 130.22
+      }
+    ],
+    [
+      {
+        "pixel mean": 76.72,
+        "pixel median": 58.0,
+        "pixel std": 61.96,
+        "pixel percentail 10%": 18.0,
+        "pixel percentail 90%": 170.0,
+        "rgb mean": [
+          77.9,
+          77.99,
+          74.27
+        ],
+        "laplacian variance": 86.56,
+        "saturation mean": 41.61,
+        "saturation std": 49.22,
+        "saturation min": 0,
+        "saturation max": 255,
+        "l-channel mean": 80.49,
+        "b-channel mean": 130.08
+      },
+      {
+        "pixel mean": 81.26,
+        "pixel median": 60.0,
+        "pixel std": 71.23,
+        "pixel percentail 10%": 8.0,
+        "pixel percentail 90%": 192.0,
+        "rgb mean": [
+          82.58,
+          82.84,
+          78.36
+        ],
+        "laplacian variance": 111.42,
+        "saturation mean": 66.62,
+        "saturation std": 85.22,
+        "saturation min": 0.0,
+        "saturation max": 255.0,
+        "l-channel mean": 85.16,
+        "b-channel mean": 130.22
+      }
+    ],
+    [
+      {
+        "pixel mean": 76.72,
+        "pixel median": 58.0,
+        "pixel std": 61.96,
+        "pixel percentail 10%": 18.0,
+        "pixel percentail 90%": 170.0,
+        "rgb mean": [
+          77.9,
+          77.99,
+          74.27
+        ],
+        "laplacian variance": 86.56,
+        "saturation mean": 41.61,
+        "saturation std": 49.22,
+        "saturation min": 0,
+        "saturation max": 255,
+        "l-channel mean": 80.49,
+        "b-channel mean": 130.08
+      },
+      {
+        "pixel mean": 81.26,
+        "pixel median": 60.0,
+        "pixel std": 71.23,
+        "pixel percentail 10%": 8.0,
+        "pixel percentail 90%": 192.0,
+        "rgb mean": [
+          82.58,
+          82.84,
+          78.36
+        ],
+        "laplacian variance": 111.42,
+        "saturation mean": 66.62,
+        "saturation std": 85.22,
+        "saturation min": 0.0,
+        "saturation max": 255.0,
+        "l-channel mean": 85.16,
+        "b-channel mean": 130.22
+      }
+    ],
+    [
+      {
+        "pixel mean": 76.72,
+        "pixel median": 58.0,
+        "pixel std": 61.96,
+        "pixel percentail 10%": 18.0,
+        "pixel percentail 90%": 170.0,
+        "rgb mean": [
+          77.9,
+          77.99,
+          74.27
+        ],
+        "laplacian variance": 86.56,
+        "saturation mean": 41.61,
+        "saturation std": 49.22,
+        "saturation min": 0,
+        "saturation max": 255,
+        "l-channel mean": 80.49,
+        "b-channel mean": 130.08
+      },
+      {
+        "pixel mean": 81.26,
+        "pixel median": 60.0,
+        "pixel std": 71.23,
+        "pixel percentail 10%": 8.0,
+        "pixel percentail 90%": 192.0,
+        "rgb mean": [
+          82.58,
+          82.84,
+          78.36
+        ],
+        "laplacian variance": 111.42,
+        "saturation mean": 66.62,
+        "saturation std": 85.22,
+        "saturation min": 0.0,
+        "saturation max": 255.0,
+        "l-channel mean": 85.16,
+        "b-channel mean": 130.22
+      }
+    ]
+  ],
+  "r": 3,
+  "init_score": [
+    22.89,
+    0.922,
+    0.036,
+    5.71
+  ],
+  "final_score": [
+    26.72,
+    0.949,
+    0.023,
+    3.83
+  ],
+  "re_list": []
+}

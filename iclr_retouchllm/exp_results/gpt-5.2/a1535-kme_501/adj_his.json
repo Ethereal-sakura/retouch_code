@@ -1,0 +1,357 @@
+{
+  "target": "./samples/gt_a1535-kme_501.tif",
+  "diff": [
+    "Candidate 1  \nThe target is **brighter overall** (exposure/brightness up by **(5, 10)%**), with **higher highlight range** (whites lifted by **(5, 10)%**) and **slightly deeper shadows** (shadow level down by **(1, 3)%**), resulting in a **contrast increase** of **(5, 10)%**. Colors are **more saturated** (global saturation up by **(5, 10)%**), while the **white balance stays nearly neutral** with only a **very small warm shift** (temperature/tint change within **(0, 1)%**). The image also appears **sharper/clearer** (micro-contrast/clarity up by **(3, 5)%**, sharpening up by **(3, 5)%**).\n\nCandidate 2  \nCompared to the source, the target applies a **moderate brightness lift** (exposure up by **(3, 5)%**) and a **notable contrast boost** (contrast up by **(5, 10)%**) mainly by **lifting highlights** (**(5, 10)%**) while also **slightly lowering blacks** (**(1, 3)%**) to keep depth. **Saturation is increased strongly** (**(5, 10)%**) making foliage and tones richer, with **minimal hue/white-balance change** (temperature/tint within **(0, 1)%**). **Detail definition increases** (sharpness/texture up by **(5, 10)%**), giving edges and surfaces a crisper look.\n\nCandidate 3  \nThe target looks **more vivid and punchy**: **overall luminance is raised** (**(5, 10)%**) and **dynamic range is expanded** with **brighter highlights** (**(5, 10)%**) and **slightly darker shadow regions** (**(1, 3)%**), producing a **contrast gain** of **(5, 10)%**. **Color intensity is boosted** substantially (saturation up by **(5, 10)%**), while **color balance remains essentially the same** (WB shift within **(0, 1)%**, no meaningful hue rotation beyond **(0, 1)%**). **Perceived sharpness increases** due to added clarity/edge enhancement (**(3, 5)%**).",
+    "Candidate 1  \n- **Exposure / Brightness:** increased by **(5, 10)%** (higher overall luminance; pixel mean and L-channel mean are up).  \n- **Contrast (global dynamic range):** increased by **(5, 10)%** (std and 90th percentile rise, giving stronger light\u2013dark separation).  \n- **Highlights / Whites:** lifted by **(5, 10)%** (brighter bright regions; upper percentile noticeably higher).  \n- **Shadows / Blacks:** deepened slightly by **(1, 3)%** (10th percentile drops, indicating darker shadow floor).  \n- **Saturation (color intensity):** increased by **(5, 10)%** (saturation mean rises strongly; colors look richer).  \n- **White balance / Color temperature:** warmed slightly by **(0, 1)%** (RGB means rise similarly with a tiny warm tilt).  \n- **Sharpness / Clarity:** increased by **(5, 10)%** (laplacian variance increases, indicating crisper edges/texture).\n\nCandidate 2  \n- **Exposure / Brightness:** increased by **(3, 5)%** (moderate brightening across the image).  \n- **Contrast:** increased by **(3, 5)%** (more punch, but not extreme).  \n- **Highlights / Whites:** increased by **(3, 5)%** (brights are more pronounced without heavy blowout).  \n- **Shadows / Blacks:** decreased (darker) by **(3, 5)%** (lower 10th percentile suggests stronger shadow drop).  \n- **Saturation:** increased by **(5, 10)%** (major boost in color vividness vs source).  \n- **White balance / Tint:** shifted slightly warmer/less cool by **(0, 1)%** (minimal chroma balance change overall).  \n- **Sharpness / Clarity:** increased by **(3, 5)%** (noticeably sharper but less than the strongest option).\n\nCandidate 3  \n- **Exposure / Brightness:** increased by **(5, 10)%** (clear overall lift, especially in midtones).  \n- **Contrast:** increased by **(5, 10)%** with a mild \u201cS-curve\u201d feel (brighter highs and darker lows simultaneously).  \n- **Highlights / Whites:** increased by **(5, 10)%** (brighter light areas; stronger specular/bright fa\u00e7ade emphasis).  \n- **Shadows / Blacks:** decreased (darker) by **(5, 10)%** (shadow regions pushed down more aggressively per lower 10th percentile).  \n- **Saturation:** increased by **(3, 5)%** (still stronger than source, but slightly less extreme than the max-sat interpretation).  \n- **White balance:** essentially unchanged, within **(0, 1)%** (no meaningful color cast shift; b-channel stays ~same).  \n- **Sharpness / Clarity:** increased by **(5, 10)%** (edge definition and micro-contrast strengthened; higher laplacian variance).",
+    "Candidate 1  \n- **Exposure / Brightness:** Increased overall brightness by **(5, 10)%** (higher pixel mean and L-channel mean).  \n- **Contrast / Dynamic range:** Increased contrast by **(5, 10)%**, with both darker shadows (lower 10th percentile) and brighter highlights (higher 90th percentile).  \n- **Saturation / Color intensity:** Increased saturation noticeably by **(5, 10)%** (large rise in saturation mean and spread).  \n- **White balance / Color temperature:** Slightly warmer shift by **(0, 1)%** (RGB channels rise similarly with a tiny bias; b-channel nearly unchanged).  \n- **Sharpness / Clarity:** Increased sharpness/clarity by **(1, 3)%** (higher Laplacian variance indicating more edge contrast).  \n\nCandidate 2  \n- **Exposure / Brightness:** Lifted exposure by **(3, 5)%**, making midtones brighter (median and L mean up).  \n- **Contrast / Dynamic range:** Expanded tonal range by **(5, 10)%** (shadows deeper and highlights stronger based on percentile spread and higher std).  \n- **Saturation / Color intensity:** Boosted saturation by **(5, 10)%**, making colors more vivid overall.  \n- **White balance / Tint:** Very small shift toward a slightly greener/yellower cast by **(0, 1)%** (a/b channels essentially stable; change is minimal).  \n- **Sharpness / Detail:** Added micro-contrast/sharpening by **(3, 5)%** (clear increase in Laplacian variance).  \n\nCandidate 3  \n- **Exposure / Brightness:** Increased brightness by **(5, 10)%** (overall luminance and RGB means are higher).  \n- **Contrast / Blacks & highlights:** Increased contrast by **(5, 10)%**, with **blacks lowered** and **highlights raised** (10% percentile drops while 90% rises).  \n- **Saturation / Vibrance:** Increased saturation/vibrance strongly by **(5, 10)%** (saturation mean jumps substantially).  \n- **White balance / Temperature:** Nearly unchanged temperature with only a tiny warm shift by **(0, 1)%** (b-channel almost identical; RGB lift is uniform).  \n- **Sharpness / Edge definition:** Moderate sharpening by **(1, 3)%** (edges appear more defined per higher Laplacian variance).",
+    "Candidate 1  \n- **Exposure / brightness:** Increased by **(5, 10)%** (higher overall luminance; mean and L-channel are up).  \n- **Contrast (global):** Increased by **(5, 10)%** (wider tonal spread; std and 90th percentile are higher).  \n- **Highlights / whites:** Lifted by **(5, 10)%** (brighter bright regions; 90th percentile rises notably).  \n- **Shadows / blacks:** Lowered by **(5, 10)%** (darker dark regions; 10th percentile drops).  \n- **Saturation / vibrance:** Increased by **(5, 10)%** (saturation mean rises strongly).  \n- **White balance (temperature):** Slightly warmer by **(0, 1)%** (RGB means rise similarly; minimal channel skew).  \n- **Tint (green\u2013magenta):** Essentially unchanged by **(0, 1)%** (no meaningful a/b-channel shift indicated).  \n- **Sharpness / clarity:** Increased by **(1, 3)%** (laplacian variance is higher, suggesting added detail/edge contrast).  \n\nCandidate 2  \n- **Exposure / brightness:** Increased by **(3, 5)%** (moderate lift in midtones).  \n- **Contrast (global):** Increased by **(3, 5)%** (moderate expansion of dynamic range).  \n- **Highlights / whites:** Increased by **(5, 10)%** (stronger highlight boost than midtones).  \n- **Shadows / blacks:** Decreased by **(5, 10)%** (deeper blacks; darker low-end).  \n- **Saturation / vibrance:** Increased by **(5, 10)%** (noticeably richer color overall).  \n- **White balance (temperature):** Slight warm shift by **(0, 1)%**.  \n- **Tint (green\u2013magenta):** Changed by **(0, 1)%** at most (nearly neutral).  \n- **Sharpness / clarity:** Increased by **(3, 5)%** (clearer edges/texture consistent with higher laplacian variance).  \n\nCandidate 3  \n- **Exposure / brightness:** Increased by **(5, 10)%** (overall image is brighter).  \n- **Contrast (global):** Increased by **(1, 3)%** (contrast change is present but kept relatively restrained overall).  \n- **Highlights / whites:** Increased by **(5, 10)%** (brighter bright fa\u00e7ade areas).  \n- **Shadows / blacks:** Decreased by **(3, 5)%** (shadows slightly deeper, but less aggressive than highlights).  \n- **Saturation / vibrance:** Increased by **(5, 10)%** (strong saturation lift relative to source).  \n- **White balance (temperature):** Nearly unchanged to slightly warmer by **(0, 1)%**.  \n- **Tint (green\u2013magenta):** No meaningful shift, **(0, 1)%**.  \n- **Sharpness / clarity:** Increased by **(1, 3)%** (mild added crispness/edge contrast).",
+    "Candidate 1  \nThe target images are slightly brighter overall, with exposure/brightness increased in the **(5, 10)%** range. Contrast is also mildly higher in the **(3, 5)%** range (brighter highlights and slightly deeper shadows). Saturation is noticeably boosted in the **(5, 10)%** range, making colors (especially foliage) look richer. White balance shifts a touch cooler/less warm in the **(0, 1)%** range, with only a very small hue change. Sharpness/clarity is marginally increased in the **(0, 1)%** range.\n\nCandidate 2  \nCompared to the source, the targets apply a modest global lift to midtones and highlights (brightness up **(5, 10)%**). Dynamic range/contrast is expanded slightly in the **(3, 5)%** range, with highlights pushed brighter while keeping shadows a bit stronger. Color intensity is increased substantially (saturation up **(5, 10)%**), giving the scene a more vivid look. The overall color temperature is adjusted very subtly toward cooler/neutral tones in the **(0, 1)%** range, and tint/hue changes remain minimal (**(0, 1)%**). Detail enhancement is very small, with sharpness up **(0, 1)%**.\n\nCandidate 3  \nThe target version looks like it has a gentle exposure gain (overall luminance up **(5, 10)%**) and a slight contrast increase (**(3, 5)%**) that makes bright building facets pop more. Saturation is clearly higher (**(5, 10)%**), increasing chroma separation and making greens more pronounced. There is a barely perceptible shift in white balance toward cooler tones (**(0, 1)%**) with negligible hue rotation (**(0, 1)%**). Texture/edge clarity is only slightly strengthened (**(0, 1)%**), indicating minimal sharpening.",
+    "Candidate 1  \n- **Exposure / Brightness:** Increased by **(5, 10)%** (higher overall luminance; mean/median rise).  \n- **Contrast (global):** Increased by **(5, 10)%** (std and 90th percentile higher; shadows/highlights more separated).  \n- **Highlights / Whites:** Increased by **(5, 10)%** (bright regions pushed brighter; 90th percentile up).  \n- **Shadows / Blacks:** Decreased by **(5, 10)%** (darker low-end; 10th percentile lower).  \n- **Saturation (overall):** Increased by **(5, 10)%** (notable rise in saturation mean).  \n- **Color temperature (warm/cool):** Shifted slightly warmer by **(0, 1)%** (R and G increase a bit more than B).  \n- **Tint (green\u2013magenta):** Changed negligibly by **(0, 1)%** (b-channel essentially unchanged).  \n- **Sharpness / Clarity:** Increased by **(1, 3)%** (slightly higher Laplacian variance; edges a touch crisper).  \n\nCandidate 2  \n- **Exposure / Brightness:** Increased by **(3, 5)%** (moderate lift in overall brightness).  \n- **Contrast (global):** Increased by **(3, 5)%** (midtones and edges appear a bit more punchy).  \n- **Highlights / Whites:** Increased by **(3, 5)%** (bright fa\u00e7ade planes more luminous).  \n- **Shadows / Blacks:** Decreased by **(5, 10)%** (shadowed foliage and recesses deepen more noticeably).  \n- **Saturation (overall):** Increased by **(5, 10)%** (colors, especially greens, look more vivid).  \n- **Color temperature (warm/cool):** Warmer by **(1, 3)%** (small but perceptible warmth).  \n- **Tint (green\u2013magenta):** **(0, 1)%** change (effectively neutral).  \n- **Sharpness / Clarity:** Increased by **(0, 1)%** (very subtle detail enhancement).  \n\nCandidate 3  \n- **Exposure / Brightness:** Increased by **(5, 10)%** (clear overall brightening; L-channel mean higher).  \n- **Contrast (global):** Increased by **(1, 3)%** (some added contrast, but less than the brightness lift suggests).  \n- **Highlights / Whites:** Increased by **(5, 10)%** (sunlit concrete facets pop more).  \n- **Shadows / Blacks:** Decreased by **(3, 5)%** (shadows slightly deeper, but not overly crushed).  \n- **Saturation (overall):** Increased by **(5, 10)%** (largest stylistic change; saturation distribution expands).  \n- **Color temperature (warm/cool):** Warmed by **(0, 1)%** (very minor warming; B lags R/G).  \n- **Tint (green\u2013magenta):** Adjusted by **(0, 1)%** (no meaningful tint shift).  \n- **Sharpness / Clarity:** Increased by **(1, 3)%** (marginally clearer texture/edges).",
+    "Candidate 1  \n- **Exposure / brightness:** Target is brighter overall by **(5, 10)%** (higher pixel mean/median and L-channel mean).  \n- **Contrast / dynamic range:** Target has slightly stronger contrast by **(3, 5)%**, with deeper shadows and a bit more separation between dark foliage and bright facade (std and 90th percentile increased).  \n- **Highlights / whites:** Highlights are lifted by **(5, 10)%**, making bright wall faces and sunlit edges appear more luminous (90th percentile up).  \n- **Shadows / blacks:** Shadows are slightly darker/clipped by **(1, 3)%** (10th percentile lower), so dark leaves read a bit heavier.  \n- **Color temperature (warm/cool):** Target is marginally warmer by **(0, 1)%** (RGB means rise similarly; minimal WB shift).  \n- **Saturation / vibrance:** Target is noticeably more saturated by **(5, 10)%** (saturation mean much higher), especially in greens and midtones.  \n- **Sharpness / clarity:** Target is a touch sharper by **(1, 3)%** (laplacian variance slightly higher), giving edges a slightly crisper look.\n\nCandidate 2  \n- **Exposure / brightness:** Target increases midtone brightness by **(5, 10)%**, making the overall scene look more \u201copen\u201d and less dim.  \n- **Contrast / dynamic range:** Target expands tonal spread by **(5, 10)%** (std higher), so the light/shadow geometry on the building pops more.  \n- **Highlights / whites:** Target boosts whites by **(3, 5)%**, with brighter sunlit concrete planes while preserving structure.  \n- **Shadows / blacks:** Target pushes blacks down by **(3, 5)%**, making the tree canopy silhouettes slightly denser.  \n- **Color temperature (warm/cool):** Very small warm shift by **(0, 1)%**, almost neutral.  \n- **Saturation / vibrance:** Target applies a strong vibrance/saturation increase by **(5, 10)%**, enriching greens and slightly intensifying overall color.  \n- **Sharpness / clarity:** Mild clarity increase by **(0, 1)%**, only subtly improving micro-contrast on edges.\n\nCandidate 3  \n- **Exposure / brightness:** Target raises brightness modestly by **(3, 5)%** (mean/median up), primarily in mid-to-high tones.  \n- **Contrast / dynamic range:** Target adds moderate contrast by **(3, 5)%**, increasing separation in facade facets and shadow shapes.  \n- **Highlights / whites:** Target lifts highlights by **(5, 10)%**, making the brightest concrete areas closer to white.  \n- **Shadows / blacks:** Target slightly lowers shadow floor by **(1, 3)%**, deepening dark foliage without major crushing.  \n- **Color temperature (warm/cool):** Negligible WB change by **(0, 1)%**, staying essentially neutral with a faint warm lean.  \n- **Saturation / vibrance:** Target increases saturation strongly by **(5, 10)%**, most visible in foliage and subtle color in concrete.  \n- **Sharpness / clarity:** Target increases perceived sharpness by **(1, 3)%**, giving a slightly more defined, crisp texture."
+  ],
+  "code": [
+    "",
+    "filter.exposure(0.04)\nfilter.contrast(0.04)\nfilter.highlight(0.04)\nfilter.shadow(-0.04)\nfilter.saturation(0.08)\nfilter.temperature(0.01)\nadjusted_img_11 = filter.texture(0.04)",
+    "",
+    "filter.exposure(0.04)\nfilter.contrast(0.04)\nfilter.highlight(0.08)\nfilter.shadow(-0.08)\nfilter.saturation(0.08)\nfilter.temperature(0.01)\nadjusted_img_31 = filter.texture(0.04)",
+    "",
+    "",
+    ""
+  ],
+  "stat": [
+    [
+      {
+        "pixel mean": 72.69,
+        "pixel median": 55.0,
+        "pixel std": 57.24,
+        "pixel percentail 10%": 19.0,
+        "pixel percentail 90%": 156.0,
+        "rgb mean": [
+          73.81,
+          73.87,
+          70.4
+        ],
+        "laplacian variance": 71.52,
+        "saturation mean": 37.24,
+        "saturation std": 42.76,
+        "saturation min": 0,
+        "saturation max": 255,
+        "l-channel mean": 76.39,
+        "b-channel mean": 130.0
+      },
+      {
+        "pixel mean": 81.26,
+        "pixel median": 60.0,
+        "pixel std": 71.23,
+        "pixel percentail 10%": 8.0,
+        "pixel percentail 90%": 192.0,
+        "rgb mean": [
+          82.58,
+          82.84,
+          78.36
+        ],
+        "laplacian variance": 111.42,
+        "saturation mean": 66.62,
+        "saturation std": 85.22,
+        "saturation min": 0.0,
+        "saturation max": 255.0,
+        "l-channel mean": 85.16,
+        "b-channel mean": 130.22
+      }
+    ],
+    [
+      {
+        "pixel mean": 72.69,
+        "pixel median": 55.0,
+        "pixel std": 57.24,
+        "pixel percentail 10%": 19.0,
+        "pixel percentail 90%": 156.0,
+        "rgb mean": [
+          73.81,
+          73.87,
+          70.4
+        ],
+        "laplacian variance": 71.52,
+        "saturation mean": 37.24,
+        "saturation std": 42.76,
+        "saturation min": 0,
+        "saturation max": 255,
+        "l-channel mean": 76.39,
+        "b-channel mean": 130.0
+      },
+      {
+        "pixel mean": 81.26,
+        "pixel median": 60.0,
+        "pixel std": 71.23,
+        "pixel percentail 10%": 8.0,
+        "pixel percentail 90%": 192.0,
+        "rgb mean": [
+          82.58,
+          82.84,
+          78.36
+        ],
+        "laplacian variance": 111.42,
+        "saturation mean": 66.62,
+        "saturation std": 85.22,
+        "saturation min": 0.0,
+        "saturation max": 255.0,
+        "l-channel mean": 85.16,
+        "b-channel mean": 130.22
+      }
+    ],
+    [
+      {
+        "pixel mean": 74.17,
+        "pixel median": 55.0,
+        "pixel std": 60.3,
+        "pixel percentail 10%": 17.0,
+        "pixel percentail 90%": 164.0,
+        "rgb mean": [
+          75.48,
+          75.37,
+          71.66
+        ],
+        "laplacian variance": 85.75,
+        "saturation mean": 41.34,
+        "saturation std": 47.55,
+        "saturation min": 0,
+        "saturation max": 255,
+        "l-channel mean": 77.77,
+        "b-channel mean": 130.08
+      },
+      {
+        "pixel mean": 81.26,
+        "pixel median": 60.0,
+        "pixel std": 71.23,
+        "pixel percentail 10%": 8.0,
+        "pixel percentail 90%": 192.0,
+        "rgb mean": [
+          82.58,
+          82.84,
+          78.36
+        ],
+        "laplacian variance": 111.42,
+        "saturation mean": 66.62,
+        "saturation std": 85.22,
+        "saturation min": 0.0,
+        "saturation max": 255.0,
+        "l-channel mean": 85.16,
+        "b-channel mean": 130.22
+      }
+    ],
+    [
+      {
+        "pixel mean": 74.17,
+        "pixel median": 55.0,
+        "pixel std": 60.3,
+        "pixel percentail 10%": 17.0,
+        "pixel percentail 90%": 164.0,
+        "rgb mean": [
+          75.48,
+          75.37,
+          71.66
+        ],
+        "laplacian variance": 85.75,
+        "saturation mean": 41.34,
+        "saturation std": 47.55,
+        "saturation min": 0,
+        "saturation max": 255,
+        "l-channel mean": 77.77,
+        "b-channel mean": 130.08
+      },
+      {
+        "pixel mean": 81.26,
+        "pixel median": 60.0,
+        "pixel std": 71.23,
+        "pixel percentail 10%": 8.0,
+        "pixel percentail 90%": 192.0,
+        "rgb mean": [
+          82.58,
+          82.84,
+          78.36
+        ],
+        "laplacian variance": 111.42,
+        "saturation mean": 66.62,
+        "saturation std": 85.22,
+        "saturation min": 0.0,
+        "saturation max": 255.0,
+        "l-channel mean": 85.16,
+        "b-channel mean": 130.22
+      }
+    ],
+    [
+      {
+        "pixel mean": 75.25,
+        "pixel median": 55.0,
+        "pixel std": 64.09,
+        "pixel percentail 10%": 14.0,
+        "pixel percentail 90%": 173.0,
+        "rgb mean": [
+          76.76,
+          76.44,
+          72.54
+        ],
+        "laplacian variance": 105.63,
+        "saturation mean": 47.1,
+        "saturation std": 54.48,
+        "saturation min": 0,
+        "saturation max": 255,
+        "l-channel mean": 78.67,
+        "b-channel mean": 130.11
+      },
+      {
+        "pixel mean": 81.26,
+        "pixel median": 60.0,
+        "pixel std": 71.23,
+        "pixel percentail 10%": 8.0,
+        "pixel percentail 90%": 192.0,
+        "rgb mean": [
+          82.58,
+          82.84,
+          78.36
+        ],
+        "laplacian variance": 111.42,
+        "saturation mean": 66.62,
+        "saturation std": 85.22,
+        "saturation min": 0.0,
+        "saturation max": 255.0,
+        "l-channel mean": 85.16,
+        "b-channel mean": 130.22
+      }
+    ],
+    [
+      {
+        "pixel mean": 75.25,
+        "pixel median": 55.0,
+        "pixel std": 64.09,
+        "pixel percentail 10%": 14.0,
+        "pixel percentail 90%": 173.0,
+        "rgb mean": [
+          76.76,
+          76.44,
+          72.54
+        ],
+        "laplacian variance": 105.63,
+        "saturation mean": 47.1,
+        "saturation std": 54.48,
+        "saturation min": 0,
+        "saturation max": 255,
+        "l-channel mean": 78.67,
+        "b-channel mean": 130.11
+      },
+      {
+        "pixel mean": 81.26,
+        "pixel median": 60.0,
+        "pixel std": 71.23,
+        "pixel percentail 10%": 8.0,
+        "pixel percentail 90%": 192.0,
+        "rgb mean": [
+          82.58,
+          82.84,
+          78.36
+        ],
+        "laplacian variance": 111.42,
+        "saturation mean": 66.62,
+        "saturation std": 85.22,
+        "saturation min": 0.0,
+        "saturation max": 255.0,
+        "l-channel mean": 85.16,
+        "b-channel mean": 130.22
+      }
+    ],
+    [
+      {
+        "pixel mean": 75.25,
+        "pixel median": 55.0,
+        "pixel std": 64.09,
+        "pixel percentail 10%": 14.0,
+        "pixel percentail 90%": 173.0,
+        "rgb mean": [
+          76.76,
+          76.44,
+          72.54
+        ],
+        "laplacian variance": 105.63,
+        "saturation mean": 47.1,
+        "saturation std": 54.48,
+        "saturation min": 0,
+        "saturation max": 255,
+        "l-channel mean": 78.67,
+        "b-channel mean": 130.11
+      },
+      {
+        "pixel mean": 81.26,
+        "pixel median": 60.0,
+        "pixel std": 71.23,
+        "pixel percentail 10%": 8.0,
+        "pixel percentail 90%": 192.0,
+        "rgb mean": [
+          82.58,
+          82.84,
+          78.36
+        ],
+        "laplacian variance": 111.42,
+        "saturation mean": 66.62,
+        "saturation std": 85.22,
+        "saturation min": 0.0,
+        "saturation max": 255.0,
+        "l-channel mean": 85.16,
+        "b-channel mean": 130.22
+      }
+    ],
+    [
+      {
+        "pixel mean": 75.25,
+        "pixel median": 55.0,
+        "pixel std": 64.09,
+        "pixel percentail 10%": 14.0,
+        "pixel percentail 90%": 173.0,
+        "rgb mean": [
+          76.76,
+          76.44,
+          72.54
+        ],
+        "laplacian variance": 105.63,
+        "saturation mean": 47.1,
+        "saturation std": 54.48,
+        "saturation min": 0,
+        "saturation max": 255,
+        "l-channel mean": 78.67,
+        "b-channel mean": 130.11
+      },
+      {
+        "pixel mean": 81.26,
+        "pixel median": 60.0,
+        "pixel std": 71.23,
+        "pixel percentail 10%": 8.0,
+        "pixel percentail 90%": 192.0,
+        "rgb mean": [
+          82.58,
+          82.84,
+          78.36
+        ],
+        "laplacian variance": 111.42,
+        "saturation mean": 66.62,
+        "saturation std": 85.22,
+        "saturation min": 0.0,
+        "saturation max": 255.0,
+        "l-channel mean": 85.16,
+        "b-channel mean": 130.22
+      }
+    ]
+  ],
+  "r": 6,
+  "init_score": [
+    22.89,
+    0.922,
+    0.036,
+    5.71
+  ],
+  "final_score": [
+    27.57,
+    0.965,
+    0.02,
+    3.51
+  ],
+  "re_list": []
+}

@@ -1,0 +1,4 @@
+numpy>=1.24
+Pillow>=10.0
+scipy>=1.10
+imageio>=2.30

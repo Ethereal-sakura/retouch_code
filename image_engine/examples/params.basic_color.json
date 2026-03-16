@@ -1,0 +1,36 @@
+{
+  "inputColorSpace": "srgb",
+  "toneMapper": "agx",
+
+  "exposure": 0.35,
+  "brightness": 0.15,
+  "contrast": 18,
+  "highlights": -32,
+  "shadows": 22,
+  "whites": 8,
+  "blacks": -6,
+
+  "temperature": 12,
+  "tint": 4,
+  "saturation": 8,
+  "vibrance": 16,
+
+  "hsl": {
+    "reds": { "hue": 0, "saturation": 4, "luminance": 0 },
+    "oranges": { "hue": -2, "saturation": 10, "luminance": 4 },
+    "yellows": { "hue": -8, "saturation": -8, "luminance": 2 },
+    "greens": { "hue": -8, "saturation": 6, "luminance": -4 },
+    "aquas": { "hue": 0, "saturation": 0, "luminance": 0 },
+    "blues": { "hue": 6, "saturation": 10, "luminance": -6 },
+    "purples": { "hue": 0, "saturation": 0, "luminance": 0 },
+    "magentas": { "hue": 0, "saturation": 0, "luminance": 0 }
+  },
+
+  "colorGrading": {
+    "shadows": { "hue": 220, "saturation": 16, "luminance": -4 },
+    "midtones": { "hue": 32, "saturation": 12, "luminance": 2 },
+    "highlights": { "hue": 48, "saturation": 14, "luminance": 3 },
+    "blending": 55,
+    "balance": 8
+  }
+}
