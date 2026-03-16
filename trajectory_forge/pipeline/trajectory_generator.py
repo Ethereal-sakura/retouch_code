@@ -155,8 +155,16 @@ def generate_trajectory(
             logger.error(f"[{trajectory_id}] Turn {turn}: API call failed: {e}")
             break
 
-        # Update conversation history
-        conv_history.append(user_msg)
+        # Update conversation history.
+        # Strip image blocks from the historical user message: the model only needs
+        # current images for the *current* turn; past images would accumulate and
+        # quickly hit API limits (e.g. "at most 10 images per request").
+        # The text-based step_history already summarises what was done each round.
+        user_msg_text_only = {
+            "role": "user",
+            "content": [b for b in user_content if b.get("type") == "text"],
+        }
+        conv_history.append(user_msg_text_only)
         conv_history.append({"role": "assistant", "content": response})
 
         # Parse response
