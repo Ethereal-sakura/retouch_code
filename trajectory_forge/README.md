@@ -63,6 +63,230 @@ trajectory_forge/
 
 ---
 
+## 完整工作流程
+
+### 总览
+
+```
+数据集 (pairs.json)
+    ↓
+run_generate.py          ← 批量入口
+    ↓
+trajectory_generator.py  ← 单图对主循环
+    ├── stat_utils.py        计算 delta 统计
+    ├── prompts.py           构造 MLLM 输入
+    ├── mllm_agent.py        调用 GPT-4o
+    ├── tool_registry.py     校验工具调用
+    └── image_engine_adapter.py  渲染图像
+    ↓
+trajectories_raw.json
+    ↓
+run_filter.py            ← 过滤入口
+    ↓
+quality_filter.py        ← 多维度过滤
+    ↓
+training_data.json       ← 最终训练数据
+```
+
+---
+
+### 第一阶段：生成轨迹（`run_generate.py`）
+
+批量入口脚本，负责：
+
+1. 读取 `config/pipeline.yaml` → 所有超参数
+2. 读取 `data/mit5k_pairs.json` → 图像路径列表
+3. 初始化 `MLLMAgent` → 连接 GPT-4o API
+4. 逐个图像对调用 `generate_trajectory()`
+5. 每完成一条轨迹立即追加写入 `trajectories_raw.json`（crash-safe，不会因中途失败丢失已生成数据）
+
+---
+
+### 第二阶段：单图对轨迹生成主循环（`trajectory_generator.py`）
+
+对每一对 `(src, tgt)` 图像运行最多 `max_turns=8` 轮对话：
+
+```
+初始化
+  src_img = load_image(source_path)        # float32 [0,1]
+  tgt_img = load_image(target_path)
+  accumulated_params = BasicColorParams()  # 全零，即 identity
+  initial_quality = compute_metrics(src, tgt)
+
+┌─────────────────────── 主循环（每轮）────────────────────────────┐
+│                                                                    │
+│  [1] 计算 delta 统计 (stat_utils.py)                              │
+│      get_delta_stat(current_img, tgt_img)                         │
+│      → brightness_delta, contrast_delta,                          │
+│        temperature_delta, saturation_delta, dominant_issue        │
+│                                                                    │
+│  [2] 检查是否已收敛                                                │
+│      if DeltaE < 4.0: break（提前结束）                           │
+│                                                                    │
+│  [3] 构造 MLLM 输入 (prompts.py)                                  │
+│      • 当前图缩略图（base64 JPEG）                                 │
+│      • 目标图缩略图（base64 JPEG）                                 │
+│      • 定量 delta 统计文字                                         │
+│      • 历史操作记录（已用工具 + 每步 DeltaE）                     │
+│                                                                    │
+│  [4] 调用 GPT-4o (mllm_agent.py)                                  │
+│      → 返回包含 <thinking> 和 <tool_call> 的文本                  │
+│                                                                    │
+│  [5] 解析响应 (mllm_agent.py)                                     │
+│      parse_thinking() → CoT 推理文本                              │
+│      parse_tool_call() → (tool_name, params)                      │
+│      is_stop()         → 模型主动停止？                           │
+│                                                                    │
+│  [6] 校验参数 (tool_registry.py)                                   │
+│      validate_tool_call() → 检查范围合法性                        │
+│                                                                    │
+│  [7] 合并参数 + 渲染 (image_engine_adapter.py)                    │
+│      accumulated_params = merge_tool_call(params, tool, args)     │
+│      new_img = render(src_img, accumulated_params)                │
+│      ↑ 始终从原图渲染！                                           │
+│                                                                    │
+│  [8] 记录步骤                                                      │
+│      step = {round, cot, tool, parameters,                        │
+│              params_accumulated, step_quality, delta_stat}        │
+│                                                                    │
+└────────────────────────────────────────────────────────────────────┘
+
+最终
+  final_quality = compute_metrics(current_img, tgt_img)
+  return trajectory_dict
+```
+
+---
+
+### 关键子模块详解
+
+#### `stat_utils.py` — 定量统计
+
+`get_delta_stat(current_img, target_img)` 对两张图分别提取像素统计、HSV 饱和度、LAB 通道均值，然后做差，映射为工具信号：
+
+| delta 字段 | 对应工具信号 |
+|-----------|------------|
+| `brightness_delta` / `l_channel_delta` | → `exposure_tool` |
+| `contrast_delta` / `highlight_delta` / `shadow_delta` | → `tone_tool` |
+| `temperature_delta` / `tint_delta` | → `white_balance_tool` |
+| `saturation_delta` | → `saturation_tool` |
+| `dominant_issue` | 归一化后取最大维度，显式告知模型主要问题 |
+
+---
+
+#### `prompts.py` — Prompt 构造
+
+**System Prompt** 告知模型：
+- 每轮只能用**一个工具**
+- 必须遵循优先级：`exposure → tone → white_balance → saturation → hsl`
+- 输出格式严格为 `<thinking>...</thinking><tool_call>...</tool_call>` 或 `<stop>`
+
+**User Prompt（每轮）** 包含：
+```
+[当前图] [目标图]
+
+Brightness delta: +28.3 (target is brighter)
+Contrast delta: +5.1 (target has more contrast)
+Temperature signal: -12.0 (target is cooler)
+Saturation delta: +0.042 (target is more saturated)
+Dominant issue: exposure
+
+Adjustment history:
+  Round 1: exposure_tool(exposure=35.0, brightness=10.0) → DeltaE=12.1
+  Round 2: tone_tool(contrast=20.0, highlights=-30.0)    → DeltaE=8.4
+```
+
+---
+
+#### `image_engine_adapter.py` — 渲染核心
+
+`merge_tool_call()` 根据工具名更新 `BasicColorParams` 中对应的字段，其余字段保持不变：
+
+| 工具 | 更新的字段 |
+|------|-----------|
+| `exposure_tool` | `params.exposure`, `params.brightness` |
+| `tone_tool` | `params.contrast/highlights/shadows/whites/blacks` |
+| `white_balance_tool` | `params.temperature`, `params.tint` |
+| `saturation_tool` | `params.saturation`, `params.vibrance` |
+| `hsl_tool` | `params.hsl.{band}.hue/saturation/luminance`（只更新指定色带）|
+
+之后调用 `render(src_img, accumulated_params)` **始终从原始源图出发**重新渲染，不在中间图上叠加。
+
+---
+
+#### 关于图像格式转换
+
+磁盘上的 `.tif` 文件在发送给 MLLM 之前会经历如下转换，**不存在格式冲突**：
+
+```
+.tif 文件（磁盘）
+    ↓  load_image()       用 imageio 读取，转为 float32 numpy array [0,1]
+    ↓  make_thumbnail()   缩放至 512×512，仍为 numpy array
+    ↓  encode_image_base64()  numpy → PIL → JPEG 字节流 → base64 字符串
+    ↓  build_image_content()  拼接 data:image/jpeg;base64,...
+                              media_type="image/jpeg" 与实际编码完全匹配
+```
+
+---
+
+### 第三阶段：质量过滤（`quality_filter.py`）
+
+对每条轨迹依次检查 5 项，全部通过才写入训练集：
+
+```
+① 最终质量门槛
+   DeltaE_final ≤ 10.0  AND  PSNR_final ≥ 20.0 dB
+
+② 改善幅度
+   DeltaE_initial − DeltaE_final ≥ 2.0
+
+③ 单调性（每步不能大幅变差）
+   DeltaE_step[i] ≤ DeltaE_step[i−1] × 1.3
+
+④ 工具多样性
+   每个工具最多使用 2 次
+
+⑤ 轨迹长度
+   3 ≤ num_steps ≤ 8
+```
+
+---
+
+### 数据流汇总
+
+```
+source.tif ──────────────────────────────────────────────────────────┐
+                                                                       │
+target.tif ──┐                                                         │
+             │                                                         │
+             ├─ get_delta_stat() ──→ 数值锚点                          │
+             │                          │                              │
+             │                          ↓                              │
+             │                    build_user_prompt()                  │
+             │                          │                              │
+             │                          ↓                              │
+             │                    GPT-4o API call                      │
+             │                          │                              │
+             │                    parse_tool_call()                    │
+             │                          │                              │
+             │                    merge_tool_call()                    │
+             │                    (更新 BasicColorParams)              │
+             │                          │                              │
+             └──────────────────→ render(src, params) ──→ new_img      │
+                                        │                              │
+                                  compute_metrics() ──→ step_quality   │
+                                        │                              │
+                                  [循环 max_turns 次]                   │
+                                        │                              │
+                                  trajectory_dict ──────────────────── ┘
+                                        │
+                                  filter_trajectory()
+                                        │
+                                  training_data.json
+```
+
+---
+
 ## 工具设计
 
 共 5 个工具，按摄影师调色优先级排序：
@@ -100,7 +324,7 @@ pip install openai pyyaml numpy pillow opencv-python scikit-image torch lpips im
 
 ### 配置
 
-编辑 `config/pipeline.yaml`，主要配置项：
+编辑 `trajectory_forge/config/pipeline.yaml`，主要配置项：
 
 ```yaml
 api:
@@ -116,7 +340,7 @@ dataset:
   max_samples: 10          # 调试时先跑少量样本
 ```
 
-准备 paired 数据的 JSON 文件（参考 `data/mit5k_pairs.json`）：
+准备 paired 数据的 JSON 文件（参考 `trajectory_forge/data/mit5k_pairs.json`）：
 ```json
 [
   {"id": "a0001", "source": "path/to/src/a0001.tif", "target": "path/to/gt/a0001.tif"},
@@ -126,8 +350,10 @@ dataset:
 
 ### 生成轨迹
 
+所有路径均相对于**执行命令的当前目录**：
+
 ```bash
-cd /path/to/retouch
+cd /path/to/retouch_code
 
 # 设置 API Key
 export OPENAI_API_KEY="sk-..."
@@ -139,8 +365,10 @@ python trajectory_forge/run_generate.py \
     --output trajectories/ \
     --max-samples 5
 
-# Dry run（不调用 API，仅验证配置）
-python trajectory_forge/run_generate.py --dry-run --max-samples 3
+# Dry run（不调用 API，仅验证配置和数据路径）
+python trajectory_forge/run_generate.py \
+    --config trajectory_forge/config/pipeline.yaml \
+    --dry-run --max-samples 3
 ```
 
 ### 质量过滤
@@ -186,7 +414,7 @@ Fail reasons:
       "cot": "The image is underexposed. L-channel delta is +28...",
       "tool": "exposure_tool",
       "parameters": {"exposure": 35, "brightness": 10},
-      "params_accumulated": {"exposure": 35, "brightness": 10, "contrast": 0, ...},
+      "params_accumulated": {"exposure": 35, "brightness": 10, "contrast": 0, "...": "..."},
       "output_image": "trajectories/a0001_0000/step_0_output.jpg",
       "step_quality": {"psnr": 24.8, "delta_e": 12.1},
       "delta_stat": {"brightness_delta": 28.3, "dominant_issue": "exposure"}
