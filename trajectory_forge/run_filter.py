@@ -104,8 +104,9 @@ def main() -> None:
 
     from trajectory_forge.pipeline.quality_filter import filter_and_export
 
-    # Load config
-    config_path = script_dir / args.config
+    # CLI-provided paths (args.config, args.input, args.output) are relative to cwd.
+    # script_dir is only used for internal fallbacks if needed in the future.
+    config_path = Path(args.config)          # relative to cwd
     cfg = load_config(str(config_path))
 
     logging.basicConfig(
@@ -115,13 +116,9 @@ def main() -> None:
     )
     logger = logging.getLogger("run_filter")
 
-    # Resolve paths relative to script
+    # Paths are relative to cwd (where the user runs the command)
     input_path = Path(args.input)
-    if not input_path.is_absolute():
-        input_path = script_dir / input_path
     output_path = Path(args.output)
-    if not output_path.is_absolute():
-        output_path = script_dir / output_path
 
     if not input_path.exists():
         logger.error(f"Input file not found: {input_path}")

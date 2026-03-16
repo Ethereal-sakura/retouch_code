@@ -96,9 +96,10 @@ def make_trajectory_id(pair: dict, idx: int) -> str:
 def main() -> None:
     args = parse_args()
 
-    # Load config (relative to script location)
+    # script_dir is used only for config-derived default paths (e.g. dataset.pairs_file).
+    # CLI-provided paths (args.config, args.pairs, args.output) are relative to cwd.
     script_dir = Path(__file__).parent
-    config_path = script_dir / args.config
+    config_path = Path(args.config)          # relative to cwd, as the user typed it
     cfg = load_config(str(config_path))
     setup_logging(cfg)
     logger = logging.getLogger("run_generate")
