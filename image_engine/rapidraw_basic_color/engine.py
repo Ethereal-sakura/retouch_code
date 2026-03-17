@@ -88,7 +88,8 @@ class BasicColorRenderer:
     def _normalize_basic(self, p: BasicColorParams) -> dict[str, float | str]:
         """将 Basic + Color 面板的 UI 参数除以对应 SCALES，得到 shader 内部使用的归一化值。
         
-        对应 Rust 端 image_processing.rs 中 build_global_adjustments 函数的参数归一化逻辑。
+        exposure / brightness：UI 范围 ±100，SCALE=16.0，内部最大值 ±6.25
+        其余参数：UI 范围 ±100（整数），SCALE 见 basic.py SCALES 字典。
         """
         return {
             "tone_mapper": p.tone_mapper,

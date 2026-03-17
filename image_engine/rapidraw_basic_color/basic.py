@@ -6,12 +6,16 @@ from scipy.ndimage import gaussian_filter
 from .colors import get_luma, mix, smoothstep
 
 
-# UI 参数到归一化值的缩放因子，与 Rust 端 image_processing.rs 中 SCALES 常量完全一致。
+# UI 参数到归一化值的缩放因子。
 # engine.py 中的 _normalize_basic/_normalize_hsl/_normalize_grading 将 UI 值除以对应 SCALE
 # 后传给各处理函数，使函数内部的数值范围与 shader.wgsl 一致。
+#
+# exposure / brightness 使用 16.0：
+#   原始 RapidRAW UI 范围为 ±5，SCALE=0.8，内部最大值 = 5/0.8 = 6.25
+#   本版 UI 范围改为 ±100，步长 1，SCALE=16.0，内部最大值 = 100/16 = 6.25（等效）
 SCALES = {
-    "exposure": 0.8,
-    "brightness": 0.8,
+    "exposure": 16.0,
+    "brightness": 16.0,
     "contrast": 100.0,
     "highlights": 120.0,
     "shadows": 120.0,
@@ -50,7 +54,7 @@ def apply_linear_exposure(image: np.ndarray, exposure_adj: float) -> np.ndarray:
       color * pow(2.0, exposure_adj)
     
     在线性光空间中操作，是所有调整中最先执行的步骤。
-    参数 exposure_adj 为归一化后的值（UI 值 / SCALES["exposure"] = UI值 / 0.8）。
+    参数 exposure_adj 为归一化后的值（UI 值 / SCALES["exposure"] = UI值 / 16.0）。
     """
     if abs(exposure_adj) <= 1e-8:
         return image.astype(np.float32)
@@ -71,7 +75,7 @@ def apply_filmic_exposure(image: np.ndarray, brightness_adj: float) -> np.ndarra
     色度（chroma = color - luma）按亮度变化比例的 0.8 次方缩放，
     避免饱和度随亮度变化过大（chroma_scale = total_scale^0.8）。
     
-    参数 brightness_adj 为归一化后的值（UI 值 / SCALES["brightness"] = UI值 / 0.8）。
+    参数 brightness_adj 为归一化后的值（UI 值 / SCALES["brightness"] = UI值 / 16.0）。
     """
     if abs(brightness_adj) <= 1e-8:
         return image.astype(np.float32)

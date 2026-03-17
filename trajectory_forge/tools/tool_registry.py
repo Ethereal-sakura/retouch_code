@@ -40,8 +40,8 @@ TOOL_SCHEMAS: dict[str, dict] = {
         "description": "Shape the tonal curve (contrast, highlights, shadows, whites, blacks).",
         "parameters": {
             "contrast":   {"type": "float", "range": (-100, 100)},
-            "highlights": {"type": "float", "range": (-120, 120)},
-            "shadows":    {"type": "float", "range": (-120, 120)},
+            "highlights": {"type": "float", "range": (-100, 100)},
+            "shadows":    {"type": "float", "range": (-100, 100)},
             "whites":     {"type": "float", "range": (-30, 30)},
             "blacks":     {"type": "float", "range": (-70, 70)},
         },
@@ -49,7 +49,7 @@ TOOL_SCHEMAS: dict[str, dict] = {
     "white_balance_tool": {
         "description": "Correct color temperature (warm/cool) and tint (green/magenta).",
         "parameters": {
-            "temperature": {"type": "float", "range": (-500, 500)},
+            "temperature": {"type": "float", "range": (-100, 100)},
             "tint":        {"type": "float", "range": (-100, 100)},
         },
     },

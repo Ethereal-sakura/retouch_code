@@ -121,8 +121,8 @@ class BasicColorParams:
     tone_mapper: str = "basic"
 
     # Basic 面板
-    exposure: float = 0.0      # 曝光，UI 单位，SCALE=0.8
-    brightness: float = 0.0    # 亮度（filmic），UI 单位，SCALE=0.8
+    exposure: float = 0.0      # 曝光，UI 范围 -100~100，SCALE=16.0（等效原版 ±5/0.8）
+    brightness: float = 0.0    # 亮度（filmic），UI 范围 -100~100，SCALE=16.0
     contrast: float = 0.0      # 对比度，UI 单位，SCALE=100
     highlights: float = 0.0    # 高光，UI 单位，SCALE=120
     shadows: float = 0.0       # 阴影，UI 单位，SCALE=120

@@ -294,8 +294,8 @@ target.tif ──┐                                                         │
 | 优先级 | 工具名 | 参数 | 作用 |
 |--------|--------|------|------|
 | 1 | `exposure_tool` | exposure [-100,100], brightness [-100,100] | 全局曝光亮度 |
-| 2 | `tone_tool` | contrast [-100,100], highlights [-120,120], shadows [-120,120], whites [-30,30], blacks [-70,70] | 色调曲线塑形 |
-| 3 | `white_balance_tool` | temperature [-500,500], tint [-100,100] | 色温/色调校正 |
+| 2 | `tone_tool` | contrast [-100,100], highlights [-100,100], shadows [-100,100], whites [-30,30], blacks [-70,70] | 色调曲线塑形 |
+| 3 | `white_balance_tool` | temperature [-100,100], tint [-100,100] | 色温/色调校正 |
 | 4 | `saturation_tool` | saturation [-100,100], vibrance [-100,100] | 全局饱和度 |
 | 5 | `hsl_tool` | adjustments: [{color, hue, saturation, luminance}] | 选择性色相调整 |
 

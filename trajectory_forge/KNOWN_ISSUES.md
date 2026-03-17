@@ -5,87 +5,23 @@
 
 ---
 
-## CRITICAL
+## ~~CRITICAL~~ RESOLVED
 
-### 1. Wrong parameter ranges → catastrophic image blackening
+### ~~1. Wrong parameter ranges → catastrophic image blackening~~ FIXED
 
-**Files**: `tools/tool_registry.py` · `config/tools.json`
+**Status**: **RESOLVED** — image_engine SCALES updated, temperature range fixed.
 
-**Symptom**: Model outputs `exposure: -14`, image becomes near-black (DeltaE≈78, PSNR≈2).
+**Root cause was**: `image_engine/rapidraw_basic_color/basic.py` had `SCALES["exposure"] = 0.8`
+and `SCALES["brightness"] = 0.8`（original RapidRAW ±5 UI range），but trajectory_forge tools
+used ±100 UI range. UI `exposure = -14` → `2^(-14/0.8) = 2^(-17.5)` → near-zero image.
 
-**Root cause**: The image engine's `apply_linear_exposure` scales the UI value before applying:
-
-```python
-# image_engine/rapidraw_basic_color/basic.py
-SCALES = {"exposure": 0.8, "brightness": 0.8, "temperature": 25.0, ...}
-
-def apply_linear_exposure(image, exposure_adj):
-    # exposure_adj = ui / SCALES["exposure"]
-    return image * (2.0 ** exposure_adj)
-```
-
-So UI `exposure = -14` → `2^(-14/0.8) = 2^(-17.5) ≈ 5.5e-6` → near-zero image.
-
-Similarly for white balance:
-```python
-# colors.py
-temp_norm = ui / 25.0        # temperature = ui / SCALES["temperature"]
-blue_mult = 1 - temp_norm * 0.2   # goes NEGATIVE when |ui| > 125
-```
-
-**Correct ranges** (derived from engine internals):
-
-| Parameter | Current (WRONG) | Correct |
-|-----------|-----------------|---------|
-| `exposure` | `(-100, 100)` | `(-4, 4)` |
-| `brightness` | `(-100, 100)` | `(-4, 4)` |
-| `temperature` | `(-500, 500)` | `(-100, 100)` |
-
-Rationale:
-- `exposure = ±4` → `2^(4/0.8) = 2^5 = 32×` — already extreme
-- `temperature = ±100` → `temp_norm = ±4` → `blue_mult = 1∓0.8` — still positive
-
-**Fix needed in two places**:
-
-```python
-# tools/tool_registry.py — change these lines:
-"exposure":   {"type": "float", "range": (-4, 4),     ...},
-"brightness": {"type": "float", "range": (-4, 4),     ...},
-"temperature":{"type": "float", "range": (-100, 100), ...},
-```
-
-```json
-// config/tools.json — same changes:
-"exposure":    { "range": [-4, 4] }
-"brightness":  { "range": [-4, 4] }
-"temperature": { "range": [-100, 100] }
-```
+**Fix applied**:
+1. `image_engine/rapidraw_basic_color/basic.py`: SCALES `exposure` 0.8→16.0, `brightness` 0.8→16.0
+   (UI ±100 / 16 = ±6.25 internal, same as original ±5 / 0.8 = ±6.25)
+2. `tools/tool_registry.py` + `config/tools.json`: `temperature` range (-500,500) → (-100,100)
+3. Tool parameter ranges for exposure/brightness remain (-100, 100), now correct with SCALE=16.0
 
 ---
-
-## MEDIUM
-
-### 2. Prompt stats units are ambiguous — model may confuse pixel-scale deltas with tool values
-
-**File**: `agents/prompts.py`
-
-**Problem**: `get_delta_stat()` returns values in **pixel [0–255] scale** (e.g., `brightness_delta = -13.8`), but the prompt displays them without clarifying the unit. The model may interpret `-13.8` as a tool parameter value and call `exposure_tool` with `exposure: -13.8` — which, given Issue #1 above, is catastrophic.
-
-**Fix needed**: Add a unit note to the stats block in `build_user_prompt()`:
-
-```python
-stats_text = (
-    f"Quantitative Statistics (Current vs Target):\n"
-    f"NOTE: These are pixel-scale deltas [0-255], NOT tool parameter values.\n"
-    f"- Brightness delta: {bd:+.1f}/255 (target is {brightness_dir})\n"
-    ...
-)
-```
-
-Also consider normalising to a 0–1 scale to reduce confusion.
-
----
-
 ### 3. `:.1f` format crash when `delta_e` key is missing
 
 **File**: `agents/prompts.py`, line ~117
@@ -188,13 +124,13 @@ accumulated for the tool's parameter group.
 
 ## Summary table
 
-| # | Severity | File | Issue |
-|---|----------|------|-------|
-| 1 | **CRITICAL** | `tools/tool_registry.py`, `config/tools.json` | Wrong parameter ranges → image blackening |
-| 2 | **MEDIUM** | `agents/prompts.py` | Delta stats unit ambiguity misleads model |
-| 3 | **MEDIUM** | `agents/prompts.py` | `:.1f` crash on missing `delta_e` key |
-| 4 | **MEDIUM** | `agents/mllm_agent.py` | Retries non-retryable 4xx errors |
-| 5 | **MINOR** | `run_generate.py` | `thumbnail_size` int/list type crash |
-| 6 | **MINOR** | `pipeline/trajectory_generator.py` | Duplicate `step_0_input` save |
-| 7 | **MINOR** | `pipeline/trajectory_generator.py` | Unused `asdict` import |
-| 8 | **MINOR** | `tools/image_engine_adapter.py` | Misleading "added" vs "replaced" docstring |
+| #   | Severity     | File                                          | Issue                                      |
+| --- | ------------ | --------------------------------------------- | ------------------------------------------ |
+| 1   | **CRITICAL** | `tools/tool_registry.py`, `config/tools.json` | Wrong parameter ranges → image blackening  |
+| 2   | **MEDIUM**   | `agents/prompts.py`                           | Delta stats unit ambiguity misleads model  |
+| 3   | **MEDIUM**   | `agents/prompts.py`                           | `:.1f` crash on missing `delta_e` key      |
+| 4   | **MEDIUM**   | `agents/mllm_agent.py`                        | Retries non-retryable 4xx errors           |
+| 5   | **MINOR**    | `run_generate.py`                             | `thumbnail_size` int/list type crash       |
+| 6   | **MINOR**    | `pipeline/trajectory_generator.py`            | Duplicate `step_0_input` save              |
+| 7   | **MINOR**    | `pipeline/trajectory_generator.py`            | Unused `asdict` import                     |
+| 8   | **MINOR**    | `tools/image_engine_adapter.py`               | Misleading "added" vs "replaced" docstring |
