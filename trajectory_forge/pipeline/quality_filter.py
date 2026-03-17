@@ -40,6 +40,7 @@ def filter_trajectory(traj: dict, cfg: dict | None = None) -> tuple[bool, str]:
     max_repeats = int(cfg.get("max_tool_repeats", 2))
     min_steps = int(cfg.get("min_steps", 3))
     max_steps = int(cfg.get("max_steps", 8))
+    allow_short_below = float(cfg.get("allow_short_if_initial_delta_e_below", 0.0))
 
     steps = traj.get("steps", [])
     initial_q = traj.get("initial_quality", {})
@@ -82,7 +83,7 @@ def filter_trajectory(traj: dict, cfg: dict | None = None) -> tuple[bool, str]:
 
     # 5. Trajectory length
     n = len(steps)
-    if n < min_steps:
+    if n < min_steps and initial_de > allow_short_below:
         return False, f"too few steps: {n} < {min_steps}"
     if n > max_steps:
         return False, f"too many steps: {n} > {max_steps}"

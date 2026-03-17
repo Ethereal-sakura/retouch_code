@@ -93,6 +93,27 @@ def make_trajectory_id(pair: dict, idx: int) -> str:
     return f"{src}_{idx:04d}"
 
 
+def make_brief_trajectory(traj: dict) -> dict:
+    """Build a compact trajectory record for training-data collection."""
+    return {
+        "id": traj.get("id", ""),
+        "source": traj.get("source", ""),
+        "target": traj.get("target", ""),
+        "initial_quality": traj.get("initial_quality", {}),
+        "steps": [
+            {
+                "round": step.get("round"),
+                "output_image": step.get("output_image", ""),
+                "tool": step.get("tool", ""),
+                "parameters": step.get("parameters", {}),
+                "cot": step.get("cot", ""),
+                "step_quality": step.get("step_quality", {}),
+            }
+            for step in traj.get("steps", [])
+        ],
+    }
+
+
 def main() -> None:
     args = parse_args()
 
@@ -109,6 +130,11 @@ def main() -> None:
     gen_cfg = cfg.get("generation", {})
     dataset_cfg = cfg.get("dataset", {})
     metrics_cfg = cfg.get("metrics", {})
+    planner_cfg = cfg.get("planner", {})
+    search_cfg = cfg.get("search", {})
+    probe_cfg = cfg.get("probe", {})
+    scoring_cfg = cfg.get("scoring", {})
+    debug_cfg = cfg.get("debug", {})
 
     # Resolve parameters (CLI overrides config)
     pairs_file = args.pairs or (script_dir / dataset_cfg.get("pairs_file", "data/mit5k_pairs.json"))
@@ -152,7 +178,9 @@ def main() -> None:
     # Generation loop
     output_dir.mkdir(parents=True, exist_ok=True)
     results_file = output_dir / "trajectories_raw.json"
+    brief_results_file = output_dir / "trajectories_brief.json"
     all_trajectories = []
+    brief_trajectories = []
 
     log_every_n = cfg.get("logging", {}).get("log_every_n", 10)
 
@@ -188,8 +216,14 @@ def main() -> None:
                 use_lpips=bool(metrics_cfg.get("use_lpips", False)),
                 metrics_device=str(metrics_cfg.get("device", "cpu")),
                 save_images=bool(gen_cfg.get("save_intermediate_images", True)),
+                search_cfg=search_cfg,
+                probe_cfg=probe_cfg,
+                scoring_cfg=scoring_cfg,
+                planner_cfg=planner_cfg,
+                debug_cfg=debug_cfg,
             )
             all_trajectories.append(traj)
+            brief_trajectories.append(make_brief_trajectory(traj))
         except Exception as e:
             logger.error(f"[{traj_id}] Trajectory generation failed: {e}", exc_info=True)
             continue
@@ -197,9 +231,15 @@ def main() -> None:
         # Append to results file incrementally (crash-safe)
         with open(results_file, "w", encoding="utf-8") as f:
             json.dump(all_trajectories, f, ensure_ascii=False, indent=2)
+        with open(brief_results_file, "w", encoding="utf-8") as f:
+            json.dump(brief_trajectories, f, ensure_ascii=False, indent=2)
 
     logger.info(
-        f"Generation complete: {len(all_trajectories)}/{len(pairs)} trajectories saved to {results_file}"
+        "Generation complete: %s/%s trajectories saved to %s and %s",
+        len(all_trajectories),
+        len(pairs),
+        results_file,
+        brief_results_file,
     )
 
 

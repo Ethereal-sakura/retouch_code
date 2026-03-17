@@ -1,473 +1,553 @@
 # trajectory_forge
 
-**修图长链轨迹构造框架** — 用于生成训练 Agentic MLLM 修图模型的多轮轨迹数据集。
+用于从 paired retouch 数据中自动构造多步修图轨迹，供后续 SFT / agentic 训练使用。
 
----
+当前版本已经从“单链贪心、模型直接猜精确参数”的方案，重构为“模型做离散规划，程序做试探搜索和接受门”的方案。
 
-## 概述
+## 给新接手同学的 5 分钟说明
 
-`trajectory_forge` 通过调用前沿 MLLM（如 GPT-4o）驱动图像处理引擎，自动为 paired 修图数据集（MIT-FiveK / PPR10K）生成**多轮修图轨迹**，每条轨迹形如：
+如果你第一次接手这个项目，先记住这 4 句话：
 
+1. `trajectory_forge` 不是一个“让模型直接输出最终参数”的项目，而是一个“模型给方向，程序验证并决定是否接受”的轨迹构造器。
+2. 模型输出的是**相对当前图的参数增量**，不是绝对最终值。
+3. 渲染器每次都从 `src` 重新回放累计参数，所以不会在 JPEG 中间图上继续叠加误差。
+4. 正式轨迹里只保留**被接受的步骤**，被拒绝的候选只存在于内部搜索过程，不会写入训练链。
+
+如果你只想快速建立全局认识，建议按这个顺序阅读代码：
+
+1. `config/pipeline.yaml`
+2. `agents/prompts.py`
+3. `pipeline/trajectory_generator.py`
+4. `pipeline/candidate_generator.py`
+5. `pipeline/probe_engine.py`
+6. `pipeline/scoring.py`
+7. `tools/image_engine_adapter.py`
+
+## 为什么这次要重构
+
+旧方案的问题不是“prompt 再润色一下”就能解决，而是控制闭环本身不稳定。之前的单链贪心方案有几个结构性问题：
+
+- 模型一次只给一个动作，程序直接执行，没有内部比较多个候选。
+- 只要模型给了参数，状态就会推进，即使客观指标已经变差。
+- 模型既要决定工具，又要猜精确连续参数，这部分负担太重。
+- 过滤器只在最后做体检，无法阻止坏步骤污染后续轨迹。
+
+这次重构的目标很明确：
+
+- 模型负责“现在该修什么、先用哪个工具、方向和幅度大概是多少”
+- 程序负责“真实渲染、试探、比较、细化、接受或拒绝”
+- 正式轨迹只保留客观上确实变好的步骤
+
+## 当前实现摘要
+
+### 目标
+
+- 输入：`source image`、`target image`
+- 输出：一条只包含**被接受步骤**的修图轨迹
+- 每一步都要求：
+  - 模型先决定现在修什么、用哪个工具、方向和大致幅度
+  - 程序在真实渲染器上试多个候选参数
+  - 只有客观指标变好，才把这一步加入正式轨迹
+
+### 本次代码改动
+
+- `merge_tool_call()` 改成了**增量累加语义**
+  - 模型每轮输出的是相对当前图的 `delta`
+  - 程序把这个 `delta` 累加到全局参数状态
+  - 渲染时始终从 `src` 重新回放累计参数
+- 生成主循环从单链贪心改成了 accepted-state search
+  - 当前状态只会指向“已经被接受”的图
+  - 被拒绝的候选不会污染下一轮
+- 新增 hidden search 组件
+  - `candidate_generator.py`
+  - `probe_engine.py`
+  - `scoring.py`
+  - `state_manager.py`
+- Prompt 改成英文 JSON planner prompt
+  - 模型推理时看到的 prompt 全部为英文
+  - 模型输出的是 `tool / direction / magnitude_bucket / reason`
+  - 不再让模型直接输出最终精确参数
+- 新增 accept gate
+  - 结合 `DeltaE / SSIM / LPIPS / residual stats / edit cost`
+  - 只有变好才提交
+- 新增工具冷却与锁定规则
+  - 连续失败的工具会暂时 cooldown
+  - 已基本修好的问题会被 lock，避免来回震荡
+- 过滤器保留，但定位变成“最终体检”
+  - 生成阶段先保证坏状态不推进
+  - 过滤阶段再做质量筛查
+
+## 核心设计
+
+### 1. 参数语义
+
+当前代码约定如下：
+
+- 模型看到的是 `CURRENT image`
+- 模型输出的是相对 `CURRENT image` 的参数增量
+- `merge_tool_call(accumulated, tool, delta_params)` 负责把本轮增量累加到累计参数
+- `render(src_img, accumulated_params)` 始终从原图重新渲染
+
+这意味着：
+
+- 轨迹里的 `delta_parameters` 表示本轮增量
+- `params_accumulated` 表示到当前为止的总参数
+
+### 2. hidden search
+
+导出的训练轨迹仍然是一条单链，但生成过程内部允许：
+
+- 多候选 proposal
+- probe ladder 试探渲染
+- 局部细化
+- 被拒候选直接丢弃
+- 多条 accepted state 并行保留
+
+最终只导出 best path。
+
+### 3. 模型与程序的分工
+
+模型负责：
+
+- 现在主要剩余问题是什么
+- 现在优先用哪个工具
+- 方向是 increase / decrease / mixed
+- 幅度属于 small / medium / large
+
+程序负责：
+
+- 真实参数数值搜索
+- probe 渲染
+- 局部优化
+- 客观打分
+- accept / reject
+- cooldown / lock / beam 保留
+
+### 4. Prompt 约束
+
+模型实际推理时的 prompt 必须全部是英文。
+
+当前代码中：
+
+- planner prompt 是英文
+- explanation prompt 是英文
+- 历史摘要、统计摘要、结构化字段名全部是英文
+
+中文只用于：
+
+- README
+- 注释
+- 本地开发说明
+
+## 一条样本在系统里如何流转
+
+下面这张图是当前版本最重要的心智模型：
+
+```text
+source / target
+    ↓
+current accepted state
+    ↓
+residual stats
+    ↓
+shortlist tools
+    ↓
+planner prompt (English)
+    ↓
+coarse proposals
+    ↓
+probe ladder on renderer
+    ↓
+local refine
+    ↓
+objective score
+    ↓
+accept / reject
+    ├─ accept -> enter next accepted frontier
+    └─ reject -> discard candidate
+    ↓
+best accepted path
+    ↓
+export trajectory
 ```
-原图 → [CoT + 工具1 + 中间图1] → [CoT + 工具2 + 中间图2] → ... → 最终图
-```
 
-生成的轨迹经质量过滤后，可作为训练数据用于：
-- 监督微调（SFT）Agentic MLLM 修图模型
-- 构建多轮工具调用的推理链数据集
+注意两点：
 
----
+- `CURRENT image` 永远指向“当前最佳已接受状态”
+- 下一轮不会看到被拒绝候选生成的图
 
-## 特性
+## 当前项目结构
 
-- **Training-free**：无需任何标注，由前沿 MLLM 自动生成轨迹
-- **5 个语义工具**：对应摄影师调色认知顺序（曝光 → 色调 → 色温 → 饱和度 → HSL）
-- **定量统计锚点**：每轮 prompt 包含 delta 统计数值，引导模型做出有依据的决策
-- **从原图累积渲染**：每步从原图重新渲染，避免误差累积，参数耦合关系正确
-- **完整质量过滤**：DeltaE、PSNR、单调性、工具多样性等多维度过滤
-
----
-
-## 项目结构
-
-```
+```text
 trajectory_forge/
-├── run_generate.py              # 入口：批量生成轨迹
-├── run_filter.py                # 入口：质量过滤 + 导出训练数据
-│
-├── tools/
-│   ├── tool_registry.py         # 工具 schema 定义 + 参数校验
-│   └── image_engine_adapter.py  # BasicColorParams 构造 + 渲染封装
-│
-├── agents/
-│   ├── mllm_agent.py            # MLLM API 调用（OpenAI 兼容格式）
-│   └── prompts.py               # System / user prompt 模板
-│
-├── pipeline/
-│   ├── trajectory_generator.py  # 单图对的轨迹生成主循环
-│   └── quality_filter.py        # 轨迹质量过滤
-│
-├── utils/
-│   ├── stat_utils.py            # get_stat + get_delta_stat
-│   ├── metrics.py               # PSNR / SSIM / LPIPS / DeltaE
-│   └── image_utils.py           # 图像 I/O + base64 编码
-│
+├── run_generate.py
+├── run_filter.py
 ├── config/
-│   ├── tools.json               # 工具 schema（参数名、范围、描述）
-│   └── pipeline.yaml            # 超参配置
-│
-└── data/
-    ├── mit5k_pairs.json         # MIT-FiveK paired 列表（示例）
-    └── ppr10k_pairs.json        # PPR10K paired 列表（示例）
+│   └── pipeline.yaml
+├── agents/
+│   ├── mllm_agent.py
+│   └── prompts.py
+├── tools/
+│   ├── tool_registry.py
+│   └── image_engine_adapter.py
+├── pipeline/
+│   ├── candidate_generator.py
+│   ├── probe_engine.py
+│   ├── scoring.py
+│   ├── state_manager.py
+│   ├── trajectory_generator.py
+│   └── quality_filter.py
+├── utils/
+│   ├── image_utils.py
+│   ├── metrics.py
+│   └── stat_utils.py
+└── tests/
+    └── test_search_pipeline.py
 ```
 
----
+## 生成流程
 
-## 完整工作流程
+单张图对的主流程现在是：
 
-### 总览
+1. 读取 `src / tgt`
+2. 计算当前 residual stats
+3. 根据 residual、priority、cooldown、lock 选出 shortlist tools
+4. 调 planner prompt，让模型输出 1 到 3 个 coarse proposals
+5. 对每个 proposal 做 probe ladder
+6. 从 probe 结果中选最优，再做局部细化
+7. 用统一 objective score 做 accept / reject
+8. 只保留 accepted children 进入下一轮
+9. 每轮保留 top-K accepted states
+10. 最终只导出 best accepted path
 
-```
-数据集 (pairs.json)
-    ↓
-run_generate.py          ← 批量入口
-    ↓
-trajectory_generator.py  ← 单图对主循环
-    ├── stat_utils.py        计算 delta 统计
-    ├── prompts.py           构造 MLLM 输入
-    ├── mllm_agent.py        调用 GPT-4o
-    ├── tool_registry.py     校验工具调用
-    └── image_engine_adapter.py  渲染图像
-    ↓
-trajectories_raw.json
-    ↓
-run_filter.py            ← 过滤入口
-    ↓
-quality_filter.py        ← 多维度过滤
-    ↓
-training_data.json       ← 最终训练数据
-```
+## 模块职责总表
 
----
+如果你要改代码，先判断你改的是哪一层：
 
-### 第一阶段：生成轨迹（`run_generate.py`）
+### `agents/`
 
-批量入口脚本，负责：
+- 负责和模型交互
+- 不负责决定候选是否接受
+- 这里的改动通常是：
+  - prompt 结构
+  - 输出 JSON 字段
+  - explanation 文本风格
 
-1. 读取 `config/pipeline.yaml` → 所有超参数
-2. 读取 `data/mit5k_pairs.json` → 图像路径列表
-3. 初始化 `MLLMAgent` → 连接 GPT-4o API
-4. 逐个图像对调用 `generate_trajectory()`
-5. 每完成一条轨迹立即追加写入 `trajectories_raw.json`（crash-safe，不会因中途失败丢失已生成数据）
+### `pipeline/candidate_generator.py`
 
----
+- 决定本轮允许哪些工具进入 shortlist
+- 决定 planner 输出解析失败后的启发式 proposal
+- 这里的改动通常影响：
+  - 哪些工具更容易被尝试
+  - 工具优先级是否足够稳定
 
-### 第二阶段：单图对轨迹生成主循环（`trajectory_generator.py`）
+### `pipeline/probe_engine.py`
 
-对每一对 `(src, tgt)` 图像运行最多 `max_turns=8` 轮对话：
+- 把 coarse proposal 变成真实可比较的参数候选
+- 定义各个工具的 probe ladder 和局部细化策略
+- 这里的改动通常影响：
+  - 模型建议是否能被转成有效数值
+  - 搜索是否太慢
+  - 参数是否容易震荡
 
-```
-初始化
-  src_img = load_image(source_path)        # float32 [0,1]
-  tgt_img = load_image(target_path)
-  accumulated_params = BasicColorParams()  # 全零，即 identity
-  initial_quality = compute_metrics(src, tgt)
+### `pipeline/scoring.py`
 
-┌─────────────────────── 主循环（每轮）────────────────────────────┐
-│                                                                    │
-│  [1] 计算 delta 统计 (stat_utils.py)                              │
-│      get_delta_stat(current_img, tgt_img)                         │
-│      → brightness_delta, contrast_delta,                          │
-│        temperature_delta, saturation_delta, dominant_issue        │
-│                                                                    │
-│  [2] 检查是否已收敛                                                │
-│      if DeltaE < 4.0: break（提前结束）                           │
-│                                                                    │
-│  [3] 构造 MLLM 输入 (prompts.py)                                  │
-│      • 当前图缩略图（base64 JPEG）                                 │
-│      • 目标图缩略图（base64 JPEG）                                 │
-│      • 定量 delta 统计文字                                         │
-│      • 历史操作记录（已用工具 + 每步 DeltaE）                     │
-│                                                                    │
-│  [4] 调用 GPT-4o (mllm_agent.py)                                  │
-│      → 返回包含 <thinking> 和 <tool_call> 的文本                  │
-│                                                                    │
-│  [5] 解析响应 (mllm_agent.py)                                     │
-│      parse_thinking() → CoT 推理文本                              │
-│      parse_tool_call() → (tool_name, params)                      │
-│      is_stop()         → 模型主动停止？                           │
-│                                                                    │
-│  [6] 校验参数 (tool_registry.py)                                   │
-│      validate_tool_call() → 检查范围合法性                        │
-│                                                                    │
-│  [7] 合并参数 + 渲染 (image_engine_adapter.py)                    │
-│      accumulated_params = merge_tool_call(params, tool, args)     │
-│      new_img = render(src_img, accumulated_params)                │
-│      ↑ 始终从原图渲染！                                           │
-│                                                                    │
-│  [8] 记录步骤                                                      │
-│      step = {round, cot, tool, parameters,                        │
-│              params_accumulated, step_quality, delta_stat}        │
-│                                                                    │
-└────────────────────────────────────────────────────────────────────┘
+- 定义 objective score
+- 定义 accept gate
+- 定义 beam 排序
+- 这里的改动通常影响：
+  - 哪些候选会被接受
+  - 轨迹是否更保守或更激进
 
-最终
-  final_quality = compute_metrics(current_img, tgt_img)
-  return trajectory_dict
-```
+### `pipeline/state_manager.py`
 
----
+- 管理 accepted streak / reject streak / cooldown / lock
+- 这里的改动通常影响：
+  - 是否容易出现工具来回震荡
+  - 某个工具是否被过早禁用或过早锁死
 
-### 关键子模块详解
+### `tools/image_engine_adapter.py`
 
-#### `stat_utils.py` — 定量统计
+- 定义参数语义
+- 负责把 delta 合并到累计参数
+- 负责从 `src` 回放渲染
+- 这里是最容易把“delta”和“absolute total”搞混的地方，修改时必须非常谨慎
 
-`get_delta_stat(current_img, target_img)` 对两张图分别提取像素统计、HSV 饱和度、LAB 通道均值，然后做差，映射为工具信号：
+## 关键文件说明
 
-| delta 字段 | 对应工具信号 |
-|-----------|------------|
-| `brightness_delta` / `l_channel_delta` | → `exposure_tool` |
-| `contrast_delta` / `highlight_delta` / `shadow_delta` | → `tone_tool` |
-| `temperature_delta` / `tint_delta` | → `white_balance_tool` |
-| `saturation_delta` | → `saturation_tool` |
-| `dominant_issue` | 归一化后取最大维度，显式告知模型主要问题 |
+### `agents/prompts.py`
 
----
+- 定义 planner prompt 和 explainer prompt
+- 都是英文 prompt
+- planner 输出 JSON
 
-#### `prompts.py` — Prompt 构造
+### `agents/mllm_agent.py`
 
-**System Prompt** 告知模型：
-- 每轮只能用**一个工具**
-- 必须遵循优先级：`exposure → tone → white_balance → saturation → hsl`
-- 输出格式严格为 `<thinking>...</thinking><tool_call>...</tool_call>` 或 `<stop>`
+- 使用 OpenAI Python SDK 调用兼容接口
+- 现在不再提供“缺少依赖时自动降级”的冗余兼容逻辑
+- 运行前请确保依赖环境已经安装完整
 
-**User Prompt（每轮）** 包含：
-```
-[当前图] [目标图]
+### `tools/image_engine_adapter.py`
 
-Brightness delta: +28.3 (target is brighter)
-Contrast delta: +5.1 (target has more contrast)
-Temperature signal: -12.0 (target is cooler)
-Saturation delta: +0.042 (target is more saturated)
-Dominant issue: exposure
+- `merge_tool_call()` 现在执行**累加**
+- `get_tool_params()` / `diff_tool_params()` 用于记录累计参数和实际生效增量
+- 渲染仍然从 `src` 回放总参数
 
-Adjustment history:
-  Round 1: exposure_tool(exposure=35.0, brightness=10.0) → DeltaE=12.1
-  Round 2: tone_tool(contrast=20.0, highlights=-30.0)    → DeltaE=8.4
-```
+### `pipeline/candidate_generator.py`
 
----
+- 根据 residual 和工具状态选 shortlist
+- 调模型生成 coarse proposals
+- planner 失败时会退回到**启发式 proposal**，但这不是依赖缺失兜底，只是解析失败时的控制兜底
 
-#### `image_engine_adapter.py` — 渲染核心
+### `pipeline/probe_engine.py`
 
-`merge_tool_call()` 根据工具名更新 `BasicColorParams` 中对应的字段，其余字段保持不变：
+- 对每个 coarse proposal 生成 probe ladder
+- 在低分辨率图上做试探
+- 再做局部细化
+- 输出候选的 metrics / score / probe_summary
 
-| 工具 | 更新的字段 |
-|------|-----------|
-| `exposure_tool` | `params.exposure`, `params.brightness` |
-| `tone_tool` | `params.contrast/highlights/shadows/whites/blacks` |
-| `white_balance_tool` | `params.temperature`, `params.tint` |
-| `saturation_tool` | `params.saturation`, `params.vibrance` |
-| `hsl_tool` | `params.hsl.{band}.hue/saturation/luminance`（只更新指定色带）|
+### `pipeline/scoring.py`
 
-之后调用 `render(src_img, accumulated_params)` **始终从原始源图出发**重新渲染，不在中间图上叠加。
+- 统一 objective score
+- 接受门
+- tool residual
+- beam ranking
 
----
+### `pipeline/state_manager.py`
 
-#### 关于图像格式转换
+- accepted state 数据结构
+- tool cooldown / lock / accepted streak / reject streak
 
-磁盘上的 `.tif` 文件在发送给 MLLM 之前会经历如下转换，**不存在格式冲突**：
+### `pipeline/trajectory_generator.py`
 
-```
-.tif 文件（磁盘）
-    ↓  load_image()       用 imageio 读取，转为 float32 numpy array [0,1]
-    ↓  make_thumbnail()   缩放至 512×512，仍为 numpy array
-    ↓  encode_image_base64()  numpy → PIL → JPEG 字节流 → base64 字符串
-    ↓  build_image_content()  拼接 data:image/jpeg;base64,...
-                              media_type="image/jpeg" 与实际编码完全匹配
-```
+- 主搜索循环
+- accepted-only 状态推进
+- 最终导出训练轨迹
 
----
+## 新人最容易踩坑的地方
 
-### 第三阶段：质量过滤（`quality_filter.py`）
+### 1. 把 `delta_parameters` 当成绝对值
 
-对每条轨迹依次检查 5 项，全部通过才写入训练集：
+不是。
 
-```
-① 最终质量门槛
-   DeltaE_final ≤ 10.0  AND  PSNR_final ≥ 20.0 dB
+当前实现中：
 
-② 改善幅度
-   DeltaE_initial − DeltaE_final ≥ 2.0
+- `delta_parameters` 是本轮增量
+- `params_accumulated` 才是累计总参数
 
-③ 单调性（每步不能大幅变差）
-   DeltaE_step[i] ≤ DeltaE_step[i−1] × 1.3
+### 2. 以为 `current_img` 是上一张导出的中间图
 
-④ 工具多样性
-   每个工具最多使用 2 次
+不完全是。
 
-⑤ 轨迹长度
-   3 ≤ num_steps ≤ 8
-```
+语义上它是“当前已接受状态对应的图”。虽然这张图也可能会被导出成中间图，但内部逻辑看的是 accepted state，不是“上一轮模型刚产生的任意图”。
 
----
+### 3. 以为 planner 说了算
 
-### 数据流汇总
+不是。
 
-```
-source.tif ──────────────────────────────────────────────────────────┐
-                                                                       │
-target.tif ──┐                                                         │
-             │                                                         │
-             ├─ get_delta_stat() ──→ 数值锚点                          │
-             │                          │                              │
-             │                          ↓                              │
-             │                    build_user_prompt()                  │
-             │                          │                              │
-             │                          ↓                              │
-             │                    GPT-4o API call                      │
-             │                          │                              │
-             │                    parse_tool_call()                    │
-             │                          │                              │
-             │                    merge_tool_call()                    │
-             │                    (更新 BasicColorParams)              │
-             │                          │                              │
-             └──────────────────→ render(src, params) ──→ new_img      │
-                                        │                              │
-                                  compute_metrics() ──→ step_quality   │
-                                        │                              │
-                                  [循环 max_turns 次]                   │
-                                        │                              │
-                                  trajectory_dict ──────────────────── ┘
-                                        │
-                                  filter_trajectory()
-                                        │
-                                  training_data.json
-```
+planner 只决定 coarse direction，真正是否提交由程序根据真实渲染结果决定。
 
----
+### 4. 以为过滤器会修正生成错误
 
-## 工具设计
+不会。
 
-共 5 个工具，按摄影师调色优先级排序：
+过滤器现在只是最终体检。真正防止坏步骤污染轨迹的是生成阶段的 accept gate。
 
-| 优先级 | 工具名 | 参数 | 作用 |
-|--------|--------|------|------|
-| 1 | `exposure_tool` | exposure [-100,100], brightness [-100,100] | 全局曝光亮度 |
-| 2 | `tone_tool` | contrast [-100,100], highlights [-100,100], shadows [-100,100], whites [-30,30], blacks [-70,70] | 色调曲线塑形 |
-| 3 | `white_balance_tool` | temperature [-100,100], tint [-100,100] | 色温/色调校正 |
-| 4 | `saturation_tool` | saturation [-100,100], vibrance [-100,100] | 全局饱和度 |
-| 5 | `hsl_tool` | adjustments: [{color, hue, saturation, luminance}] | 选择性色相调整 |
+## 如果你要调效果，优先改哪里
 
-`hsl_tool` 示例：
-```json
-{
-  "tool": "hsl_tool",
-  "adjustments": [
-    {"color": "reds",    "hue": 5,  "saturation": 10, "luminance": 0},
-    {"color": "oranges", "hue": -3, "saturation": 8,  "luminance": 4}
-  ]
-}
-```
+### 场景 1：同一个工具反复震荡
 
----
+优先检查：
 
-## 快速开始
+- `state_manager.py` 里的 cooldown / lock / accepted streak
+- `scoring.py` 里的 sign flip penalty
+- `probe_engine.py` 里的 refine step 是否太大
 
-### 安装依赖
+### 场景 2：模型总选错工具
+
+优先检查：
+
+- `candidate_generator.py` 的 shortlist 逻辑
+- `prompts.py` 的 planner prompt
+- `stat_utils.py` 的 residual 定义是否和工具语义一致
+
+### 场景 3：模型方向对，但数值总是不准
+
+优先检查：
+
+- `probe_engine.py` 的 ladder 设计
+- `probe_engine.py` 的 local refine
+- `image_engine_adapter.py` 的参数合并语义
+
+### 场景 4：轨迹太短或太长
+
+优先检查：
+
+- `search.stop_residual_threshold`
+- `generation.max_turns`
+- `search.accept_margin`
+- `filter.min_steps`
+
+## 配置文件
+
+`config/pipeline.yaml` 现在除了原有配置，还增加了几组新配置：
+
+- `planner`
+- `search`
+- `probe`
+- `scoring`
+- `debug`
+
+其中重点参数如下：
+
+- `search.beam_size`
+- `search.shortlist_tools`
+- `search.max_proposals`
+- `search.accept_margin`
+- `search.hard_delta_e_tolerance`
+- `probe.render_size`
+- `probe.refine_steps`
+- `scoring.weights.*`
+
+推荐理解方式：
+
+- `generation.*` 控整体生成边界
+- `search.*` 控搜索深度和接受门
+- `probe.*` 控数值试探方式
+- `scoring.*` 控候选排序标准
+- `filter.*` 控最终入库门槛
+
+## 依赖要求
+
+请在完整虚拟环境中运行，至少保证以下依赖已经安装：
+
+- `openai`
+- `lpips`
+- `torch`
+- `opencv-python`
+- `scikit-image`
+- `Pillow`
+- `PyYAML`
+
+当前代码不再对这些缺失依赖做自动降级。
+
+## 运行命令
+
+### 1. 单样本 smoke test
 
 ```bash
-pip install openai pyyaml numpy pillow opencv-python scikit-image torch lpips imageio
+export OPENAI_API_KEY=你的key
+
+python trajectory_forge/run_generate.py \
+  --config trajectory_forge/config/pipeline.yaml \
+  --pairs trajectory_forge/data/ppr10k_pairs.json \
+  --output trajectories_smoke \
+  --max-samples 1
 ```
 
-确保 `image_engine` 可被导入（已包含在本仓库 `image_engine/` 目录中）。
+### 2. 真实数据生成
 
-### 配置
-
-编辑 `trajectory_forge/config/pipeline.yaml`，主要配置项：
-
-```yaml
-api:
-  model: "gpt-4o"          # 使用的模型
-  api_key_env: "OPENAI_API_KEY"
-
-generation:
-  max_turns: 8             # 每条轨迹最多修图轮数
-  output_dir: "trajectories"
-
-dataset:
-  pairs_file: "data/mit5k_pairs.json"
-  max_samples: 10          # 调试时先跑少量样本
-```
-
-准备 paired 数据的 JSON 文件（参考 `trajectory_forge/data/mit5k_pairs.json`）：
-```json
-[
-  {"id": "a0001", "source": "path/to/src/a0001.tif", "target": "path/to/gt/a0001.tif"},
-  ...
-]
-```
-
-### 生成轨迹
-
-所有路径均相对于**执行命令的当前目录**：
+下面这条就是当前 README 推荐的真实数据运行命令：
 
 ```bash
-cd /path/to/retouch_code
+export OPENAI_API_KEY=你的key
 
-# 设置 API Key
-export OPENAI_API_KEY="sk-..."
-
-# 运行生成（--max-samples 用于快速测试）
 python trajectory_forge/run_generate.py \
-    --config trajectory_forge/config/pipeline.yaml \
-    --pairs trajectory_forge/data/mit5k_pairs.json \
-    --output trajectories/ \
-    --max-samples 5
-
-# Dry run（不调用 API，仅验证配置和数据路径）
-python trajectory_forge/run_generate.py \
-    --config trajectory_forge/config/pipeline.yaml \
-    --dry-run --max-samples 3
+  --config trajectory_forge/config/pipeline.yaml \
+  --pairs trajectory_forge/data/ppr10k_pairs.json \
+  --output trajectories_ppr10k_run
 ```
 
-### 质量过滤
+如果你只想先跑一部分数据：
+
+```bash
+export OPENAI_API_KEY=你的key
+
+python trajectory_forge/run_generate.py \
+  --config trajectory_forge/config/pipeline.yaml \
+  --pairs trajectory_forge/data/ppr10k_pairs.json \
+  --output trajectories_ppr10k_run \
+  --max-samples 100 \
+  --start-idx 0
+```
+
+### 3. 过滤导出
 
 ```bash
 python trajectory_forge/run_filter.py \
-    --input trajectories/trajectories_raw.json \
-    --output trajectories/training_data.json \
-    --stats
+  --input trajectories_ppr10k_run/trajectories_raw.json \
+  --output trajectories_ppr10k_run/training_data.json \
+  --config trajectory_forge/config/pipeline.yaml \
+  --stats
 ```
 
-输出示例：
-```
-=== Filter Summary ===
-Total:     100
-Passed:    62  (62.0%)
-Failed:    38
-Fail reasons:
-  final DeltaE: 15
-  improvement: 12
-  regression: 8
-  too few steps: 3
-```
+## 运行产物
 
----
+生成阶段输出：
 
-## 轨迹数据格式
+- `trajectories_raw.json`
+- `trajectories_brief.json`
+- 每条轨迹的中间图目录
 
-生成的训练数据为 JSON 数组，每条轨迹结构：
+其中：
 
-```json
-{
-  "id": "a0001_0000",
-  "source": "path/to/src/a0001.tif",
-  "target": "path/to/gt/a0001.tif",
-  "initial_quality": {"psnr": 22.3, "ssim": 0.84, "delta_e": 16.2},
-  "final_quality":   {"psnr": 27.8, "ssim": 0.91, "delta_e": 6.5},
-  "num_steps": 4,
-  "steps": [
-    {
-      "round": 0,
-      "input_image": "trajectories/a0001_0000/step_0_input.jpg",
-      "cot": "The image is underexposed. L-channel delta is +28...",
-      "tool": "exposure_tool",
-      "parameters": {"exposure": 35, "brightness": 10},
-      "params_accumulated": {"exposure": 35, "brightness": 10, "contrast": 0, "...": "..."},
-      "output_image": "trajectories/a0001_0000/step_0_output.jpg",
-      "step_quality": {"psnr": 24.8, "delta_e": 12.1},
-      "delta_stat": {"brightness_delta": 28.3, "dominant_issue": "exposure"}
-    }
-  ]
-}
-```
+- `trajectories_raw.json` 是完整版本，保留全部搜索结果导出字段
+- `trajectories_brief.json` 是精简版本，便于快速收集训练数据
+  - 每条轨迹只保留 `initial_quality`
+  - 每个 step 只保留 `output_image / tool / parameters / cot / step_quality`
 
----
+每个 step 现在会包含：
 
-## 质量过滤标准
+- `parameters`
+- `delta_parameters`
+- `params_accumulated`
+- `params_accumulated_tool`
+- `proposal`
+- `probe_summary`
+- `score_before`
+- `score_after`
+- `accepted`
 
-| 标准 | 默认阈值 | 说明 |
-|------|----------|------|
-| 最终 DeltaE | ≤ 10.0 | 颜色差距不能太大 |
-| 最终 PSNR | ≥ 20.0 dB | 结构质量保证 |
-| 改善幅度 | ≥ 2.0 DeltaE | 相对原图必须有显著改善 |
-| 单调性 | 每步退化 ≤ 30% | 避免大幅变差的步骤 |
-| 工具多样性 | 同一工具 ≤ 2 次 | 避免重复调整 |
-| 轨迹长度 | 3–8 步 | 过短或过长均过滤 |
+其中：
 
-所有阈值可在 `config/pipeline.yaml` 的 `filter:` 节中调整。
+- `parameters` 与 `delta_parameters` 当前等价，都是本轮增量
+- `params_accumulated` 是当前总参数状态
 
----
+如果你想快速人工看一条轨迹，最有用的字段通常是：
 
-## 核心设计：从原图累积渲染
+- `tool`
+- `delta_parameters`
+- `step_quality`
+- `score_before`
+- `score_after`
+- `proposal`
 
-每步不是在前一步结果上叠加，而是将参数累积后**从原图重新渲染**：
+如果你想快速整理训练样本，优先看：
 
-```
-Step 1: params₁ = exposure(+35)          → render(src, params₁) → img₁
-Step 2: params₂ = params₁ + tone(...)    → render(src, params₂) → img₂
-Step 3: params₃ = params₂ + wb(...)      → render(src, params₃) → img₃
-```
+- `trajectories_brief.json`
 
-优点：
-1. 避免 JPEG 压缩误差累积
-2. 参数之间的物理耦合关系正确（由 image_engine 统一处理）
-3. 可随时回退或重新渲染任意步骤
+## 已完成的本地验证
 
----
+- `python -m py_compile $(find trajectory_forge -name '*.py')`
+- `python -m unittest trajectory_forge.tests.test_search_pipeline`
 
-## 复用的已有代码
+当前离线测试覆盖了：
 
-| 代码 | 来源 | 用途 |
-|------|------|------|
-| `get_stat()` | `iclr_retouchllm/diff_tools.py` | 图像统计基础（扩展为 `get_delta_stat()`）|
-| `BasicColorRenderer` | `image_engine/rapidraw_basic_color/engine.py` | 图像渲染引擎 |
-| `BasicColorParams` | `image_engine/rapidraw_basic_color/params.py` | 参数容器 |
-| `load_image/save_image` | `image_engine/rapidraw_basic_color/io.py` | 图像 I/O |
+- `merge_tool_call()` 的增量累加语义
+- 错误候选不会污染 accepted state
+- 正确候选可以被接受并写入正式轨迹
 
----
+## 下一步
 
-## 许可证
+你在完整依赖环境里运行真实数据后，把这些内容发回来：
 
-本项目代码遵循 MIT License。`image_engine/` 和 `iclr_retouchllm/` 的许可证见各自目录。
+- `trajectory_forge.log`
+- `trajectories_raw.json` 中 1 到 3 条代表性轨迹
+- `run_filter.py --stats` 的输出
+
+我会继续基于真实运行结果做第二轮收敛，包括：
+
+- score 权重调参
+- probe ladder 调整
+- 工具锁定/冷却阈值调整
+- planner prompt 的进一步收紧

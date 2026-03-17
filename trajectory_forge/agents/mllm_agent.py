@@ -44,8 +44,8 @@ class MLLMAgent:
         kwargs: dict[str, Any] = {"api_key": api_key, "timeout": request_timeout}
         if base_url:
             kwargs["base_url"] = base_url
-
         self._client = OpenAI(**kwargs)
+
         self.model = model
         self.max_tokens = max_tokens
         self.temperature = temperature
@@ -145,6 +145,65 @@ def parse_tool_call(response: str) -> tuple[str | None, dict | None]:
         return None, None
 
     return tool_name, params
+
+
+def extract_json_object(response: str) -> dict[str, Any] | None:
+    """Extract the first valid JSON object from a model response."""
+    response = response.strip()
+    if not response:
+        return None
+
+    candidates = [response]
+    if "```" in response:
+        fenced = re.findall(r"```(?:json)?\s*(.*?)```", response, re.DOTALL | re.IGNORECASE)
+        candidates = fenced + candidates
+
+    first = response.find("{")
+    last = response.rfind("}")
+    if first != -1 and last != -1 and first < last:
+        candidates.append(response[first:last + 1])
+
+    for candidate in candidates:
+        candidate = candidate.strip()
+        if not candidate:
+            continue
+        try:
+            parsed = json.loads(candidate)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(parsed, dict):
+            return parsed
+    return None
+
+
+def parse_planner_response(response: str) -> dict[str, Any] | None:
+    """Parse the planner's JSON response into a normalized dictionary."""
+    payload = extract_json_object(response)
+    if not payload:
+        return None
+
+    proposals = []
+    raw_proposals = payload.get("proposals", [])
+    if isinstance(raw_proposals, list):
+        for item in raw_proposals:
+            if not isinstance(item, dict):
+                continue
+            proposals.append(
+                {
+                    "tool": str(item.get("tool", "")).strip(),
+                    "direction": str(item.get("direction", "mixed")).strip().lower(),
+                    "magnitude_bucket": str(
+                        item.get("magnitude_bucket", "medium")
+                    ).strip().lower(),
+                    "reason": str(item.get("reason", "")).strip(),
+                }
+            )
+
+    return {
+        "should_stop": bool(payload.get("should_stop", False)),
+        "main_issue": str(payload.get("main_issue", "")).strip().lower(),
+        "proposals": proposals,
+    }
 
 
 def parse_thinking(response: str) -> str:

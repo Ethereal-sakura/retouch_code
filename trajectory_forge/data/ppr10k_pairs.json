@@ -1,17 +1,7 @@
 [
-  {
-    "id": "p0001",
-    "source": "data/ppr10k/src/p0001.tif",
-    "target": "data/ppr10k/gt/p0001.tif"
-  },
-  {
-    "id": "p0002",
-    "source": "data/ppr10k/src/p0002.tif",
-    "target": "data/ppr10k/gt/p0002.tif"
-  },
-  {
-    "id": "p0003",
-    "source": "data/ppr10k/src/p0003.tif",
-    "target": "data/ppr10k/gt/p0003.tif"
-  }
-]
+    {
+      "id": "p0001",
+      "source": "samples/src/0_0.tif",
+      "target": "samples/tgt/0_0.tif"
+    }
+  ]
