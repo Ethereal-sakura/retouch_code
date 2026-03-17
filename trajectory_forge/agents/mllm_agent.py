@@ -86,6 +86,7 @@ class MLLMAgent:
                     max_tokens=self.max_tokens,
                     temperature=self.temperature,
                 )
+                logger.info(f"Response: \n{response.choices[0].message.content}")
                 return response.choices[0].message.content or ""
             except Exception as e:
                 if attempt < max_retries - 1:
@@ -97,6 +98,8 @@ class MLLMAgent:
                 else:
                     raise
 
+
+# ── Single-candidate parsing (backward compatible) ───────────────────────────
 
 def parse_tool_call(response: str) -> tuple[str | None, dict | None]:
     """Parse a <tool_call>...</tool_call> block from the model response.
@@ -156,6 +159,69 @@ def is_stop(response: str) -> bool:
     """Check if the response contains a <stop> signal."""
     return bool(re.search(r"<stop>", response, re.IGNORECASE))
 
+
+# ── Multi-candidate parsing ──────────────────────────────────────────────────
+
+def parse_multi_tool_calls(
+    response: str, num_candidates: int = 3
+) -> list[dict]:
+    """Parse multiple <candidate_N>...</candidate_N> blocks.
+
+    Each candidate block is expected to contain <thinking> and <tool_call> tags.
+    Falls back to single-response parsing if no candidate tags are found.
+
+    Returns
+    -------
+    list[dict]
+        Each dict has keys: cot (str), tool_name (str|None), tool_params (dict|None).
+    """
+    results = []
+    for i in range(1, num_candidates + 1):
+        block = _extract_tag(response, f"candidate_{i}")
+        if block is None:
+            continue
+        cot = parse_thinking(block)
+        tool_name, tool_params = parse_tool_call(block)
+        results.append({
+            "cot": cot,
+            "tool_name": tool_name,
+            "tool_params": tool_params,
+        })
+
+    if not results:
+        cot = parse_thinking(response)
+        tool_name, tool_params = parse_tool_call(response)
+        if tool_name is not None and tool_params is not None:
+            results.append({
+                "cot": cot,
+                "tool_name": tool_name,
+                "tool_params": tool_params,
+            })
+
+    return results
+
+
+def parse_judge_choice(response: str) -> int | None:
+    """Parse <choice>X</choice> from the VLM judge response.
+
+    Falls back to finding the first standalone digit if tags are missing.
+
+    Returns
+    -------
+    int or None
+        The chosen image index, or None if parsing fails.
+    """
+    match = re.search(r"<choice>\s*(\d+)\s*</choice>", response, re.IGNORECASE)
+    if match:
+        return int(match.group(1))
+    # Fallback: last digit in the response (often the judge just says "2")
+    digits = re.findall(r"\b(\d+)\b", response.strip())
+    if digits:
+        return int(digits[-1])
+    return None
+
+
+# ── Helpers ──────────────────────────────────────────────────────────────────
 
 def _extract_tag(text: str, tag: str) -> str | None:
     """Extract content between <tag>...</tag>."""

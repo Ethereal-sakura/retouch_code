@@ -3,16 +3,18 @@
     {
       "name": "exposure_tool",
       "priority": 1,
-      "description": "Adjust global exposure and brightness. Use this first to fix under/overexposure.",
+      "description": "Adjust global exposure and brightness. Output per-turn deltas that will be added to the current accumulated slider state.",
       "parameters": {
         "exposure": {
           "type": "float",
           "range": [-100, 100],
+          "recommended_delta_range": [-16, 16],
           "description": "Overall exposure adjustment. Positive = brighter, negative = darker."
         },
         "brightness": {
           "type": "float",
           "range": [-100, 100],
+          "recommended_delta_range": [-16, 16],
           "description": "Filmic brightness adjustment. Fine-tunes midtone brightness."
         }
       }
@@ -25,26 +27,31 @@
         "contrast": {
           "type": "float",
           "range": [-100, 100],
+          "recommended_delta_range": [-20, 20],
           "description": "Global contrast. Positive = more contrast."
         },
         "highlights": {
           "type": "float",
           "range": [-100, 100],
+          "recommended_delta_range": [-20, 20],
           "description": "Recover or boost highlight areas."
         },
         "shadows": {
           "type": "float",
           "range": [-100, 100],
+          "recommended_delta_range": [-20, 20],
           "description": "Lift or crush shadow areas."
         },
         "whites": {
           "type": "float",
           "range": [-30, 30],
+          "recommended_delta_range": [-10, 10],
           "description": "Set the white point."
         },
         "blacks": {
           "type": "float",
           "range": [-70, 70],
+          "recommended_delta_range": [-10, 10],
           "description": "Set the black point."
         }
       }
@@ -57,11 +64,13 @@
         "temperature": {
           "type": "float",
           "range": [-100, 100],
+          "recommended_delta_range": [-25, 25],
           "description": "Color temperature. Positive = warmer (yellow), negative = cooler (blue)."
         },
         "tint": {
           "type": "float",
           "range": [-100, 100],
+          "recommended_delta_range": [-20, 20],
           "description": "Color tint. Positive = magenta shift, negative = green shift."
         }
       }
@@ -74,11 +83,13 @@
         "saturation": {
           "type": "float",
           "range": [-100, 100],
+          "recommended_delta_range": [-20, 20],
           "description": "Global saturation. Positive = more colorful, negative = desaturated."
         },
         "vibrance": {
           "type": "float",
           "range": [-100, 100],
+          "recommended_delta_range": [-20, 20],
           "description": "Smart saturation boost that protects already-saturated colors."
         }
       }
@@ -99,16 +110,19 @@
             "hue": {
               "type": "float",
               "range": [-100, 100],
+              "recommended_delta_range": [-12, 12],
               "description": "Hue shift for this color band."
             },
             "saturation": {
               "type": "float",
               "range": [-100, 100],
+              "recommended_delta_range": [-20, 20],
               "description": "Saturation adjustment for this color band."
             },
             "luminance": {
               "type": "float",
               "range": [-100, 100],
+              "recommended_delta_range": [-20, 20],
               "description": "Luminance adjustment for this color band."
             }
           }

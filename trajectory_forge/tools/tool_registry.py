@@ -3,14 +3,13 @@
 Each tool corresponds to a semantically coherent group of image_engine parameters,
 following the photographer's adjustment priority order:
   exposure → tone → white_balance → saturation → hsl
+
+In trajectory_forge, the model emits *incremental* parameter deltas each turn.
+Those deltas are accumulated into the current absolute slider state, which is
+then clamped to the renderer's valid absolute limits.
 """
 
 from __future__ import annotations
-
-import json
-from dataclasses import dataclass, field
-from pathlib import Path
-from typing import Any
 
 # Valid HSL color band names (must match image_engine params.py HSL_BAND_NAMES)
 HSL_BAND_NAMES = [
@@ -32,32 +31,76 @@ TOOL_SCHEMAS: dict[str, dict] = {
     "exposure_tool": {
         "description": "Adjust global exposure and brightness.",
         "parameters": {
-            "exposure":   {"type": "float", "range": (-100, 100)},
-            "brightness": {"type": "float", "range": (-100, 100)},
+            "exposure": {
+                "type": "float",
+                "range": (-100, 100),
+                "recommended_delta_range": (-16, 16),
+            },
+            "brightness": {
+                "type": "float",
+                "range": (-100, 100),
+                "recommended_delta_range": (-16, 16),
+            },
         },
     },
     "tone_tool": {
         "description": "Shape the tonal curve (contrast, highlights, shadows, whites, blacks).",
         "parameters": {
-            "contrast":   {"type": "float", "range": (-100, 100)},
-            "highlights": {"type": "float", "range": (-100, 100)},
-            "shadows":    {"type": "float", "range": (-100, 100)},
-            "whites":     {"type": "float", "range": (-30, 30)},
-            "blacks":     {"type": "float", "range": (-70, 70)},
+            "contrast": {
+                "type": "float",
+                "range": (-100, 100),
+                "recommended_delta_range": (-20, 20),
+            },
+            "highlights": {
+                "type": "float",
+                "range": (-100, 100),
+                "recommended_delta_range": (-20, 20),
+            },
+            "shadows": {
+                "type": "float",
+                "range": (-100, 100),
+                "recommended_delta_range": (-20, 20),
+            },
+            "whites": {
+                "type": "float",
+                "range": (-30, 30),
+                "recommended_delta_range": (-10, 10),
+            },
+            "blacks": {
+                "type": "float",
+                "range": (-70, 70),
+                "recommended_delta_range": (-10, 10),
+            },
         },
     },
     "white_balance_tool": {
         "description": "Correct color temperature (warm/cool) and tint (green/magenta).",
         "parameters": {
-            "temperature": {"type": "float", "range": (-100, 100)},
-            "tint":        {"type": "float", "range": (-100, 100)},
+            "temperature": {
+                "type": "float",
+                "range": (-100, 100),
+                "recommended_delta_range": (-25, 25),
+            },
+            "tint": {
+                "type": "float",
+                "range": (-100, 100),
+                "recommended_delta_range": (-20, 20),
+            },
         },
     },
     "saturation_tool": {
         "description": "Adjust global color saturation and vibrance.",
         "parameters": {
-            "saturation": {"type": "float", "range": (-100, 100)},
-            "vibrance":   {"type": "float", "range": (-100, 100)},
+            "saturation": {
+                "type": "float",
+                "range": (-100, 100),
+                "recommended_delta_range": (-20, 20),
+            },
+            "vibrance": {
+                "type": "float",
+                "range": (-100, 100),
+                "recommended_delta_range": (-20, 20),
+            },
         },
     },
     "hsl_tool": {
@@ -70,9 +113,21 @@ TOOL_SCHEMAS: dict[str, dict] = {
                 "type": "array",
                 "items": {
                     "color":      {"type": "string", "enum": HSL_BAND_NAMES},
-                    "hue":        {"type": "float", "range": (-100, 100)},
-                    "saturation": {"type": "float", "range": (-100, 100)},
-                    "luminance":  {"type": "float", "range": (-100, 100)},
+                    "hue": {
+                        "type": "float",
+                        "range": (-100, 100),
+                        "recommended_delta_range": (-12, 12),
+                    },
+                    "saturation": {
+                        "type": "float",
+                        "range": (-100, 100),
+                        "recommended_delta_range": (-20, 20),
+                    },
+                    "luminance": {
+                        "type": "float",
+                        "range": (-100, 100),
+                        "recommended_delta_range": (-20, 20),
+                    },
                 },
             }
         },
@@ -81,20 +136,29 @@ TOOL_SCHEMAS: dict[str, dict] = {
 
 
 def get_tool_schema_text() -> str:
-    """Return a human-readable text description of all tools for the system prompt."""
+    """Return a human-readable tool description for the system prompt."""
     lines = []
     for tool_name, schema in TOOL_SCHEMAS.items():
         priority = TOOL_PRIORITY[tool_name]
         lines.append(f"[Priority {priority}] {tool_name}: {schema['description']}")
         for param_name, param in schema["parameters"].items():
             if param["type"] == "array":
+                hue_rec = param["items"]["hue"]["recommended_delta_range"]
+                sat_rec = param["items"]["saturation"]["recommended_delta_range"]
+                lum_rec = param["items"]["luminance"]["recommended_delta_range"]
                 lines.append(
                     f"  - adjustments: list of {{color ∈ {HSL_BAND_NAMES}, "
-                    f"hue [-100,100], saturation [-100,100], luminance [-100,100]}}"
+                    f"hue hard-limit [-100,100] / recommended-step [{hue_rec[0]},{hue_rec[1]}], "
+                    f"saturation hard-limit [-100,100] / recommended-step [{sat_rec[0]},{sat_rec[1]}], "
+                    f"luminance hard-limit [-100,100] / recommended-step [{lum_rec[0]},{lum_rec[1]}]}}"
                 )
             else:
                 lo, hi = param["range"]
-                lines.append(f"  - {param_name}: float [{lo}, {hi}]")
+                rec_lo, rec_hi = param["recommended_delta_range"]
+                lines.append(
+                    f"  - {param_name}: delta float; hard-limit [{lo}, {hi}], "
+                    f"recommended single-step [{rec_lo}, {rec_hi}]"
+                )
     return "\n".join(lines)
 
 

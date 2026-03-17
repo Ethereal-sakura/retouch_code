@@ -152,7 +152,9 @@ def main() -> None:
     # Generation loop
     output_dir.mkdir(parents=True, exist_ok=True)
     results_file = output_dir / "trajectories_raw.json"
+    summary_file = output_dir / "steps_summary.json"
     all_trajectories = []
+    all_steps_summary = []
 
     log_every_n = cfg.get("logging", {}).get("log_every_n", 10)
 
@@ -188,15 +190,38 @@ def main() -> None:
                 use_lpips=bool(metrics_cfg.get("use_lpips", False)),
                 metrics_device=str(metrics_cfg.get("device", "cpu")),
                 save_images=bool(gen_cfg.get("save_intermediate_images", True)),
+                num_candidates=int(gen_cfg.get("num_candidates", 3)),
+                max_rollbacks=int(gen_cfg.get("max_rollbacks", 3)),
+                oscillation_window=int(gen_cfg.get("oscillation_window", 3)),
             )
             all_trajectories.append(traj)
+
+            # Build per-step summary (adopt steps only, with saved images)
+            initial_quality = traj.get("initial_quality", {})
+            for step in traj.get("steps", []):
+                if step.get("action") != "adopt":
+                    continue
+                all_steps_summary.append({
+                    "trajectory_id": traj_id,
+                    "round": step["round"],
+                    "input_image": step.get("input_image", ""),
+                    "output_image": step.get("output_image", ""),
+                    "tool": step.get("tool", ""),
+                    "parameters": step.get("parameters", {}),
+                    "cot": step.get("cot", ""),
+                    "initial_quality": initial_quality,
+                    "step_quality": step.get("step_quality", {}),
+                })
+
         except Exception as e:
             logger.error(f"[{traj_id}] Trajectory generation failed: {e}", exc_info=True)
             continue
 
-        # Append to results file incrementally (crash-safe)
+        # Append to results files incrementally (crash-safe)
         with open(results_file, "w", encoding="utf-8") as f:
             json.dump(all_trajectories, f, ensure_ascii=False, indent=2)
+        with open(summary_file, "w", encoding="utf-8") as f:
+            json.dump(all_steps_summary, f, ensure_ascii=False, indent=2)
 
     logger.info(
         f"Generation complete: {len(all_trajectories)}/{len(pairs)} trajectories saved to {results_file}"

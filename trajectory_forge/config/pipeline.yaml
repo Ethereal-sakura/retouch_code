@@ -2,11 +2,11 @@
 
 # ── MLLM API Settings ──────────────────────────────────────────────────────────
 api:
-  base_url: "https://api.openai.com/v1"   # OpenAI or compatible endpoint
-  model: "gpt-4o"                          # Model to use for trajectory generation
+  base_url: "https://www.blueshirtmap.com/v1"   # OpenAI or compatible endpoint
+  model: "gemini-2.5-pro"                          # Model to use for trajectory generation
   api_key_env: "OPENAI_API_KEY"            # Environment variable name for API key
-  max_tokens: 1024
-  temperature: 0.2                         # Low temperature for deterministic editing
+  max_tokens: 8192
+  temperature: 1.0                         # Low temperature for deterministic editing
   request_timeout: 60                      # Seconds per API call
 
 # ── Trajectory Generation ──────────────────────────────────────────────────────
@@ -17,6 +17,9 @@ generation:
   save_intermediate_images: true           # Save intermediate step images to disk
   output_dir: "trajectories"              # Directory to save generated trajectories
   image_quality: 85                        # JPEG quality for intermediate images (1-95)
+  num_candidates: 3                        # Candidate strategies per turn (all rendered, best DeltaE adopted)
+  max_rollbacks: 3                         # Stop after N consecutive no-improvement turns
+  oscillation_window: 3                    # Recent steps window for oscillation detection
 
 # ── Quality Filter Thresholds ──────────────────────────────────────────────────
 filter:

@@ -1,8 +1,8 @@
 [
   {
     "id": "a0001",
-    "source": "data/mitfivek/src/a0001.tif",
-    "target": "data/mitfivek/gt/a0001.tif"
+    "source": "samples/src/src_a1535-kme_501.tif",
+    "target": "samples/tgt/gt_a1535-kme_501.tif"
   },
   {
     "id": "a0002",
