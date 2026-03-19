@@ -1,0 +1,1236 @@
+[
+  {
+    "id": "0_0_0000",
+    "source": "samples/src/0_0.tif",
+    "target": "samples/tgt/0_0.tif",
+    "initial_quality": {
+      "psnr": 22.42,
+      "ssim": 0.969,
+      "delta_e": 8.63,
+      "lpips": 0.053
+    },
+    "steps": [
+      {
+        "round": 0,
+        "input_image": "trajectories_ppr10k/0_0_0000/step_0_input.jpg",
+        "cot": "The residual statistics showed that the image was far too bright, with a `brightness_delta` of -13.83 and an `l_channel_delta` of -13.43. The highlights and shadows were also too high. The most effective first step was to correct this fundamental tonal issue. Applying a strong negative adjustment to both exposure and brightness directly targeted this primary problem, bringing the overall luminosity much closer to the target and establishing a better foundation for subsequent edits.",
+        "tool": "exposure_tool",
+        "delta_parameters": {
+          "exposure": -2,
+          "brightness": -4
+        },
+        "params_accumulated": {
+          "input_color_space": "srgb",
+          "tone_mapper": "basic",
+          "exposure": -2.0,
+          "brightness": -4.0,
+          "contrast": 0.0,
+          "highlights": 0.0,
+          "shadows": 0.0,
+          "whites": 0.0,
+          "blacks": 0.0,
+          "temperature": 0.0,
+          "tint": 0.0,
+          "saturation": 0.0,
+          "vibrance": 0.0,
+          "hsl": {
+            "reds": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "oranges": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "yellows": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "greens": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "aquas": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "blues": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "purples": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "magentas": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            }
+          },
+          "color_grading": {
+            "shadows": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "midtones": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "highlights": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "blending": 50.0,
+            "balance": 0.0
+          }
+        },
+        "params_accumulated_tool": {
+          "exposure": -2.0,
+          "brightness": -4.0
+        },
+        "output_image": "trajectories_ppr10k/0_0_0000/step_0_output.jpg",
+        "step_quality": {
+          "psnr": 25.7,
+          "ssim": 0.97,
+          "delta_e": 6.66,
+          "lpips": 0.045
+        },
+        "delta_stat": {
+          "brightness_delta": -13.83,
+          "l_channel_delta": -13.43,
+          "contrast_delta": -2.18,
+          "highlight_delta": -9.0,
+          "shadow_delta": -7.0,
+          "temperature_delta": -5.61,
+          "tint_delta": -12.84,
+          "saturation_delta": 10.98,
+          "hue_band_residuals": {
+            "reds": 0.2535,
+            "oranges": 0.3896,
+            "yellows": 0.3401,
+            "greens": 0.7045,
+            "aquas": 0.2691,
+            "blues": 0.9038,
+            "purples": 0.227,
+            "magentas": 0.1021
+          },
+          "dominant_hsl_band": "blues",
+          "dominant_issue": "hsl"
+        },
+        "proposal": {
+          "tool": "exposure_tool",
+          "direction": "decrease",
+          "magnitude_bucket": "large",
+          "reason": "The current image is significantly brighter than the target across the entire tonal range, indicated by the large negative brightness_delta (-13.83) and l_channel_delta (-13.43)."
+        },
+        "probe_summary": [
+          {
+            "delta_parameters": {
+              "exposure": -8,
+              "brightness": -3
+            },
+            "score": 13.297,
+            "metrics": {
+              "psnr": 19.93,
+              "ssim": 0.954,
+              "delta_e": 10.67
+            }
+          },
+          {
+            "delta_parameters": {
+              "exposure": -11,
+              "brightness": -6
+            },
+            "score": 19.3067,
+            "metrics": {
+              "psnr": 15.74,
+              "ssim": 0.925,
+              "delta_e": 15.95
+            }
+          },
+          {
+            "delta_parameters": {
+              "exposure": -14,
+              "brightness": -8
+            },
+            "score": 25.0394,
+            "metrics": {
+              "psnr": 13.16,
+              "ssim": 0.887,
+              "delta_e": 20.97
+            }
+          }
+        ],
+        "score_before": 11.25278588235294,
+        "score_after": 9.13164862745098,
+        "accepted": true
+      },
+      {
+        "round": 1,
+        "input_image": "trajectories_ppr10k/0_0_0000/step_1_input.jpg",
+        "cot": "The residual analysis indicated that the most significant remaining error was in the HSL tool, specifically within the blue color range. The blues in the current image were considerably too bright compared to the target. Therefore, the most effective next step was to use the HSL tool to decrease the luminance of the blues, directly addressing this primary color error and bringing the overall color balance closer to the desired state.",
+        "tool": "hsl_tool",
+        "delta_parameters": {
+          "adjustments": [
+            {
+              "color": "blues",
+              "hue": 0,
+              "saturation": 0,
+              "luminance": -1
+            }
+          ]
+        },
+        "params_accumulated": {
+          "input_color_space": "srgb",
+          "tone_mapper": "basic",
+          "exposure": -2.0,
+          "brightness": -4.0,
+          "contrast": 0.0,
+          "highlights": 0.0,
+          "shadows": 0.0,
+          "whites": 0.0,
+          "blacks": 0.0,
+          "temperature": 0.0,
+          "tint": 0.0,
+          "saturation": 0.0,
+          "vibrance": 0.0,
+          "hsl": {
+            "reds": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "oranges": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "yellows": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "greens": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "aquas": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "blues": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": -1.0
+            },
+            "purples": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "magentas": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            }
+          },
+          "color_grading": {
+            "shadows": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "midtones": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "highlights": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "blending": 50.0,
+            "balance": 0.0
+          }
+        },
+        "params_accumulated_tool": {
+          "adjustments": [
+            {
+              "color": "reds",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            {
+              "color": "oranges",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            {
+              "color": "yellows",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            {
+              "color": "greens",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            {
+              "color": "aquas",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            {
+              "color": "blues",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": -1.0
+            },
+            {
+              "color": "purples",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            {
+              "color": "magentas",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            }
+          ]
+        },
+        "output_image": "trajectories_ppr10k/0_0_0000/step_1_output.jpg",
+        "step_quality": {
+          "psnr": 25.71,
+          "ssim": 0.97,
+          "delta_e": 6.66,
+          "lpips": 0.045
+        },
+        "delta_stat": {
+          "brightness_delta": -0.28,
+          "l_channel_delta": -0.77,
+          "contrast_delta": -1.24,
+          "highlight_delta": 4.0,
+          "shadow_delta": 5.0,
+          "temperature_delta": -5.52,
+          "tint_delta": 0.67,
+          "saturation_delta": 9.87,
+          "hue_band_residuals": {
+            "reds": 0.3015,
+            "oranges": 0.4754,
+            "yellows": 0.3487,
+            "greens": 0.6698,
+            "aquas": 0.2278,
+            "blues": 0.9368,
+            "purples": 0.1749,
+            "magentas": 0.0606
+          },
+          "dominant_hsl_band": "blues",
+          "dominant_issue": "hsl"
+        },
+        "proposal": {
+          "tool": "hsl_tool",
+          "direction": "increase",
+          "magnitude_bucket": "small",
+          "reason": "Specifically, the blue and green channels in the HSL bands need more saturation to match the water and background tones."
+        },
+        "probe_summary": [
+          {
+            "delta_parameters": {
+              "adjustments": [
+                {
+                  "color": "blues",
+                  "hue": 0,
+                  "saturation": 6,
+                  "luminance": -2
+                }
+              ]
+            },
+            "score": 8.6387,
+            "metrics": {
+              "psnr": 25.74,
+              "ssim": 0.971,
+              "delta_e": 6.65
+            }
+          },
+          {
+            "delta_parameters": {
+              "adjustments": [
+                {
+                  "color": "blues",
+                  "hue": 0,
+                  "saturation": 4,
+                  "luminance": -4
+                }
+              ]
+            },
+            "score": 8.6505,
+            "metrics": {
+              "psnr": 25.74,
+              "ssim": 0.971,
+              "delta_e": 6.66
+            }
+          }
+        ],
+        "score_before": 9.13164862745098,
+        "score_after": 9.091905882352942,
+        "accepted": true
+      },
+      {
+        "round": 2,
+        "input_image": "trajectories_ppr10k/0_0_0000/step_2_input.jpg",
+        "cot": "The residual statistics identified `hsl` as the dominant issue, with the `blues` channel having the largest error (0.937). This indicates the blue tones in the image are inaccurate, likely too bright. The accepted step directly addresses this by using the HSL tool to slightly decrease the luminance of the blues. This targeted adjustment is the correct move as it precisely corrects the most significant remaining color error without affecting other, more accurate, color ranges.",
+        "tool": "hsl_tool",
+        "delta_parameters": {
+          "adjustments": []
+        },
+        "params_accumulated": {
+          "input_color_space": "srgb",
+          "tone_mapper": "basic",
+          "exposure": -2.0,
+          "brightness": -4.0,
+          "contrast": 0.0,
+          "highlights": 0.0,
+          "shadows": 0.0,
+          "whites": 0.0,
+          "blacks": 0.0,
+          "temperature": 0.0,
+          "tint": 0.0,
+          "saturation": 0.0,
+          "vibrance": 0.0,
+          "hsl": {
+            "reds": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "oranges": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "yellows": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "greens": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "aquas": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "blues": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": -1.0
+            },
+            "purples": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "magentas": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            }
+          },
+          "color_grading": {
+            "shadows": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "midtones": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "highlights": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "blending": 50.0,
+            "balance": 0.0
+          }
+        },
+        "params_accumulated_tool": {
+          "adjustments": [
+            {
+              "color": "reds",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            {
+              "color": "oranges",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            {
+              "color": "yellows",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            {
+              "color": "greens",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            {
+              "color": "aquas",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            {
+              "color": "blues",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": -1.0
+            },
+            {
+              "color": "purples",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            {
+              "color": "magentas",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            }
+          ]
+        },
+        "output_image": "trajectories_ppr10k/0_0_0000/step_2_output.jpg",
+        "step_quality": {
+          "psnr": 25.71,
+          "ssim": 0.97,
+          "delta_e": 6.66,
+          "lpips": 0.045
+        },
+        "delta_stat": {
+          "brightness_delta": -0.27,
+          "l_channel_delta": -0.76,
+          "contrast_delta": -1.24,
+          "highlight_delta": 4.0,
+          "shadow_delta": 5.0,
+          "temperature_delta": -5.52,
+          "tint_delta": 0.68,
+          "saturation_delta": 9.87,
+          "hue_band_residuals": {
+            "reds": 0.3015,
+            "oranges": 0.4754,
+            "yellows": 0.3487,
+            "greens": 0.6698,
+            "aquas": 0.2281,
+            "blues": 0.937,
+            "purples": 0.1743,
+            "magentas": 0.0606
+          },
+          "dominant_hsl_band": "blues",
+          "dominant_issue": "hsl"
+        },
+        "proposal": {
+          "tool": "hsl_tool",
+          "direction": "increase",
+          "magnitude_bucket": "large",
+          "reason": "The dominant issue is HSL, with the highest residual in the blues (0.937). Increasing the saturation of the blues will make the water more vibrant to match the target."
+        },
+        "probe_summary": [
+          {
+            "delta_parameters": {
+              "adjustments": [
+                {
+                  "color": "blues",
+                  "hue": 0,
+                  "saturation": 18,
+                  "luminance": -6
+                }
+              ]
+            },
+            "score": 8.8756,
+            "metrics": {
+              "psnr": 25.9,
+              "ssim": 0.972,
+              "delta_e": 6.58
+            }
+          },
+          {
+            "delta_parameters": {
+              "adjustments": [
+                {
+                  "color": "blues",
+                  "hue": 0,
+                  "saturation": 13,
+                  "luminance": -13
+                }
+              ]
+            },
+            "score": 8.95,
+            "metrics": {
+              "psnr": 25.9,
+              "ssim": 0.972,
+              "delta_e": 6.6
+            }
+          }
+        ],
+        "score_before": 9.091905882352942,
+        "score_after": 9.071905882352942,
+        "accepted": true
+      },
+      {
+        "round": 3,
+        "input_image": "trajectories_ppr10k/0_0_0000/step_3_input.jpg",
+        "cot": "The residual statistics clearly indicated a strong warm color cast, with `temperature_delta` at -5.52. The dominant issue was identified as HSL, confirming that color was the most significant problem to solve. The logical first step was to address this global color imbalance. By applying a -7.00 temperature adjustment, we directly targeted and corrected the warm cast. The minor +1.00 tint adjustment simultaneously addressed the slight magenta shift. This foundational color correction successfully neutralized the image, providing a much cleaner base for subsequent edits and resulting in a significant improvement in the overall score.",
+        "tool": "white_balance_tool",
+        "delta_parameters": {
+          "temperature": -7,
+          "tint": 1
+        },
+        "params_accumulated": {
+          "input_color_space": "srgb",
+          "tone_mapper": "basic",
+          "exposure": -2.0,
+          "brightness": -4.0,
+          "contrast": 0.0,
+          "highlights": 0.0,
+          "shadows": 0.0,
+          "whites": 0.0,
+          "blacks": 0.0,
+          "temperature": -7.0,
+          "tint": 1.0,
+          "saturation": 0.0,
+          "vibrance": 0.0,
+          "hsl": {
+            "reds": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "oranges": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "yellows": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "greens": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "aquas": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "blues": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": -1.0
+            },
+            "purples": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "magentas": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            }
+          },
+          "color_grading": {
+            "shadows": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "midtones": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "highlights": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "blending": 50.0,
+            "balance": 0.0
+          }
+        },
+        "params_accumulated_tool": {
+          "temperature": -7.0,
+          "tint": 1.0
+        },
+        "output_image": "trajectories_ppr10k/0_0_0000/step_3_output.jpg",
+        "step_quality": {
+          "psnr": 26.77,
+          "ssim": 0.97,
+          "delta_e": 4.99,
+          "lpips": 0.046
+        },
+        "delta_stat": {
+          "brightness_delta": -0.27,
+          "l_channel_delta": -0.76,
+          "contrast_delta": -1.24,
+          "highlight_delta": 4.0,
+          "shadow_delta": 5.0,
+          "temperature_delta": -5.52,
+          "tint_delta": 0.68,
+          "saturation_delta": 9.87,
+          "hue_band_residuals": {
+            "reds": 0.3015,
+            "oranges": 0.4754,
+            "yellows": 0.3487,
+            "greens": 0.6698,
+            "aquas": 0.2281,
+            "blues": 0.937,
+            "purples": 0.1743,
+            "magentas": 0.0606
+          },
+          "dominant_hsl_band": "blues",
+          "dominant_issue": "hsl"
+        },
+        "proposal": {
+          "tool": "white_balance_tool",
+          "direction": "decrease",
+          "magnitude_bucket": "medium",
+          "reason": "The current image is warmer than the target, as shown by the temperature_delta of -5.52. A decrease will make the image cooler/bluer."
+        },
+        "probe_summary": [
+          {
+            "delta_parameters": {
+              "temperature": -8,
+              "tint": 3
+            },
+            "score": 6.6532,
+            "metrics": {
+              "psnr": 26.82,
+              "ssim": 0.971,
+              "delta_e": 5.32
+            }
+          },
+          {
+            "delta_parameters": {
+              "temperature": -6,
+              "tint": 6
+            },
+            "score": 7.2067,
+            "metrics": {
+              "psnr": 26.55,
+              "ssim": 0.971,
+              "delta_e": 5.82
+            }
+          },
+          {
+            "delta_parameters": {
+              "temperature": -3,
+              "tint": 8
+            },
+            "score": 7.7614,
+            "metrics": {
+              "psnr": 26.06,
+              "ssim": 0.97,
+              "delta_e": 6.27
+            }
+          }
+        ],
+        "score_before": 9.071905882352942,
+        "score_after": 6.910756078431373,
+        "accepted": true
+      },
+      {
+        "round": 4,
+        "input_image": "trajectories_ppr10k/0_0_0000/step_4_input.jpg",
+        "cot": "The residual statistics identified the dominant issue as an HSL imbalance, with the green color range having the largest error. The image was also undersaturated and had overly dark shadows. This step correctly targeted the primary problem by increasing the luminance and saturation of the greens. This single adjustment simultaneously brightens the foliage to lift the shadows, boosts overall color vibrancy, and corrects the most significant color cast, making it the most effective move to improve the image.",
+        "tool": "hsl_tool",
+        "delta_parameters": {
+          "adjustments": [
+            {
+              "color": "greens",
+              "hue": 0,
+              "saturation": 1,
+              "luminance": 1
+            }
+          ]
+        },
+        "params_accumulated": {
+          "input_color_space": "srgb",
+          "tone_mapper": "basic",
+          "exposure": -2.0,
+          "brightness": -4.0,
+          "contrast": 0.0,
+          "highlights": 0.0,
+          "shadows": 0.0,
+          "whites": 0.0,
+          "blacks": 0.0,
+          "temperature": -7.0,
+          "tint": 1.0,
+          "saturation": 0.0,
+          "vibrance": 0.0,
+          "hsl": {
+            "reds": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "oranges": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "yellows": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "greens": {
+              "hue": 0.0,
+              "saturation": 1.0,
+              "luminance": 1.0
+            },
+            "aquas": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "blues": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": -1.0
+            },
+            "purples": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "magentas": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            }
+          },
+          "color_grading": {
+            "shadows": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "midtones": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "highlights": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "blending": 50.0,
+            "balance": 0.0
+          }
+        },
+        "params_accumulated_tool": {
+          "adjustments": [
+            {
+              "color": "reds",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            {
+              "color": "oranges",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            {
+              "color": "yellows",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            {
+              "color": "greens",
+              "hue": 0.0,
+              "saturation": 1.0,
+              "luminance": 1.0
+            },
+            {
+              "color": "aquas",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            {
+              "color": "blues",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": -1.0
+            },
+            {
+              "color": "purples",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            {
+              "color": "magentas",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            }
+          ]
+        },
+        "output_image": "trajectories_ppr10k/0_0_0000/step_4_output.jpg",
+        "step_quality": {
+          "psnr": 26.77,
+          "ssim": 0.97,
+          "delta_e": 4.99,
+          "lpips": 0.046
+        },
+        "delta_stat": {
+          "brightness_delta": 0.42,
+          "l_channel_delta": 1.05,
+          "contrast_delta": -1.2,
+          "highlight_delta": -1.0,
+          "shadow_delta": 5.0,
+          "temperature_delta": -2.03,
+          "tint_delta": 2.4,
+          "saturation_delta": 4.65,
+          "hue_band_residuals": {
+            "reds": 0.3102,
+            "oranges": 0.4356,
+            "yellows": 0.3983,
+            "greens": 0.6041,
+            "aquas": 0.3062,
+            "blues": 0.2896,
+            "purples": 0.0824,
+            "magentas": 0.0871
+          },
+          "dominant_hsl_band": "greens",
+          "dominant_issue": "hsl"
+        },
+        "proposal": {
+          "tool": "hsl_tool",
+          "direction": "increase",
+          "magnitude_bucket": "small",
+          "reason": "The target image has slightly more saturated greens, and a small increase in greens saturation is needed."
+        },
+        "probe_summary": [
+          {
+            "delta_parameters": {
+              "adjustments": [
+                {
+                  "color": "greens",
+                  "hue": 0,
+                  "saturation": 4,
+                  "luminance": 4
+                }
+              ]
+            },
+            "score": 6.3941,
+            "metrics": {
+              "psnr": 26.77,
+              "ssim": 0.971,
+              "delta_e": 5.0
+            }
+          },
+          {
+            "delta_parameters": {
+              "adjustments": [
+                {
+                  "color": "greens",
+                  "hue": 0,
+                  "saturation": 6,
+                  "luminance": 2
+                }
+              ]
+            },
+            "score": 6.3942,
+            "metrics": {
+              "psnr": 26.77,
+              "ssim": 0.971,
+              "delta_e": 5.0
+            }
+          }
+        ],
+        "score_before": 6.910756078431373,
+        "score_after": 6.870756078431373,
+        "accepted": true
+      },
+      {
+        "round": 5,
+        "input_image": "trajectories_ppr10k/0_0_0000/step_5_input.jpg",
+        "cot": "The dominant issue is HSL, and greens show the highest residual, meaning they are currently too dark compared to the target. Increasing the luminance of greens directly addresses this by brightening them, which helps to reduce the overall brightness delta and improve the color balance.",
+        "tool": "hsl_tool",
+        "delta_parameters": {
+          "adjustments": [
+            {
+              "color": "greens",
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 1
+            }
+          ]
+        },
+        "params_accumulated": {
+          "input_color_space": "srgb",
+          "tone_mapper": "basic",
+          "exposure": -2.0,
+          "brightness": -4.0,
+          "contrast": 0.0,
+          "highlights": 0.0,
+          "shadows": 0.0,
+          "whites": 0.0,
+          "blacks": 0.0,
+          "temperature": -7.0,
+          "tint": 1.0,
+          "saturation": 0.0,
+          "vibrance": 0.0,
+          "hsl": {
+            "reds": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "oranges": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "yellows": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "greens": {
+              "hue": 0.0,
+              "saturation": 1.0,
+              "luminance": 2.0
+            },
+            "aquas": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "blues": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": -1.0
+            },
+            "purples": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "magentas": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            }
+          },
+          "color_grading": {
+            "shadows": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "midtones": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "highlights": {
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            "blending": 50.0,
+            "balance": 0.0
+          }
+        },
+        "params_accumulated_tool": {
+          "adjustments": [
+            {
+              "color": "reds",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            {
+              "color": "oranges",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            {
+              "color": "yellows",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            {
+              "color": "greens",
+              "hue": 0.0,
+              "saturation": 1.0,
+              "luminance": 2.0
+            },
+            {
+              "color": "aquas",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            {
+              "color": "blues",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": -1.0
+            },
+            {
+              "color": "purples",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            },
+            {
+              "color": "magentas",
+              "hue": 0.0,
+              "saturation": 0.0,
+              "luminance": 0.0
+            }
+          ]
+        },
+        "output_image": "trajectories_ppr10k/0_0_0000/step_5_output.jpg",
+        "step_quality": {
+          "psnr": 26.77,
+          "ssim": 0.97,
+          "delta_e": 4.99,
+          "lpips": 0.046
+        },
+        "delta_stat": {
+          "brightness_delta": 0.42,
+          "l_channel_delta": 1.05,
+          "contrast_delta": -1.2,
+          "highlight_delta": -1.0,
+          "shadow_delta": 5.0,
+          "temperature_delta": -2.03,
+          "tint_delta": 2.4,
+          "saturation_delta": 4.65,
+          "hue_band_residuals": {
+            "reds": 0.3102,
+            "oranges": 0.4356,
+            "yellows": 0.398,
+            "greens": 0.6041,
+            "aquas": 0.3062,
+            "blues": 0.2896,
+            "purples": 0.0824,
+            "magentas": 0.0871
+          },
+          "dominant_hsl_band": "greens",
+          "dominant_issue": "hsl"
+        },
+        "proposal": {
+          "tool": "hsl_tool",
+          "direction": "mixed",
+          "magnitude_bucket": "medium",
+          "reason": "The largest HSL residual is in the greens band (0.604), likely affecting the water. The target is globally more saturated and brighter, so increasing saturation and luminance for greens should help."
+        },
+        "probe_summary": [
+          {
+            "delta_parameters": {
+              "adjustments": [
+                {
+                  "color": "greens",
+                  "hue": 0,
+                  "saturation": 12,
+                  "luminance": 4
+                }
+              ]
+            },
+            "score": 6.554,
+            "metrics": {
+              "psnr": 26.77,
+              "ssim": 0.971,
+              "delta_e": 5.0
+            }
+          },
+          {
+            "delta_parameters": {
+              "adjustments": [
+                {
+                  "color": "greens",
+                  "hue": 0,
+                  "saturation": 8,
+                  "luminance": 8
+                }
+              ]
+            },
+            "score": 6.5643,
+            "metrics": {
+              "psnr": 26.77,
+              "ssim": 0.971,
+              "delta_e": 5.0
+            }
+          }
+        ],
+        "score_before": 6.870756078431373,
+        "score_after": 6.839716078431373,
+        "accepted": true
+      }
+    ],
+    "final_quality": {
+      "psnr": 26.77,
+      "ssim": 0.97,
+      "delta_e": 4.99,
+      "lpips": 0.046
+    },
+    "num_steps": 6,
+    "search_meta": {
+      "planner_calls": 10,
+      "probe_evaluations": 60,
+      "accepted_candidates": 9,
+      "rejected_candidates": 15,
+      "final_score": 6.8397,
+      "planner_model_role": "planner",
+      "beam_size": 4
+    }
+  }
+]

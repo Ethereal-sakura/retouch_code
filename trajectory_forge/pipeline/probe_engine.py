@@ -14,6 +14,11 @@ from ..tools.image_engine_adapter import (
 )
 from ..utils.metrics import compute_metrics
 from ..utils.stat_utils import get_delta_stat
+from .quantization import (
+    DEFAULT_ACTION_STEP,
+    make_quantized_delta_signature,
+    quantize_tool_delta,
+)
 from .scoring import compute_objective_score
 
 
@@ -40,6 +45,7 @@ def probe_and_refine(
     metrics_device: str,
     scoring_cfg: dict[str, Any],
     probe_cfg: dict[str, Any],
+    quantization_step: float = DEFAULT_ACTION_STEP,
 ) -> dict[str, Any] | None:
     """Probe candidate deltas, refine locally, and evaluate the best candidate."""
     ladder = build_probe_ladder(
@@ -52,7 +58,16 @@ def probe_and_refine(
         return None
 
     probe_results = []
+    seen_probe_actions: set[str] = set()
     for delta_params in ladder:
+        signature = make_quantized_delta_signature(
+            proposal["tool"],
+            delta_params,
+            step=quantization_step,
+        )
+        if signature in seen_probe_actions:
+            continue
+        seen_probe_actions.add(signature)
         result = evaluate_candidate(
             state=state,
             tool_name=proposal["tool"],
@@ -63,15 +78,19 @@ def probe_and_refine(
             use_lpips=False,
             metrics_device=metrics_device,
             scoring_cfg=scoring_cfg,
+            quantization_step=quantization_step,
         )
         probe_results.append(result)
+
+    if not probe_results:
+        return None
 
     probe_results.sort(key=lambda item: item["score"])
     best_probe = probe_results[0]
     refined = refine_candidate(
         state=state,
         tool_name=proposal["tool"],
-        seed_delta=best_probe["delta_parameters"],
+        seed_delta=best_probe["search_delta_parameters"],
         seed_score=best_probe["score"],
         delta_stat=delta_stat,
         src_probe_img=src_probe_img,
@@ -80,9 +99,10 @@ def probe_and_refine(
         metrics_device=metrics_device,
         scoring_cfg=scoring_cfg,
         step_sizes=probe_cfg.get("refine_steps", [3.0, 1.5]),
+        quantization_step=quantization_step,
     )
 
-    final_delta = refined["delta_parameters"]
+    final_delta = refined["search_delta_parameters"]
     full_eval = evaluate_candidate(
         state=state,
         tool_name=proposal["tool"],
@@ -93,6 +113,7 @@ def probe_and_refine(
         use_lpips=use_lpips,
         metrics_device=metrics_device,
         scoring_cfg=scoring_cfg,
+        quantization_step=quantization_step,
     )
 
     full_eval["proposal"] = copy.deepcopy(proposal)
@@ -118,9 +139,15 @@ def evaluate_candidate(
     use_lpips: bool,
     metrics_device: str,
     scoring_cfg: dict[str, Any],
+    quantization_step: float = DEFAULT_ACTION_STEP,
 ) -> dict[str, Any]:
     """Render and score a candidate delta."""
-    new_params = merge_tool_call(state.params, tool_name, delta_params)
+    quantized_delta = quantize_tool_delta(
+        tool_name,
+        delta_params,
+        step=quantization_step,
+    )
+    new_params = merge_tool_call(state.params, tool_name, quantized_delta)
     actual_delta = diff_tool_params(state.params, new_params, tool_name)
     rendered = render(src_img, new_params)
     metrics = compute_metrics(
@@ -141,10 +168,10 @@ def evaluate_candidate(
     )
     return {
         "tool": tool_name,
+        "search_delta_parameters": copy.deepcopy(delta_params),
         "delta_parameters": actual_delta,
         "full_params": new_params,
         "metrics": metrics,
-        "step_quality": metrics,
         "score": score,
         "output_image": rendered,
         "output_delta_stat": new_delta_stat,
@@ -166,18 +193,34 @@ def refine_candidate(
     metrics_device: str,
     scoring_cfg: dict[str, Any],
     step_sizes: list[float],
+    quantization_step: float = DEFAULT_ACTION_STEP,
 ) -> dict[str, Any]:
     """Run a small local search around the best probe."""
     best = {
-        "delta_parameters": copy.deepcopy(seed_delta),
+        "search_delta_parameters": copy.deepcopy(seed_delta),
         "score": float(seed_score),
+    }
+    seen_quantized_actions = {
+        make_quantized_delta_signature(
+            tool_name,
+            seed_delta,
+            step=quantization_step,
+        )
     }
 
     for step_size in step_sizes:
         improved = True
         while improved:
             improved = False
-            for neighbor in generate_neighbors(tool_name, best["delta_parameters"], step_size):
+            for neighbor in generate_neighbors(tool_name, best["search_delta_parameters"], step_size):
+                signature = make_quantized_delta_signature(
+                    tool_name,
+                    neighbor,
+                    step=quantization_step,
+                )
+                if signature in seen_quantized_actions:
+                    continue
+                seen_quantized_actions.add(signature)
                 result = evaluate_candidate(
                     state=state,
                     tool_name=tool_name,
@@ -188,10 +231,11 @@ def refine_candidate(
                     use_lpips=False,
                     metrics_device=metrics_device,
                     scoring_cfg=scoring_cfg,
+                    quantization_step=quantization_step,
                 )
                 if result["score"] + 1e-8 < best["score"]:
                     best = {
-                        "delta_parameters": result["delta_parameters"],
+                        "search_delta_parameters": copy.deepcopy(neighbor),
                         "score": result["score"],
                     }
                     improved = True

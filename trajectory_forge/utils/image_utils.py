@@ -10,25 +10,22 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
+_ENGINE_PATH = Path(__file__).parent.parent.parent / "image_engine"
+if str(_ENGINE_PATH) not in sys.path:
+    sys.path.insert(0, str(_ENGINE_PATH))
+
 
 def load_image(path: str | Path) -> np.ndarray:
     """Load an image from disk as float32 [0, 1] RGB numpy array.
 
     Delegates to image_engine's load_image for format support (TIF, JPG, PNG).
     """
-    # Add image_engine to path if needed
-    engine_path = Path(__file__).parent.parent.parent / "image_engine"
-    if str(engine_path) not in sys.path:
-        sys.path.insert(0, str(engine_path))
     from rapidraw_basic_color.io import load_image as _load
     return _load(path)
 
 
 def save_image(path: str | Path, image: np.ndarray, quality: int = 85) -> None:
     """Save a float32 [0, 1] image to disk."""
-    engine_path = Path(__file__).parent.parent.parent / "image_engine"
-    if str(engine_path) not in sys.path:
-        sys.path.insert(0, str(engine_path))
     from rapidraw_basic_color.io import save_image as _save
     _save(path, image, quality=quality)
 

@@ -18,13 +18,12 @@ import os
 import sys
 from pathlib import Path
 
-import yaml
-
 # Allow running from trajectory_forge/ directory
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from trajectory_forge.agents.mllm_agent import MLLMAgent
 from trajectory_forge.pipeline.trajectory_generator import generate_trajectory
+from trajectory_forge.utils.config import load_config
 from trajectory_forge.utils.image_utils import load_image
 
 
@@ -65,14 +64,6 @@ def parse_args() -> argparse.Namespace:
     return p.parse_args()
 
 
-def load_config(config_path: str) -> dict:
-    config_path = Path(config_path)
-    if not config_path.exists():
-        # Use defaults if config file not found
-        return {}
-    with open(config_path, "r") as f:
-        return yaml.safe_load(f) or {}
-
 
 def setup_logging(cfg: dict) -> None:
     log_cfg = cfg.get("logging", {})
@@ -105,7 +96,7 @@ def make_brief_trajectory(traj: dict) -> dict:
                 "round": step.get("round"),
                 "output_image": step.get("output_image", ""),
                 "tool": step.get("tool", ""),
-                "parameters": step.get("parameters", {}),
+                "parameters": step.get("delta_parameters", step.get("parameters", {})),
                 "cot": step.get("cot", ""),
                 "step_quality": step.get("step_quality", {}),
             }

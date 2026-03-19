@@ -7,8 +7,6 @@ following the photographer's adjustment priority order:
 
 from __future__ import annotations
 
-import json
-from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
@@ -97,45 +95,6 @@ def get_tool_schema_text() -> str:
                 lines.append(f"  - {param_name}: float [{lo}, {hi}]")
     return "\n".join(lines)
 
-
-def validate_tool_call(tool_name: str, params: dict) -> tuple[bool, str]:
-    """Validate tool name and parameters against the schema.
-
-    Returns (ok: bool, error_message: str).
-    """
-    if tool_name not in TOOL_SCHEMAS:
-        return False, f"Unknown tool: '{tool_name}'. Valid tools: {list(TOOL_SCHEMAS.keys())}"
-
-    schema = TOOL_SCHEMAS[tool_name]
-
-    if tool_name == "hsl_tool":
-        adjustments = params.get("adjustments")
-        if not isinstance(adjustments, list) or len(adjustments) == 0:
-            return False, "hsl_tool requires a non-empty 'adjustments' list."
-        for adj in adjustments:
-            color = adj.get("color", "")
-            if color not in HSL_BAND_NAMES:
-                return False, f"Invalid HSL color band: '{color}'. Valid: {HSL_BAND_NAMES}"
-            for key in ("hue", "saturation", "luminance"):
-                val = adj.get(key, 0.0)
-                lo, hi = (-100, 100)
-                if not (lo <= float(val) <= hi):
-                    return False, f"HSL {key} value {val} out of range [{lo}, {hi}]"
-        return True, ""
-
-    for param_name, param_schema in schema["parameters"].items():
-        if param_name not in params:
-            continue  # Optional — default to 0
-        val = params[param_name]
-        lo, hi = param_schema["range"]
-        try:
-            fval = float(val)
-        except (TypeError, ValueError):
-            return False, f"Parameter '{param_name}' must be numeric, got: {val!r}"
-        if not (lo <= fval <= hi):
-            return False, f"Parameter '{param_name}' = {fval} out of range [{lo}, {hi}]"
-
-    return True, ""
 
 
 def clamp_params(tool_name: str, params: dict) -> dict:

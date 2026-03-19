@@ -184,16 +184,16 @@ def diff_tool_params(
             prev = before_map[color]
             delta = {
                 "color": color,
-                "hue": item["hue"] - prev["hue"],
-                "saturation": item["saturation"] - prev["saturation"],
-                "luminance": item["luminance"] - prev["luminance"],
+                "hue": _normalize_delta_number(item["hue"] - prev["hue"]),
+                "saturation": _normalize_delta_number(item["saturation"] - prev["saturation"]),
+                "luminance": _normalize_delta_number(item["luminance"] - prev["luminance"]),
             }
             if any(abs(delta[key]) > 1e-6 for key in ("hue", "saturation", "luminance")):
                 delta_items.append(delta)
         return {"adjustments": delta_items}
 
     return {
-        key: float(after_params.get(key, 0.0)) - float(before_params.get(key, 0.0))
+        key: _normalize_delta_number(float(after_params.get(key, 0.0)) - float(before_params.get(key, 0.0)))
         for key in after_params
     }
 
@@ -222,3 +222,12 @@ def render(source_img: np.ndarray, params: BasicColorParams) -> np.ndarray:
 def _clamp_total(tool_name: str, param_name: str, value: float) -> float:
     lo, hi = TOOL_SCHEMAS[tool_name]["parameters"][param_name]["range"]
     return max(float(lo), min(float(hi), float(value)))
+
+
+def _normalize_delta_number(value: float) -> int | float:
+    if abs(value) <= 1e-9:
+        return 0
+    rounded = round(value)
+    if abs(value - rounded) <= 1e-9:
+        return int(rounded)
+    return float(value)

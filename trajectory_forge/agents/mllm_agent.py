@@ -98,54 +98,6 @@ class MLLMAgent:
                     raise
 
 
-def parse_tool_call(response: str) -> tuple[str | None, dict | None]:
-    """Parse a <tool_call>...</tool_call> block from the model response.
-
-    Handles two formats:
-    1. Simple key: value lines (for scalar tools)
-    2. JSON values (for hsl_tool adjustments list)
-
-    Returns
-    -------
-    (tool_name, params) or (None, None) if parsing fails.
-    """
-    tool_block = _extract_tag(response, "tool_call")
-    if not tool_block:
-        return None, None
-
-    lines = [line.strip() for line in tool_block.strip().splitlines() if line.strip()]
-    if not lines:
-        return None, None
-
-    tool_name = None
-    params: dict = {}
-
-    for line in lines:
-        if ":" not in line:
-            continue
-        key, _, val = line.partition(":")
-        key = key.strip()
-        val = val.strip()
-
-        if key == "tool":
-            tool_name = val
-            continue
-
-        # Try JSON parse first (handles lists and nested objects)
-        try:
-            params[key] = json.loads(val)
-        except json.JSONDecodeError:
-            # Try numeric parse
-            try:
-                params[key] = float(val)
-            except ValueError:
-                params[key] = val  # Keep as string
-
-    if not tool_name:
-        return None, None
-
-    return tool_name, params
-
 
 def extract_json_object(response: str) -> dict[str, Any] | None:
     """Extract the first valid JSON object from a model response."""
@@ -209,11 +161,6 @@ def parse_planner_response(response: str) -> dict[str, Any] | None:
 def parse_thinking(response: str) -> str:
     """Extract the <thinking>...</thinking> block."""
     return _extract_tag(response, "thinking") or ""
-
-
-def is_stop(response: str) -> bool:
-    """Check if the response contains a <stop> signal."""
-    return bool(re.search(r"<stop>", response, re.IGNORECASE))
 
 
 def _extract_tag(text: str, tag: str) -> str | None:

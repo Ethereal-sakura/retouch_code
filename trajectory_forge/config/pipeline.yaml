@@ -2,8 +2,8 @@
 
 # ── MLLM API Settings ──────────────────────────────────────────────────────────
 api:
-  base_url: "http://localhost:10087/v1"   # OpenAI or compatible endpoint
-  model: "InternVL3-14B"                          # Model to use for trajectory generation
+  base_url: "https://www.blueshirtmap.com/v1"   # OpenAI or compatible endpoint
+  model: "gemini-2.5-pro"                          # Model to use for trajectory generation
   api_key_env: "OPENAI_API_KEY"            # Environment variable name for API key
   max_tokens: 8192
   temperature: 0.7                         # Low temperature for deterministic editing

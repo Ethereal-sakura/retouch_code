@@ -1,0 +1,128 @@
+[
+  {
+    "id": "0_0_0000",
+    "source": "samples/src/0_0.tif",
+    "target": "samples/tgt/0_0.tif",
+    "initial_quality": {
+      "psnr": 22.42,
+      "ssim": 0.969,
+      "delta_e": 8.63,
+      "lpips": 0.053
+    },
+    "steps": [
+      {
+        "round": 0,
+        "output_image": "trajectories_ppr10k/0_0_0000/step_0_output.jpg",
+        "tool": "exposure_tool",
+        "parameters": {
+          "exposure": -2,
+          "brightness": -4
+        },
+        "cot": "The residual statistics showed that the image was far too bright, with a `brightness_delta` of -13.83 and an `l_channel_delta` of -13.43. The highlights and shadows were also too high. The most effective first step was to correct this fundamental tonal issue. Applying a strong negative adjustment to both exposure and brightness directly targeted this primary problem, bringing the overall luminosity much closer to the target and establishing a better foundation for subsequent edits.",
+        "step_quality": {
+          "psnr": 25.7,
+          "ssim": 0.97,
+          "delta_e": 6.66,
+          "lpips": 0.045
+        }
+      },
+      {
+        "round": 1,
+        "output_image": "trajectories_ppr10k/0_0_0000/step_1_output.jpg",
+        "tool": "hsl_tool",
+        "parameters": {
+          "adjustments": [
+            {
+              "color": "blues",
+              "hue": 0,
+              "saturation": 0,
+              "luminance": -1
+            }
+          ]
+        },
+        "cot": "The residual analysis indicated that the most significant remaining error was in the HSL tool, specifically within the blue color range. The blues in the current image were considerably too bright compared to the target. Therefore, the most effective next step was to use the HSL tool to decrease the luminance of the blues, directly addressing this primary color error and bringing the overall color balance closer to the desired state.",
+        "step_quality": {
+          "psnr": 25.71,
+          "ssim": 0.97,
+          "delta_e": 6.66,
+          "lpips": 0.045
+        }
+      },
+      {
+        "round": 2,
+        "output_image": "trajectories_ppr10k/0_0_0000/step_2_output.jpg",
+        "tool": "hsl_tool",
+        "parameters": {
+          "adjustments": []
+        },
+        "cot": "The residual statistics identified `hsl` as the dominant issue, with the `blues` channel having the largest error (0.937). This indicates the blue tones in the image are inaccurate, likely too bright. The accepted step directly addresses this by using the HSL tool to slightly decrease the luminance of the blues. This targeted adjustment is the correct move as it precisely corrects the most significant remaining color error without affecting other, more accurate, color ranges.",
+        "step_quality": {
+          "psnr": 25.71,
+          "ssim": 0.97,
+          "delta_e": 6.66,
+          "lpips": 0.045
+        }
+      },
+      {
+        "round": 3,
+        "output_image": "trajectories_ppr10k/0_0_0000/step_3_output.jpg",
+        "tool": "white_balance_tool",
+        "parameters": {
+          "temperature": -7,
+          "tint": 1
+        },
+        "cot": "The residual statistics clearly indicated a strong warm color cast, with `temperature_delta` at -5.52. The dominant issue was identified as HSL, confirming that color was the most significant problem to solve. The logical first step was to address this global color imbalance. By applying a -7.00 temperature adjustment, we directly targeted and corrected the warm cast. The minor +1.00 tint adjustment simultaneously addressed the slight magenta shift. This foundational color correction successfully neutralized the image, providing a much cleaner base for subsequent edits and resulting in a significant improvement in the overall score.",
+        "step_quality": {
+          "psnr": 26.77,
+          "ssim": 0.97,
+          "delta_e": 4.99,
+          "lpips": 0.046
+        }
+      },
+      {
+        "round": 4,
+        "output_image": "trajectories_ppr10k/0_0_0000/step_4_output.jpg",
+        "tool": "hsl_tool",
+        "parameters": {
+          "adjustments": [
+            {
+              "color": "greens",
+              "hue": 0,
+              "saturation": 1,
+              "luminance": 1
+            }
+          ]
+        },
+        "cot": "The residual statistics identified the dominant issue as an HSL imbalance, with the green color range having the largest error. The image was also undersaturated and had overly dark shadows. This step correctly targeted the primary problem by increasing the luminance and saturation of the greens. This single adjustment simultaneously brightens the foliage to lift the shadows, boosts overall color vibrancy, and corrects the most significant color cast, making it the most effective move to improve the image.",
+        "step_quality": {
+          "psnr": 26.77,
+          "ssim": 0.97,
+          "delta_e": 4.99,
+          "lpips": 0.046
+        }
+      },
+      {
+        "round": 5,
+        "output_image": "trajectories_ppr10k/0_0_0000/step_5_output.jpg",
+        "tool": "hsl_tool",
+        "parameters": {
+          "adjustments": [
+            {
+              "color": "greens",
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 1
+            }
+          ]
+        },
+        "cot": "The dominant issue is HSL, and greens show the highest residual, meaning they are currently too dark compared to the target. Increasing the luminance of greens directly addresses this by brightening them, which helps to reduce the overall brightness delta and improve the color balance.",
+        "step_quality": {
+          "psnr": 26.77,
+          "ssim": 0.97,
+          "delta_e": 4.99,
+          "lpips": 0.046
+        }
+      }
+    ]
+  }
+]

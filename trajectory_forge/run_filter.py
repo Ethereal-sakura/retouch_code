@@ -18,7 +18,10 @@ import logging
 import sys
 from pathlib import Path
 
-import yaml
+# Allow running from trajectory_forge/ directory
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+from trajectory_forge.utils.config import load_config
 
 
 def parse_args() -> argparse.Namespace:
@@ -41,13 +44,6 @@ def parse_args() -> argparse.Namespace:
     )
     return p.parse_args()
 
-
-def load_config(config_path: str) -> dict:
-    config_path = Path(config_path)
-    if not config_path.exists():
-        return {}
-    with open(config_path, "r") as f:
-        return yaml.safe_load(f) or {}
 
 
 def print_statistics(trajectories: list[dict]) -> None:

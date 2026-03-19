@@ -256,7 +256,6 @@ def generate_trajectory(
                     "round": turn,
                     "cot": proposal.get("reason", ""),
                     "tool": proposal["tool"],
-                    "parameters": candidate["delta_parameters"],
                     "delta_parameters": candidate["delta_parameters"],
                     "params_accumulated": candidate["params_accumulated"],
                     "params_accumulated_tool": candidate["params_accumulated_tool"],
@@ -276,7 +275,6 @@ def generate_trajectory(
                     {
                         "round": turn,
                         "tool": proposal["tool"],
-                        "parameters": candidate["delta_parameters"],
                         "delta_parameters": candidate["delta_parameters"],
                         "params_accumulated_tool": candidate["params_accumulated_tool"],
                         "step_quality": candidate["metrics"],
@@ -426,7 +424,6 @@ def _export_steps(
                 "input_image": input_image_path,
                 "cot": step.get("cot", ""),
                 "tool": step["tool"],
-                "parameters": step["parameters"],
                 "delta_parameters": step["delta_parameters"],
                 "params_accumulated": step["params_accumulated"],
                 "params_accumulated_tool": step["params_accumulated_tool"],

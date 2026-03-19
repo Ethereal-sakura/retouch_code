@@ -225,26 +225,3 @@ def build_image_content(
             "image_url": {"url": f"data:{media_type};base64,{target_img_b64}"},
         },
     ]
-
-
-def build_system_prompt() -> str:
-    """Backward-compatible alias for the planner prompt."""
-    return build_planner_system_prompt()
-
-
-def build_user_prompt(
-    delta_stat: dict,
-    history: list[dict],
-    turn: int,
-) -> list[dict]:
-    """Backward-compatible alias for planner prompt text without constraints."""
-    return build_planner_user_prompt(
-        delta_stat=delta_stat,
-        history=history,
-        turn=turn,
-        shortlist_tools=[],
-        current_metrics={},
-        current_score=0.0,
-        locked_tools=[],
-        cooldown_tools=[],
-    )

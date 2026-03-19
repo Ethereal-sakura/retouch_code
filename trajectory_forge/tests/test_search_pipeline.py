@@ -4,7 +4,9 @@ import unittest
 
 import numpy as np
 
+from trajectory_forge.pipeline.quantization import quantize_tool_delta
 from trajectory_forge.pipeline.trajectory_generator import generate_trajectory
+from trajectory_forge.run_generate import make_brief_trajectory
 from trajectory_forge.tools.image_engine_adapter import make_default_params, merge_tool_call
 
 
@@ -23,6 +25,15 @@ class FakeAgent:
 
 
 class SearchPipelineTests(unittest.TestCase):
+    def test_quantize_tool_delta_rounds_half_away_from_zero(self) -> None:
+        quantized = quantize_tool_delta(
+            "exposure_tool",
+            {"exposure": -2.5, "brightness": 1.49},
+        )
+
+        self.assertEqual(quantized["exposure"], -3)
+        self.assertEqual(quantized["brightness"], 1)
+
     def test_merge_tool_call_accumulates_numeric_deltas(self) -> None:
         params = make_default_params()
         params = merge_tool_call(params, "exposure_tool", {"exposure": 5, "brightness": 2})
@@ -107,6 +118,15 @@ class SearchPipelineTests(unittest.TestCase):
         )
         self.assertTrue(trajectory["steps"][0]["accepted"])
         self.assertIn("delta_parameters", trajectory["steps"][0])
+        self.assertTrue(
+            all(isinstance(value, int) for value in trajectory["steps"][0]["delta_parameters"].values())
+        )
+
+        brief = make_brief_trajectory(trajectory)
+        self.assertEqual(
+            brief["steps"][0]["parameters"],
+            trajectory["steps"][0]["delta_parameters"],
+        )
 
 
 if __name__ == "__main__":
