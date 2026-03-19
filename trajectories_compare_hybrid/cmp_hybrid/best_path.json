@@ -1,0 +1,324 @@
+{
+  "id": "cmp_hybrid",
+  "source": "samples/src/0_0.tif",
+  "target": "samples/tgt/0_0.tif",
+  "initial_quality": {
+    "psnr": 22.42,
+    "ssim": 0.969,
+    "delta_e": 8.63,
+    "l1": 0.0616,
+    "l2": 0.0757,
+    "lpips": 0.053
+  },
+  "final_quality": {
+    "psnr": 23.42,
+    "ssim": 0.965,
+    "delta_e": 6.45,
+    "l1": 0.0551,
+    "l2": 0.0674,
+    "lpips": 0.056
+  },
+  "final_score": 10.7799,
+  "best_node_id": 10,
+  "node_path": [
+    0,
+    3,
+    10
+  ],
+  "steps": [
+    {
+      "round": 0,
+      "input_image": "trajectories_compare_hybrid/cmp_hybrid/best_path_images/step_00_input.jpg",
+      "cot": "The target image is cooler and has a noticeable magenta tint compared to the current image (tint_delta: -12.84). This adjustment aims to correct the overall color cast.",
+      "tool": "white_balance_tool",
+      "parameters": {
+        "temperature": -10,
+        "tint": 15
+      },
+      "delta_parameters": {
+        "temperature": -10,
+        "tint": 15
+      },
+      "params_accumulated": {
+        "input_color_space": "srgb",
+        "tone_mapper": "basic",
+        "exposure": 0,
+        "brightness": 0,
+        "contrast": 0,
+        "highlights": 0,
+        "shadows": 0,
+        "whites": 0,
+        "blacks": 0,
+        "temperature": -10,
+        "tint": 15,
+        "saturation": 0,
+        "vibrance": 0,
+        "hsl": {
+          "reds": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "oranges": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "yellows": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "greens": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "aquas": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "blues": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "purples": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "magentas": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          }
+        },
+        "color_grading": {
+          "shadows": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "midtones": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "highlights": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "blending": 50,
+          "balance": 0
+        }
+      },
+      "params_accumulated_tool": {
+        "temperature": -10,
+        "tint": 15
+      },
+      "output_image": "trajectories_compare_hybrid/cmp_hybrid/best_path_images/step_00_output.jpg",
+      "step_quality": {
+        "psnr": 23.21,
+        "ssim": 0.963,
+        "delta_e": 7.14,
+        "l1": 0.0558,
+        "l2": 0.0691,
+        "lpips": 0.065
+      },
+      "delta_stat": {
+        "brightness_delta": -13.83,
+        "l_channel_delta": -13.43,
+        "contrast_delta": -2.18,
+        "highlight_delta": -9.0,
+        "shadow_delta": -7.0,
+        "temperature_delta": -5.61,
+        "tint_delta": -12.84,
+        "saturation_delta": 10.98,
+        "hue_band_residuals": {
+          "reds": 0.2535,
+          "oranges": 0.3896,
+          "yellows": 0.3401,
+          "greens": 0.7045,
+          "aquas": 0.2691,
+          "blues": 0.9038,
+          "purples": 0.227,
+          "magentas": 0.1021
+        },
+        "dominant_hsl_band": "blues",
+        "dominant_issue": "hsl"
+      },
+      "proposal": {
+        "tool": "white_balance_tool",
+        "parameters": {
+          "temperature": -10,
+          "tint": 15
+        },
+        "reason": "The target image is cooler and has a noticeable magenta tint compared to the current image (tint_delta: -12.84). This adjustment aims to correct the overall color cast."
+      },
+      "score_before": 12.950392941176473,
+      "score_after": 11.935803137254899,
+      "score_gain": 1.0145898039215737,
+      "accepted": true,
+      "action_signature": "{\"delta_parameters\":{\"temperature\":-10,\"tint\":15},\"tool\":\"white_balance_tool\"}",
+      "planner_call_id": 0,
+      "planner_temperature": 0.4,
+      "mcts_summary": {
+        "node_id": 3,
+        "visit_count": 6,
+        "value": 1.2494,
+        "prior": 0.3333,
+        "candidate_rank": 0,
+        "terminal_reason": ""
+      }
+    },
+    {
+      "round": 1,
+      "input_image": "trajectories_compare_hybrid/cmp_hybrid/best_path_images/step_01_input.jpg",
+      "cot": "The tint_delta indicates a remaining magenta cast that needs to be corrected by shifting towards green.",
+      "tool": "white_balance_tool",
+      "parameters": {
+        "tint": -7
+      },
+      "delta_parameters": {
+        "temperature": 0,
+        "tint": -7
+      },
+      "params_accumulated": {
+        "input_color_space": "srgb",
+        "tone_mapper": "basic",
+        "exposure": 0,
+        "brightness": 0,
+        "contrast": 0,
+        "highlights": 0,
+        "shadows": 0,
+        "whites": 0,
+        "blacks": 0,
+        "temperature": -10,
+        "tint": 8,
+        "saturation": 0,
+        "vibrance": 0,
+        "hsl": {
+          "reds": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "oranges": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "yellows": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "greens": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "aquas": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "blues": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "purples": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "magentas": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          }
+        },
+        "color_grading": {
+          "shadows": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "midtones": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "highlights": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "blending": 50,
+          "balance": 0
+        }
+      },
+      "params_accumulated_tool": {
+        "temperature": -10,
+        "tint": 8
+      },
+      "output_image": "trajectories_compare_hybrid/cmp_hybrid/best_path_images/step_01_output.jpg",
+      "step_quality": {
+        "psnr": 23.42,
+        "ssim": 0.965,
+        "delta_e": 6.45,
+        "l1": 0.0551,
+        "l2": 0.0674,
+        "lpips": 0.056
+      },
+      "delta_stat": {
+        "brightness_delta": -12.6,
+        "l_channel_delta": -9.46,
+        "contrast_delta": -1.56,
+        "highlight_delta": -11.0,
+        "shadow_delta": -8.0,
+        "temperature_delta": -0.26,
+        "tint_delta": -7.51,
+        "saturation_delta": 6.07,
+        "hue_band_residuals": {
+          "reds": 0.1859,
+          "oranges": 0.2885,
+          "yellows": 0.5705,
+          "greens": 0.6048,
+          "aquas": 1.5677,
+          "blues": 0.5641,
+          "purples": 0.6057,
+          "magentas": 0.299
+        },
+        "dominant_hsl_band": "aquas",
+        "dominant_issue": "hsl"
+      },
+      "proposal": {
+        "tool": "white_balance_tool",
+        "parameters": {
+          "tint": -7
+        },
+        "reason": "The tint_delta indicates a remaining magenta cast that needs to be corrected by shifting towards green."
+      },
+      "score_before": 11.935803137254899,
+      "score_after": 10.779894901960786,
+      "score_gain": 1.1559082352941132,
+      "accepted": true,
+      "action_signature": "{\"delta_parameters\":{\"tint\":-7},\"tool\":\"white_balance_tool\"}",
+      "planner_call_id": 0,
+      "planner_temperature": 0.4,
+      "mcts_summary": {
+        "node_id": 10,
+        "visit_count": 1,
+        "value": 2.1705,
+        "prior": 0.3333,
+        "candidate_rank": 1,
+        "terminal_reason": ""
+      }
+    }
+  ]
+}

@@ -103,9 +103,11 @@ def make_brief_trajectory(traj: dict) -> dict:
         "steps": [
             {
                 "round": step.get("round"),
+                "input_image": step.get("input_image", ""),
                 "output_image": step.get("output_image", ""),
                 "tool": step.get("tool", ""),
                 "parameters": step.get("parameters", {}),
+                "delta_parameters": step.get("delta_parameters", {}),
                 "cot": step.get("cot", ""),
                 "step_quality": step.get("step_quality", {}),
             }
@@ -130,10 +132,9 @@ def main() -> None:
     gen_cfg = cfg.get("generation", {})
     dataset_cfg = cfg.get("dataset", {})
     metrics_cfg = cfg.get("metrics", {})
-    planner_cfg = cfg.get("planner", {})
-    search_cfg = cfg.get("search", {})
-    probe_cfg = cfg.get("probe", {})
     scoring_cfg = cfg.get("scoring", {})
+    planner_cfg = cfg.get("planner", {})
+    mcts_cfg = cfg.get("mcts", {})
     debug_cfg = cfg.get("debug", {})
 
     # Resolve parameters (CLI overrides config)
@@ -179,8 +180,10 @@ def main() -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
     results_file = output_dir / "trajectories_raw.json"
     brief_results_file = output_dir / "trajectories_brief.json"
+    best_paths_file = output_dir / "best_paths.json"
     all_trajectories = []
     brief_trajectories = []
+    best_paths = []
 
     log_every_n = cfg.get("logging", {}).get("log_every_n", 10)
 
@@ -216,14 +219,26 @@ def main() -> None:
                 use_lpips=bool(metrics_cfg.get("use_lpips", False)),
                 metrics_device=str(metrics_cfg.get("device", "cpu")),
                 save_images=bool(gen_cfg.get("save_intermediate_images", True)),
-                search_cfg=search_cfg,
-                probe_cfg=probe_cfg,
-                scoring_cfg=scoring_cfg,
                 planner_cfg=planner_cfg,
+                scoring_cfg=scoring_cfg,
+                mcts_cfg=mcts_cfg,
                 debug_cfg=debug_cfg,
             )
             all_trajectories.append(traj)
             brief_trajectories.append(make_brief_trajectory(traj))
+            best_paths.append(
+                {
+                    "id": traj.get("id", ""),
+                    "source": traj.get("source", ""),
+                    "target": traj.get("target", ""),
+                    "initial_quality": traj.get("initial_quality", {}),
+                    "final_quality": traj.get("final_quality", {}),
+                    "num_steps": traj.get("num_steps", 0),
+                    "steps": traj.get("steps", []),
+                    "artifacts": traj.get("artifacts", {}),
+                    "search_meta": traj.get("search_meta", {}),
+                }
+            )
         except Exception as e:
             logger.error(f"[{traj_id}] Trajectory generation failed: {e}", exc_info=True)
             continue
@@ -233,13 +248,16 @@ def main() -> None:
             json.dump(all_trajectories, f, ensure_ascii=False, indent=2)
         with open(brief_results_file, "w", encoding="utf-8") as f:
             json.dump(brief_trajectories, f, ensure_ascii=False, indent=2)
+        with open(best_paths_file, "w", encoding="utf-8") as f:
+            json.dump(best_paths, f, ensure_ascii=False, indent=2)
 
     logger.info(
-        "Generation complete: %s/%s trajectories saved to %s and %s",
+        "Generation complete: %s/%s trajectories saved to %s, %s, and %s",
         len(all_trajectories),
         len(pairs),
         results_file,
         brief_results_file,
+        best_paths_file,
     )
 
 

@@ -1,0 +1,34 @@
+[
+  {
+    "id": "0_0_0000",
+    "source": "samples/src/0_0.tif",
+    "target": "samples/tgt/0_0.tif",
+    "initial_quality": {
+      "psnr": 22.42,
+      "ssim": 0.969,
+      "delta_e": 8.63,
+      "lpips": 0.053
+    },
+    "steps": [],
+    "final_quality": {
+      "psnr": 22.42,
+      "ssim": 0.969,
+      "delta_e": 8.63,
+      "lpips": 0.053
+    },
+    "num_steps": 0,
+    "search_meta": {
+      "planner_calls": 2,
+      "candidate_evaluations": 0,
+      "expanded_nodes": 0,
+      "pruned_candidates": 0,
+      "num_simulations": 48,
+      "total_nodes": 1,
+      "best_visits": 48,
+      "best_value": 0.0,
+      "final_score": 8.63,
+      "planner_model_role": "planner",
+      "search_mode": "mcts"
+    }
+  }
+]

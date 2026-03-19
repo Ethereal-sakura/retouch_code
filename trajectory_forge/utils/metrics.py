@@ -108,6 +108,26 @@ def compute_delta_e(
     return round(float(np.array(de).mean()), 2)
 
 
+def compute_l1(
+    src: Image.Image | np.ndarray,
+    tar: Image.Image | np.ndarray,
+    size: tuple[int, int] = (64, 64),
+) -> float:
+    src_np = _pil_to_np(src, size)
+    tar_np = _pil_to_np(tar, size)
+    return round(float(np.mean(np.abs(src_np - tar_np))), 4)
+
+
+def compute_l2(
+    src: Image.Image | np.ndarray,
+    tar: Image.Image | np.ndarray,
+    size: tuple[int, int] = (64, 64),
+) -> float:
+    src_np = _pil_to_np(src, size)
+    tar_np = _pil_to_np(tar, size)
+    return round(float(np.sqrt(np.mean((src_np - tar_np) ** 2))), 4)
+
+
 def compute_metrics(
     src: Image.Image | np.ndarray,
     tar: Image.Image | np.ndarray,
@@ -123,6 +143,8 @@ def compute_metrics(
         "psnr": compute_psnr(src, tar, size),
         "ssim": compute_ssim(src, tar, size),
         "delta_e": compute_delta_e(src, tar, size),
+        "l1": compute_l1(src, tar, size),
+        "l2": compute_l2(src, tar, size),
     }
     if use_lpips:
         result["lpips"] = compute_lpips(src, tar, size, device)

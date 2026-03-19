@@ -1,0 +1,713 @@
+[
+  {
+    "id": "0_0_0000",
+    "source": "samples/src/0_0.tif",
+    "target": "samples/tgt/0_0.tif",
+    "initial_quality": {
+      "psnr": 22.42,
+      "ssim": 0.969,
+      "delta_e": 8.63,
+      "l1": 0.0616,
+      "l2": 0.0757,
+      "lpips": 0.053
+    },
+    "final_quality": {
+      "psnr": 28.16,
+      "ssim": 0.976,
+      "delta_e": 4.65,
+      "l1": 0.0261,
+      "l2": 0.0391,
+      "lpips": 0.043
+    },
+    "num_steps": 4,
+    "steps": [
+      {
+        "round": 0,
+        "input_image": "trajectories_ppr10k_tree/0_0_0000/best_path_images/step_00_input.jpg",
+        "cot": "The highlights in the sky and on the bride's dress are severely clipped. A strong reduction in highlights and whites is necessary to recover detail and texture in the brightest areas.",
+        "tool": "tone_tool",
+        "parameters": {
+          "highlights": -30,
+          "whites": -15
+        },
+        "delta_parameters": {
+          "contrast": 0,
+          "highlights": -24,
+          "shadows": 0,
+          "whites": -12,
+          "blacks": 0
+        },
+        "params_accumulated": {
+          "input_color_space": "srgb",
+          "tone_mapper": "basic",
+          "exposure": 0,
+          "brightness": 0,
+          "contrast": 0,
+          "highlights": -24,
+          "shadows": 0,
+          "whites": -12,
+          "blacks": 0,
+          "temperature": 0,
+          "tint": 0,
+          "saturation": 0,
+          "vibrance": 0,
+          "hsl": {
+            "reds": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "oranges": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "yellows": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "greens": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "aquas": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "blues": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "purples": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "magentas": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            }
+          },
+          "color_grading": {
+            "shadows": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "midtones": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "highlights": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "blending": 50,
+            "balance": 0
+          }
+        },
+        "params_accumulated_tool": {
+          "contrast": 0,
+          "highlights": -24,
+          "shadows": 0,
+          "whites": -12,
+          "blacks": 0
+        },
+        "output_image": "trajectories_ppr10k_tree/0_0_0000/best_path_images/step_00_output.jpg",
+        "step_quality": {
+          "psnr": 26.31,
+          "ssim": 0.975,
+          "delta_e": 6.63,
+          "l1": 0.0344,
+          "l2": 0.0483,
+          "lpips": 0.042
+        },
+        "delta_stat": {
+          "brightness_delta": -13.83,
+          "l_channel_delta": -13.43,
+          "contrast_delta": -2.18,
+          "highlight_delta": -9.0,
+          "shadow_delta": -7.0,
+          "temperature_delta": -5.61,
+          "tint_delta": -12.84,
+          "saturation_delta": 10.98,
+          "hue_band_residuals": {
+            "reds": 0.2535,
+            "oranges": 0.3896,
+            "yellows": 0.3401,
+            "greens": 0.7045,
+            "aquas": 0.2691,
+            "blues": 0.9038,
+            "purples": 0.227,
+            "magentas": 0.1021
+          },
+          "dominant_hsl_band": "blues",
+          "dominant_issue": "hsl"
+        },
+        "proposal": {
+          "tool": "tone_tool",
+          "parameters": {
+            "highlights": -30,
+            "whites": -15
+          },
+          "reason": "The highlights in the sky and on the bride's dress are severely clipped. A strong reduction in highlights and whites is necessary to recover detail and texture in the brightest areas."
+        },
+        "score_before": 12.950392941176473,
+        "score_after": 9.693047058823531,
+        "score_gain": 3.2573458823529418,
+        "accepted": true,
+        "action_signature": "{\"delta_parameters\":{\"highlights\":-24,\"whites\":-12},\"tool\":\"tone_tool\"}",
+        "planner_call_id": 0,
+        "planner_temperature": 0.4,
+        "mcts_summary": {
+          "node_id": 2,
+          "visit_count": 41,
+          "value": 4.3228,
+          "prior": 0.5,
+          "candidate_rank": 0,
+          "terminal_reason": ""
+        }
+      },
+      {
+        "round": 1,
+        "input_image": "trajectories_ppr10k_tree/0_0_0000/best_path_images/step_01_input.jpg",
+        "cot": "The most significant difference is the color of the water in the background. The current image has desaturated cyan water, while the target has vibrant blue. The HSL residuals for blues and greens are high. Targeting the aqua channel saturation is a direct way to address this.",
+        "tool": "hsl_tool",
+        "parameters": {
+          "adjustments": [
+            {
+              "color": "aquas",
+              "saturation": 40
+            }
+          ]
+        },
+        "delta_parameters": {
+          "adjustments": [
+            {
+              "color": "aquas",
+              "hue": 0,
+              "saturation": 18,
+              "luminance": 0
+            }
+          ]
+        },
+        "params_accumulated": {
+          "input_color_space": "srgb",
+          "tone_mapper": "basic",
+          "exposure": 0,
+          "brightness": 0,
+          "contrast": 0,
+          "highlights": -24,
+          "shadows": 0,
+          "whites": -12,
+          "blacks": 0,
+          "temperature": 0,
+          "tint": 0,
+          "saturation": 0,
+          "vibrance": 0,
+          "hsl": {
+            "reds": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "oranges": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "yellows": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "greens": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "aquas": {
+              "hue": 0,
+              "saturation": 18,
+              "luminance": 0
+            },
+            "blues": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "purples": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "magentas": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            }
+          },
+          "color_grading": {
+            "shadows": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "midtones": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "highlights": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "blending": 50,
+            "balance": 0
+          }
+        },
+        "params_accumulated_tool": {
+          "adjustments": [
+            {
+              "color": "reds",
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            {
+              "color": "oranges",
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            {
+              "color": "yellows",
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            {
+              "color": "greens",
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            {
+              "color": "aquas",
+              "hue": 0,
+              "saturation": 18,
+              "luminance": 0
+            },
+            {
+              "color": "blues",
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            {
+              "color": "purples",
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            {
+              "color": "magentas",
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            }
+          ]
+        },
+        "output_image": "trajectories_ppr10k_tree/0_0_0000/best_path_images/step_01_output.jpg",
+        "step_quality": {
+          "psnr": 26.84,
+          "ssim": 0.976,
+          "delta_e": 6.36,
+          "l1": 0.0332,
+          "l2": 0.0455,
+          "lpips": 0.04
+        },
+        "delta_stat": {
+          "brightness_delta": -0.14,
+          "l_channel_delta": -0.82,
+          "contrast_delta": 2.33,
+          "highlight_delta": 6.0,
+          "shadow_delta": -3.0,
+          "temperature_delta": -5.57,
+          "tint_delta": 0.91,
+          "saturation_delta": 10.83,
+          "hue_band_residuals": {
+            "reds": 0.2748,
+            "oranges": 0.4359,
+            "yellows": 0.3362,
+            "greens": 0.695,
+            "aquas": 0.2458,
+            "blues": 0.9395,
+            "purples": 0.203,
+            "magentas": 0.0846
+          },
+          "dominant_hsl_band": "blues",
+          "dominant_issue": "hsl"
+        },
+        "proposal": {
+          "tool": "hsl_tool",
+          "parameters": {
+            "adjustments": [
+              {
+                "color": "aquas",
+                "saturation": 40
+              }
+            ]
+          },
+          "reason": "The most significant difference is the color of the water in the background. The current image has desaturated cyan water, while the target has vibrant blue. The HSL residuals for blues and greens are high. Targeting the aqua channel saturation is a direct way to address this."
+        },
+        "score_before": 9.693047058823531,
+        "score_after": 9.399166274509804,
+        "score_gain": 0.29388078431372655,
+        "accepted": true,
+        "action_signature": "{\"delta_parameters\":{\"adjustments\":[{\"color\":\"aquas\",\"hue\":0,\"luminance\":0,\"saturation\":18}]},\"tool\":\"hsl_tool\"}",
+        "planner_call_id": 0,
+        "planner_temperature": 0.4,
+        "mcts_summary": {
+          "node_id": 9,
+          "visit_count": 32,
+          "value": 4.7242,
+          "prior": 1.0,
+          "candidate_rank": 1,
+          "terminal_reason": ""
+        }
+      },
+      {
+        "round": 2,
+        "input_image": "trajectories_ppr10k_tree/0_0_0000/best_path_images/step_02_input.jpg",
+        "cot": "The temperature delta is -5.37, meaning the current image is too warm. Cooling the image will help correct the color cast and will also enhance the blue in the water.",
+        "tool": "white_balance_tool",
+        "parameters": {
+          "temperature": -10
+        },
+        "delta_parameters": {
+          "temperature": -10,
+          "tint": 0
+        },
+        "params_accumulated": {
+          "input_color_space": "srgb",
+          "tone_mapper": "basic",
+          "exposure": 0,
+          "brightness": 0,
+          "contrast": 0,
+          "highlights": -24,
+          "shadows": 0,
+          "whites": -12,
+          "blacks": 0,
+          "temperature": -10,
+          "tint": 0,
+          "saturation": 0,
+          "vibrance": 0,
+          "hsl": {
+            "reds": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "oranges": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "yellows": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "greens": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "aquas": {
+              "hue": 0,
+              "saturation": 18,
+              "luminance": 0
+            },
+            "blues": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "purples": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "magentas": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            }
+          },
+          "color_grading": {
+            "shadows": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "midtones": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "highlights": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "blending": 50,
+            "balance": 0
+          }
+        },
+        "params_accumulated_tool": {
+          "temperature": -10,
+          "tint": 0
+        },
+        "output_image": "trajectories_ppr10k_tree/0_0_0000/best_path_images/step_02_output.jpg",
+        "step_quality": {
+          "psnr": 28.23,
+          "ssim": 0.976,
+          "delta_e": 4.93,
+          "l1": 0.026,
+          "l2": 0.0388,
+          "lpips": 0.044
+        },
+        "delta_stat": {
+          "brightness_delta": -0.06,
+          "l_channel_delta": -0.81,
+          "contrast_delta": 2.2,
+          "highlight_delta": 6.0,
+          "shadow_delta": -3.0,
+          "temperature_delta": -5.37,
+          "tint_delta": 0.78,
+          "saturation_delta": 9.65,
+          "hue_band_residuals": {
+            "reds": 0.2748,
+            "oranges": 0.4359,
+            "yellows": 0.3362,
+            "greens": 0.6943,
+            "aquas": 0.2134,
+            "blues": 0.9336,
+            "purples": 0.203,
+            "magentas": 0.0846
+          },
+          "dominant_hsl_band": "blues",
+          "dominant_issue": "hsl"
+        },
+        "proposal": {
+          "tool": "white_balance_tool",
+          "parameters": {
+            "temperature": -10
+          },
+          "reason": "The temperature delta is -5.37, meaning the current image is too warm. Cooling the image will help correct the color cast and will also enhance the blue in the water."
+        },
+        "score_before": 9.399166274509804,
+        "score_after": 7.317101176470588,
+        "score_gain": 2.082065098039216,
+        "accepted": true,
+        "action_signature": "{\"delta_parameters\":{\"temperature\":-10},\"tool\":\"white_balance_tool\"}",
+        "planner_call_id": 0,
+        "planner_temperature": 0.4,
+        "mcts_summary": {
+          "node_id": 19,
+          "visit_count": 21,
+          "value": 5.3552,
+          "prior": 0.3333,
+          "candidate_rank": 2,
+          "terminal_reason": ""
+        }
+      },
+      {
+        "round": 3,
+        "input_image": "trajectories_ppr10k_tree/0_0_0000/best_path_images/step_03_input.jpg",
+        "cot": "The current image has lower contrast and brighter shadows than the target, especially visible in the man's suit. Increasing contrast and darkening shadows should improve this.",
+        "tool": "tone_tool",
+        "parameters": {
+          "contrast": 8,
+          "shadows": -15
+        },
+        "delta_parameters": {
+          "contrast": 8,
+          "highlights": 0,
+          "shadows": -15,
+          "whites": 0,
+          "blacks": 0
+        },
+        "params_accumulated": {
+          "input_color_space": "srgb",
+          "tone_mapper": "basic",
+          "exposure": 0,
+          "brightness": 0,
+          "contrast": 8,
+          "highlights": -24,
+          "shadows": -15,
+          "whites": -12,
+          "blacks": 0,
+          "temperature": -10,
+          "tint": 0,
+          "saturation": 0,
+          "vibrance": 0,
+          "hsl": {
+            "reds": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "oranges": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "yellows": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "greens": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "aquas": {
+              "hue": 0,
+              "saturation": 18,
+              "luminance": 0
+            },
+            "blues": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "purples": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "magentas": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            }
+          },
+          "color_grading": {
+            "shadows": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "midtones": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "highlights": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "blending": 50,
+            "balance": 0
+          }
+        },
+        "params_accumulated_tool": {
+          "contrast": 8,
+          "highlights": -24,
+          "shadows": -15,
+          "whites": -12,
+          "blacks": 0
+        },
+        "output_image": "trajectories_ppr10k_tree/0_0_0000/best_path_images/step_03_output.jpg",
+        "step_quality": {
+          "psnr": 28.16,
+          "ssim": 0.976,
+          "delta_e": 4.65,
+          "l1": 0.0261,
+          "l2": 0.0391,
+          "lpips": 0.043
+        },
+        "delta_stat": {
+          "brightness_delta": 1.09,
+          "l_channel_delta": 1.66,
+          "contrast_delta": 2.26,
+          "highlight_delta": 0.0,
+          "shadow_delta": -3.0,
+          "temperature_delta": -0.52,
+          "tint_delta": 2.99,
+          "saturation_delta": 1.83,
+          "hue_band_residuals": {
+            "reds": 0.2251,
+            "oranges": 0.3855,
+            "yellows": 0.3521,
+            "greens": 0.6237,
+            "aquas": 0.3276,
+            "blues": 0.511,
+            "purples": 0.116,
+            "magentas": 0.1148
+          },
+          "dominant_hsl_band": "greens",
+          "dominant_issue": "hsl"
+        },
+        "proposal": {
+          "tool": "tone_tool",
+          "parameters": {
+            "contrast": 8,
+            "shadows": -15
+          },
+          "reason": "The current image has lower contrast and brighter shadows than the target, especially visible in the man's suit. Increasing contrast and darkening shadows should improve this."
+        },
+        "score_before": 7.317101176470588,
+        "score_after": 6.985702745098041,
+        "score_gain": 0.33139843137254754,
+        "accepted": true,
+        "action_signature": "{\"delta_parameters\":{\"contrast\":8,\"shadows\":-15},\"tool\":\"tone_tool\"}",
+        "planner_call_id": 0,
+        "planner_temperature": 0.4,
+        "mcts_summary": {
+          "node_id": 26,
+          "visit_count": 6,
+          "value": 5.319,
+          "prior": 1.0,
+          "candidate_rank": 3,
+          "terminal_reason": ""
+        }
+      }
+    ],
+    "artifacts": {
+      "trajectory_dir": "trajectories_ppr10k_tree/0_0_0000",
+      "tree_json": "trajectories_ppr10k_tree/0_0_0000/search_tree.json",
+      "best_path_json": "trajectories_ppr10k_tree/0_0_0000/best_path.json"
+    },
+    "search_meta": {
+      "planner_calls": 14,
+      "candidate_evaluations": 41,
+      "expanded_nodes": 41,
+      "invalid_actions": 0,
+      "repeated_actions": 0,
+      "regression_nodes": 22,
+      "low_gain_nodes": 7,
+      "num_simulations": 48,
+      "total_nodes": 42,
+      "best_node_id": 26,
+      "best_visits": 6,
+      "best_value": 5.319,
+      "final_score": 6.9857,
+      "planner_model_role": "planner",
+      "score_mode": "hybrid",
+      "search_mode": "mcts"
+    }
+  }
+]

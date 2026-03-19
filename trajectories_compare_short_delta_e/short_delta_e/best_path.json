@@ -1,0 +1,180 @@
+{
+  "id": "short_delta_e",
+  "source": "samples/src/0_0.tif",
+  "target": "samples/tgt/0_0.tif",
+  "initial_quality": {
+    "psnr": 22.42,
+    "ssim": 0.969,
+    "delta_e": 8.63,
+    "l1": 0.0616,
+    "l2": 0.0757
+  },
+  "final_quality": {
+    "psnr": 26.09,
+    "ssim": 0.975,
+    "delta_e": 6.68,
+    "l1": 0.0343,
+    "l2": 0.0496
+  },
+  "final_score": 6.68,
+  "best_node_id": 4,
+  "node_path": [
+    0,
+    4
+  ],
+  "steps": [
+    {
+      "round": 0,
+      "input_image": "trajectories_compare_short_delta_e/short_delta_e/best_path_images/step_00_input.jpg",
+      "cot": "The highlights in the sky and the white dress are blown out. The highlight_delta is -9.00. This action specifically targets the brightest areas to recover lost detail without affecting the midtones and shadows as much as a global exposure change.",
+      "tool": "tone_tool",
+      "parameters": {
+        "highlights": -20,
+        "whites": -10
+      },
+      "delta_parameters": {
+        "contrast": 0,
+        "highlights": -20,
+        "shadows": 0,
+        "whites": -10,
+        "blacks": 0
+      },
+      "params_accumulated": {
+        "input_color_space": "srgb",
+        "tone_mapper": "basic",
+        "exposure": 0,
+        "brightness": 0,
+        "contrast": 0,
+        "highlights": -20,
+        "shadows": 0,
+        "whites": -10,
+        "blacks": 0,
+        "temperature": 0,
+        "tint": 0,
+        "saturation": 0,
+        "vibrance": 0,
+        "hsl": {
+          "reds": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "oranges": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "yellows": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "greens": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "aquas": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "blues": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "purples": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "magentas": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          }
+        },
+        "color_grading": {
+          "shadows": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "midtones": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "highlights": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "blending": 50,
+          "balance": 0
+        }
+      },
+      "params_accumulated_tool": {
+        "contrast": 0,
+        "highlights": -20,
+        "shadows": 0,
+        "whites": -10,
+        "blacks": 0
+      },
+      "output_image": "trajectories_compare_short_delta_e/short_delta_e/best_path_images/step_00_output.jpg",
+      "step_quality": {
+        "psnr": 26.09,
+        "ssim": 0.975,
+        "delta_e": 6.68,
+        "l1": 0.0343,
+        "l2": 0.0496
+      },
+      "delta_stat": {
+        "brightness_delta": -13.83,
+        "l_channel_delta": -13.43,
+        "contrast_delta": -2.18,
+        "highlight_delta": -9.0,
+        "shadow_delta": -7.0,
+        "temperature_delta": -5.61,
+        "tint_delta": -12.84,
+        "saturation_delta": 10.98,
+        "hue_band_residuals": {
+          "reds": 0.2535,
+          "oranges": 0.3896,
+          "yellows": 0.3401,
+          "greens": 0.7045,
+          "aquas": 0.2691,
+          "blues": 0.9038,
+          "purples": 0.227,
+          "magentas": 0.1021
+        },
+        "dominant_hsl_band": "blues",
+        "dominant_issue": "hsl"
+      },
+      "proposal": {
+        "tool": "tone_tool",
+        "parameters": {
+          "highlights": -20,
+          "whites": -10
+        },
+        "reason": "The highlights in the sky and the white dress are blown out. The highlight_delta is -9.00. This action specifically targets the brightest areas to recover lost detail without affecting the midtones and shadows as much as a global exposure change."
+      },
+      "score_before": 8.63,
+      "score_after": 6.68,
+      "score_gain": 1.950000000000001,
+      "accepted": true,
+      "action_signature": "{\"delta_parameters\":{\"highlights\":-20,\"whites\":-10},\"tool\":\"tone_tool\"}",
+      "planner_call_id": 0,
+      "planner_temperature": 0.4,
+      "mcts_summary": {
+        "node_id": 4,
+        "visit_count": 1,
+        "value": 1.95,
+        "prior": 0.25,
+        "candidate_rank": 0,
+        "terminal_reason": ""
+      }
+    }
+  ]
+}

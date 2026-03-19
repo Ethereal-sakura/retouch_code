@@ -2,8 +2,8 @@
 
 # ── MLLM API Settings ──────────────────────────────────────────────────────────
 api:
-  base_url: "http://localhost:10087/v1"   # OpenAI or compatible endpoint
-  model: "InternVL3-14B"                          # Model to use for trajectory generation
+  base_url: "https://www.blueshirtmap.com/v1"   # OpenAI or compatible endpoint
+  model: "gemini-2.5-pro"                          # Model to use for trajectory generation
   api_key_env: "OPENAI_API_KEY"            # Environment variable name for API key
   max_tokens: 8192
   temperature: 0.7                         # Low temperature for deterministic editing
@@ -35,37 +35,36 @@ metrics:
   use_lpips: true                         # Whether to compute LPIPS (requires GPU or is slow)
   device: "cpu"                           # "cpu" or "cuda"
 
+scoring:
+  mode: "hybrid"                          # delta_e / l1 / l2 / pixel / hybrid
+  weights:
+    delta_e: 1.0
+    l1: 24.0
+    l2: 18.0
+    lpips: 8.0
+    ssim_error: 6.0
+    stat_residual: 4.0
+    edit_cost: 0.8
+    repeat_penalty: 0.08
+    sign_flip_penalty: 0.10
+
 # ── Planner / Search ──────────────────────────────────────────────────────────
 planner:
   role: "planner"                         # Informational label for trajectory metadata
+  candidates_per_call: 6
+  diversity_calls: 2
+  temperatures: [0.4, 0.9]
+  allow_heuristic_fallback: false
 
-search:
-  beam_size: 4
-  shortlist_tools: 2
-  max_proposals: 3
-  accept_margin: 0.02
-  hard_delta_e_tolerance: 0.05
-  residual_floor: 0.015
-  lock_threshold: 0.02
-  unlock_threshold: 0.06
-  max_accept_streak: 2
-  reject_limit: 2
-  cooldown_steps: 1
-  stop_residual_threshold: 0.015
-
-probe:
-  render_size: 320
-  refine_steps: [3.0, 1.5]
-
-scoring:
-  weights:
-    delta_e: 1.0
-    lpips: 12.0
-    ssim_error: 8.0
-    stat_residual: 8.0
-    edit_cost: 2.0
-    repeat_penalty: 0.08
-    sign_flip_penalty: 0.10
+mcts:
+  num_simulations: 48
+  c_puct: 1.4
+  max_actions_per_node: 8
+  rollout_horizon: 8
+  min_step_gain: 0.01
+  regression_tolerance: 0.05
+  prune_regression_tolerance: null
+  save_full_tree: true
 
 debug:
   save_search_debug: true

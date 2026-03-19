@@ -2,18 +2,22 @@
 
 from __future__ import annotations
 
-from collections import defaultdict
 from typing import Any
 
 
-DEFAULT_SCORE_WEIGHTS = {
-    "delta_e": 1.0,
-    "lpips": 12.0,
-    "ssim_error": 8.0,
-    "stat_residual": 8.0,
-    "edit_cost": 2.0,
-    "repeat_penalty": 0.08,
-    "sign_flip_penalty": 0.10,
+DEFAULT_SCORE_CFG = {
+    "mode": "hybrid",
+    "weights": {
+        "delta_e": 1.0,
+        "l1": 24.0,
+        "l2": 18.0,
+        "lpips": 8.0,
+        "ssim_error": 6.0,
+        "stat_residual": 4.0,
+        "edit_cost": 0.8,
+        "repeat_penalty": 0.08,
+        "sign_flip_penalty": 0.10,
+    },
 }
 
 
@@ -39,8 +43,10 @@ def compute_tool_residuals(delta_stat: dict[str, Any]) -> dict[str, float]:
     }
 
 
-def compute_stat_residual(delta_stat: dict[str, Any]) -> float:
+def compute_stat_residual(delta_stat: dict[str, Any] | None) -> float:
     """Aggregate normalized residual statistics into a single scalar."""
+    if not delta_stat:
+        return 0.0
     residuals = compute_tool_residuals(delta_stat)
     return sum(residuals.values()) / max(len(residuals), 1)
 
@@ -67,13 +73,13 @@ def compute_edit_cost(delta_params: dict[str, Any]) -> float:
 
 def compute_trajectory_penalty(
     *,
-    tool_name: str,
+    tool_name: str | None,
     delta_params: dict[str, Any],
     tool_state: dict[str, Any] | None,
     weights: dict[str, float],
 ) -> float:
     """Penalize repeated tools and immediate sign flips."""
-    if not tool_state:
+    if not tool_name or not tool_state:
         return 0.0
 
     state = tool_state.get(tool_name, {})
@@ -107,83 +113,56 @@ def compute_trajectory_penalty(
 def compute_objective_score(
     *,
     metrics: dict[str, Any],
-    delta_stat: dict[str, Any],
+    delta_stat: dict[str, Any] | None = None,
     delta_params: dict[str, Any] | None = None,
     tool_name: str | None = None,
     tool_state: dict[str, Any] | None = None,
-    weights: dict[str, float] | None = None,
+    scoring_cfg: dict[str, Any] | None = None,
 ) -> float:
     """Compute the search objective score. Lower is better."""
-    weights = {**DEFAULT_SCORE_WEIGHTS, **(weights or {})}
+    cfg = {
+        "mode": DEFAULT_SCORE_CFG["mode"],
+        "weights": {**DEFAULT_SCORE_CFG["weights"]},
+    }
+    if scoring_cfg:
+        cfg["mode"] = str(scoring_cfg.get("mode", cfg["mode"]))
+        cfg["weights"].update(scoring_cfg.get("weights", {}))
+    weights = cfg["weights"]
+    mode = str(cfg["mode"]).lower()
+
+    l1 = float(metrics.get("l1", 0.0))
+    l2 = float(metrics.get("l2", 0.0))
+    delta_e = float(metrics.get("delta_e", 0.0))
+    lpips = float(metrics.get("lpips", 0.0))
+    ssim_error = 1.0 - float(metrics.get("ssim", 1.0))
     stat_residual = compute_stat_residual(delta_stat)
     edit_cost = compute_edit_cost(delta_params or {})
-    penalty = 0.0
-    if tool_name:
-        penalty = compute_trajectory_penalty(
-            tool_name=tool_name,
-            delta_params=delta_params or {},
-            tool_state=tool_state,
-            weights=weights,
-        )
+    penalty = compute_trajectory_penalty(
+        tool_name=tool_name,
+        delta_params=delta_params or {},
+        tool_state=tool_state,
+        weights=weights,
+    )
+
+    if mode == "delta_e":
+        return delta_e + penalty
+    if mode == "l1":
+        return weights["l1"] * l1 + penalty
+    if mode == "l2":
+        return weights["l2"] * l2 + penalty
+    if mode == "pixel":
+        return weights["l1"] * l1 + weights["l2"] * l2 + penalty
 
     return (
-        weights["delta_e"] * float(metrics.get("delta_e", 0.0))
-        + weights["lpips"] * float(metrics.get("lpips", 0.0))
-        + weights["ssim_error"] * (1.0 - float(metrics.get("ssim", 1.0)))
+        weights["delta_e"] * delta_e
+        + weights["l1"] * l1
+        + weights["l2"] * l2
+        + weights["lpips"] * lpips
+        + weights["ssim_error"] * ssim_error
         + weights["stat_residual"] * stat_residual
         + weights["edit_cost"] * edit_cost
         + penalty
     )
-
-
-def should_accept_candidate(
-    *,
-    current_score: float,
-    candidate_score: float,
-    current_metrics: dict[str, Any],
-    candidate_metrics: dict[str, Any],
-    accept_margin: float,
-    hard_delta_e_tolerance: float,
-) -> tuple[bool, str]:
-    """Return whether a candidate should become the next accepted state."""
-    current_delta_e = float(current_metrics.get("delta_e", 0.0))
-    candidate_delta_e = float(candidate_metrics.get("delta_e", 0.0))
-
-    if candidate_delta_e > current_delta_e + hard_delta_e_tolerance:
-        return False, "delta_e_regression"
-
-    if candidate_score > current_score - accept_margin:
-        return False, "insufficient_gain"
-
-    return True, "accepted"
-
-
-def rank_states_diverse(states: list[Any], beam_size: int) -> list[Any]:
-    """Rank candidate states by score while keeping tool diversity when possible."""
-    ranked = sorted(states, key=lambda state: (state.score, len(state.steps)))
-    if len(ranked) <= beam_size:
-        return ranked
-
-    selected = []
-    used_last_tools: set[str] = set()
-
-    for state in ranked:
-        if len(selected) >= beam_size:
-            break
-        last_tool = state.steps[-1]["tool"] if state.steps else ""
-        if last_tool and last_tool in used_last_tools:
-            continue
-        selected.append(state)
-        if last_tool:
-            used_last_tools.add(last_tool)
-
-    for state in ranked:
-        if len(selected) >= beam_size:
-            break
-        if state not in selected:
-            selected.append(state)
-
-    return selected[:beam_size]
 
 
 def _has_sign_flip(previous: float, current: float) -> bool:

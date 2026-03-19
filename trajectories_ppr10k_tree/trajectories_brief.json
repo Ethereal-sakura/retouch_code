@@ -1,0 +1,124 @@
+[
+  {
+    "id": "0_0_0000",
+    "source": "samples/src/0_0.tif",
+    "target": "samples/tgt/0_0.tif",
+    "initial_quality": {
+      "psnr": 22.42,
+      "ssim": 0.969,
+      "delta_e": 8.63,
+      "l1": 0.0616,
+      "l2": 0.0757,
+      "lpips": 0.053
+    },
+    "steps": [
+      {
+        "round": 0,
+        "input_image": "trajectories_ppr10k_tree/0_0_0000/best_path_images/step_00_input.jpg",
+        "output_image": "trajectories_ppr10k_tree/0_0_0000/best_path_images/step_00_output.jpg",
+        "tool": "tone_tool",
+        "parameters": {
+          "highlights": -30,
+          "whites": -15
+        },
+        "delta_parameters": {
+          "contrast": 0,
+          "highlights": -24,
+          "shadows": 0,
+          "whites": -12,
+          "blacks": 0
+        },
+        "cot": "The highlights in the sky and on the bride's dress are severely clipped. A strong reduction in highlights and whites is necessary to recover detail and texture in the brightest areas.",
+        "step_quality": {
+          "psnr": 26.31,
+          "ssim": 0.975,
+          "delta_e": 6.63,
+          "l1": 0.0344,
+          "l2": 0.0483,
+          "lpips": 0.042
+        }
+      },
+      {
+        "round": 1,
+        "input_image": "trajectories_ppr10k_tree/0_0_0000/best_path_images/step_01_input.jpg",
+        "output_image": "trajectories_ppr10k_tree/0_0_0000/best_path_images/step_01_output.jpg",
+        "tool": "hsl_tool",
+        "parameters": {
+          "adjustments": [
+            {
+              "color": "aquas",
+              "saturation": 40
+            }
+          ]
+        },
+        "delta_parameters": {
+          "adjustments": [
+            {
+              "color": "aquas",
+              "hue": 0,
+              "saturation": 18,
+              "luminance": 0
+            }
+          ]
+        },
+        "cot": "The most significant difference is the color of the water in the background. The current image has desaturated cyan water, while the target has vibrant blue. The HSL residuals for blues and greens are high. Targeting the aqua channel saturation is a direct way to address this.",
+        "step_quality": {
+          "psnr": 26.84,
+          "ssim": 0.976,
+          "delta_e": 6.36,
+          "l1": 0.0332,
+          "l2": 0.0455,
+          "lpips": 0.04
+        }
+      },
+      {
+        "round": 2,
+        "input_image": "trajectories_ppr10k_tree/0_0_0000/best_path_images/step_02_input.jpg",
+        "output_image": "trajectories_ppr10k_tree/0_0_0000/best_path_images/step_02_output.jpg",
+        "tool": "white_balance_tool",
+        "parameters": {
+          "temperature": -10
+        },
+        "delta_parameters": {
+          "temperature": -10,
+          "tint": 0
+        },
+        "cot": "The temperature delta is -5.37, meaning the current image is too warm. Cooling the image will help correct the color cast and will also enhance the blue in the water.",
+        "step_quality": {
+          "psnr": 28.23,
+          "ssim": 0.976,
+          "delta_e": 4.93,
+          "l1": 0.026,
+          "l2": 0.0388,
+          "lpips": 0.044
+        }
+      },
+      {
+        "round": 3,
+        "input_image": "trajectories_ppr10k_tree/0_0_0000/best_path_images/step_03_input.jpg",
+        "output_image": "trajectories_ppr10k_tree/0_0_0000/best_path_images/step_03_output.jpg",
+        "tool": "tone_tool",
+        "parameters": {
+          "contrast": 8,
+          "shadows": -15
+        },
+        "delta_parameters": {
+          "contrast": 8,
+          "highlights": 0,
+          "shadows": -15,
+          "whites": 0,
+          "blacks": 0
+        },
+        "cot": "The current image has lower contrast and brighter shadows than the target, especially visible in the man's suit. Increasing contrast and darkening shadows should improve this.",
+        "step_quality": {
+          "psnr": 28.16,
+          "ssim": 0.976,
+          "delta_e": 4.65,
+          "l1": 0.0261,
+          "l2": 0.0391,
+          "lpips": 0.043
+        }
+      }
+    ]
+  }
+]

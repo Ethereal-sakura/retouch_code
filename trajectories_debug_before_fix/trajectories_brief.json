@@ -1,0 +1,114 @@
+[
+  {
+    "id": "0_0_0000",
+    "source": "samples/src/0_0.tif",
+    "target": "samples/tgt/0_0.tif",
+    "initial_quality": {
+      "psnr": 22.42,
+      "ssim": 0.969,
+      "delta_e": 8.63,
+      "lpips": 0.053
+    },
+    "steps": [
+      {
+        "round": 0,
+        "input_image": "trajectories_debug_before_fix/0_0_0000/step_0_input.jpg",
+        "output_image": "trajectories_debug_before_fix/0_0_0000/step_0_output.jpg",
+        "tool": "tone_tool",
+        "parameters": {
+          "highlights": -30,
+          "whites": -15
+        },
+        "delta_parameters": {
+          "contrast": 0,
+          "highlights": -24,
+          "shadows": 0,
+          "whites": -12,
+          "blacks": 0
+        },
+        "cot": "The highlights in the current image are severely clipped. A strong reduction in highlights and whites will help recover detail in the bright areas like the dress and the sky/water, addressing the -9 highlight delta.",
+        "step_quality": {
+          "psnr": 26.31,
+          "ssim": 0.975,
+          "delta_e": 6.63,
+          "lpips": 0.042
+        }
+      },
+      {
+        "round": 1,
+        "input_image": "trajectories_debug_before_fix/0_0_0000/step_1_input.jpg",
+        "output_image": "trajectories_debug_before_fix/0_0_0000/step_1_output.jpg",
+        "tool": "hsl_tool",
+        "parameters": {
+          "adjustments": [
+            {
+              "color": "blues",
+              "saturation": 30,
+              "luminance": -5
+            }
+          ]
+        },
+        "delta_parameters": {
+          "adjustments": [
+            {
+              "color": "blues",
+              "hue": 0,
+              "saturation": 18,
+              "luminance": -5
+            }
+          ]
+        },
+        "cot": "The dominant residual is in the HSL blues band, corresponding to the undersaturated water in the current image. Increasing saturation and slightly decreasing luminance should make the water color pop like in the target.",
+        "step_quality": {
+          "psnr": 26.5,
+          "ssim": 0.975,
+          "delta_e": 6.54,
+          "lpips": 0.041
+        }
+      },
+      {
+        "round": 2,
+        "input_image": "trajectories_debug_before_fix/0_0_0000/step_2_input.jpg",
+        "output_image": "trajectories_debug_before_fix/0_0_0000/step_2_output.jpg",
+        "tool": "white_balance_tool",
+        "parameters": {
+          "temperature": -10
+        },
+        "delta_parameters": {
+          "temperature": -10,
+          "tint": 0
+        },
+        "cot": "The residual statistics indicate the target is cooler than the current image (temperature_delta: -5.50). A negative temperature adjustment will shift the overall color balance towards blue.",
+        "step_quality": {
+          "psnr": 28.23,
+          "ssim": 0.976,
+          "delta_e": 5.21,
+          "lpips": 0.045
+        }
+      },
+      {
+        "round": 3,
+        "input_image": "trajectories_debug_before_fix/0_0_0000/step_3_input.jpg",
+        "output_image": "trajectories_debug_before_fix/0_0_0000/step_3_output.jpg",
+        "tool": "tone_tool",
+        "parameters": {
+          "blacks": -8
+        },
+        "delta_parameters": {
+          "contrast": 0,
+          "highlights": 0,
+          "shadows": 0,
+          "whites": 0,
+          "blacks": -8
+        },
+        "cot": "The shadow delta is negative (-3.00), indicating the shadows in the current image are too bright. Lowering the black point will create deeper shadows and increase overall contrast, particularly in the man's suit.",
+        "step_quality": {
+          "psnr": 28.23,
+          "ssim": 0.976,
+          "delta_e": 5.21,
+          "lpips": 0.045
+        }
+      }
+    ]
+  }
+]

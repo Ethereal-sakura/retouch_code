@@ -1,0 +1,2264 @@
+{
+  "root_node_id": 0,
+  "num_nodes": 12,
+  "nodes": [
+    {
+      "node_id": 0,
+      "parent_id": null,
+      "depth": 0,
+      "image_path": "trajectories_compare_delta_e/cmp_delta_e/tree_nodes/node_000000.jpg",
+      "metrics": {
+        "psnr": 22.42,
+        "ssim": 0.969,
+        "delta_e": 8.63,
+        "l1": 0.0616,
+        "l2": 0.0757,
+        "lpips": 0.053
+      },
+      "score": 8.63,
+      "params_accumulated": {
+        "input_color_space": "srgb",
+        "tone_mapper": "basic",
+        "exposure": 0.0,
+        "brightness": 0.0,
+        "contrast": 0.0,
+        "highlights": 0.0,
+        "shadows": 0.0,
+        "whites": 0.0,
+        "blacks": 0.0,
+        "temperature": 0.0,
+        "tint": 0.0,
+        "saturation": 0.0,
+        "vibrance": 0.0,
+        "hsl": {
+          "reds": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "oranges": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "yellows": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "greens": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "aquas": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "blues": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "purples": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "magentas": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          }
+        },
+        "color_grading": {
+          "shadows": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "midtones": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "highlights": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "blending": 50.0,
+          "balance": 0.0
+        }
+      },
+      "visits": 12,
+      "value_sum": -23.68,
+      "q_value": -1.9733,
+      "prior": 1.0,
+      "terminal_reason": "",
+      "children": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "planner_meta": {
+        "source": "planner",
+        "traces": [
+          {
+            "call_index": 0,
+            "temperature": 0.4,
+            "raw_response": "```json\n{\n  \"candidates\": [\n    {\n      \"tool\": \"exposure_tool\",\n      \"parameters\": {\n        \"exposure\": -8,\n        \"brightness\": -5\n      },\n      \"reason\": \"The current image is significantly brighter than the target, indicated by negative brightness and L-channel deltas. Reducing exposure and brightness will help bring down the overall luminosity.\"\n    },\n    {\n      \"tool\": \"tone_tool\",\n      \"parameters\": {\n        \"highlights\": -10,\n        \"whites\": -5\n      },\n      \"reason\": \"The target has lower highlights and whites. Reducing these will help recover detail in the brightest areas and bring the overall tone closer to the target.\"\n    },\n    {\n      \"tool\": \"white_balance_tool\",\n      \"parameters\": {\n        \"temperature\": -6,\n        \"tint\": -10\n      },\n      \"reason\": \"The target image is cooler and has a stronger green tint compared to the current image. Adjusting temperature and tint accordingly will help correct the color balance.\"\n    },\n    {\n      \"tool\": \"saturation_tool\",\n      \"parameters\": {\n        \"saturation\": 10\n      },\n      \"reason\": \"The target image has slightly more saturation overall. Increasing saturation will help match the target's color intensity.\"\n    },\n    {\n      \"tool\": \"hsl_tool\",\n      \"parameters\": {\n        \"adjustments\": [\n          {\n            \"color\": \"blues\",\n            \"saturation\": 10\n          }\n        ]\n      },\n      \"reason\": \"The 'blues' band has the highest residual, suggesting it needs adjustment. Increasing the saturation of blues will help match the target's blue tones.\"\n    },\n    {\n      \"tool\": \"tone_tool\",\n      \"parameters\": {\n        \"shadows\": -7,\n        \"blacks\": -5\n      },\n      \"reason\": \"The target image has darker shadows and blacks. Decreasing these values will add more depth and contrast to the darker regions.\"\n    }\n  ]\n}\n```",
+            "parsed": {
+              "main_issue": "",
+              "candidates": [
+                {
+                  "tool": "exposure_tool",
+                  "parameters": {
+                    "exposure": -8,
+                    "brightness": -5
+                  },
+                  "reason": "The current image is significantly brighter than the target, indicated by negative brightness and L-channel deltas. Reducing exposure and brightness will help bring down the overall luminosity."
+                },
+                {
+                  "tool": "tone_tool",
+                  "parameters": {
+                    "highlights": -10,
+                    "whites": -5
+                  },
+                  "reason": "The target has lower highlights and whites. Reducing these will help recover detail in the brightest areas and bring the overall tone closer to the target."
+                },
+                {
+                  "tool": "white_balance_tool",
+                  "parameters": {
+                    "temperature": -6,
+                    "tint": -10
+                  },
+                  "reason": "The target image is cooler and has a stronger green tint compared to the current image. Adjusting temperature and tint accordingly will help correct the color balance."
+                },
+                {
+                  "tool": "saturation_tool",
+                  "parameters": {
+                    "saturation": 10
+                  },
+                  "reason": "The target image has slightly more saturation overall. Increasing saturation will help match the target's color intensity."
+                },
+                {
+                  "tool": "hsl_tool",
+                  "parameters": {
+                    "adjustments": [
+                      {
+                        "color": "blues",
+                        "saturation": 10
+                      }
+                    ]
+                  },
+                  "reason": "The 'blues' band has the highest residual, suggesting it needs adjustment. Increasing the saturation of blues will help match the target's blue tones."
+                },
+                {
+                  "tool": "tone_tool",
+                  "parameters": {
+                    "shadows": -7,
+                    "blacks": -5
+                  },
+                  "reason": "The target image has darker shadows and blacks. Decreasing these values will add more depth and contrast to the darker regions."
+                }
+              ]
+            }
+          },
+          {
+            "call_index": 1,
+            "temperature": 0.9,
+            "raw_response": "```json\n{\n  \"candidates\": [\n    {\n      \"tool\": \"exposure_tool\",\n      \"parameters\": {\n        \"exposure\": -20\n      },\n      \"reason\": \"The current image is significantly overexposed compared to the target, with blown-out highlights in the dress and water. Reducing exposure is the highest priority.\"\n    },\n    {\n      \"tool\": \"tone_tool\",\n      \"parameters\": {\n        \"highlights\": -40,\n        \"whites\": -10\n      },\n      \"reason\": \"As an alternative to global exposure, this directly targets the clipped highlights and bright areas to recover detail in the wedding dress and water.\"\n    },\n    {\n      \"tool\": \"white_balance_tool\",\n      \"parameters\": {\n        \"tint\": -25,\n        \"temperature\": -5\n      },\n      \"reason\": \"The target image has a noticeable green tint and is slightly cooler. The tint_delta of -12.84 is large, justifying a significant green shift.\"\n    },\n    {\n      \"tool\": \"saturation_tool\",\n      \"parameters\": {\n        \"saturation\": +25\n      },\n      \"reason\": \"The target image is more saturated, particularly the blue water. A global saturation boost is a straightforward way to address the saturation_delta of +10.98.\"\n    },\n    {\n      \"tool\": \"hsl_tool\",\n      \"parameters\": {\n        \"adjustments\": [\n          {\n            \"color\": \"blues\",\n            \"saturation\": 50\n          }\n        ]\n      },\n      \"reason\": \"The most significant color difference is in the water. The HSL residual for blues is highest, and the water in the current image is very washed out. This directly boosts the blue saturation.\"\n    },\n    {\n      \"tool\": \"tone_tool\",\n      \"parameters\": {\n        \"shadows\": -20\n      },\n      \"reason\": \"The shadows in the current image are brighter than the target (shadow_delta: -7.00). Lowering the shadows will increase depth and contrast, especially in the groom's suit.\"\n    }\n  ]\n}\n```",
+            "parsed": {
+              "main_issue": "",
+              "candidates": [
+                {
+                  "tool": "exposure_tool",
+                  "parameters": {
+                    "exposure": -20
+                  },
+                  "reason": "The current image is significantly overexposed compared to the target, with blown-out highlights in the dress and water. Reducing exposure is the highest priority."
+                },
+                {
+                  "tool": "tone_tool",
+                  "parameters": {
+                    "highlights": -40,
+                    "whites": -10
+                  },
+                  "reason": "As an alternative to global exposure, this directly targets the clipped highlights and bright areas to recover detail in the wedding dress and water."
+                },
+                {
+                  "tool": "white_balance_tool",
+                  "parameters": {
+                    "tint": -25,
+                    "temperature": -5
+                  },
+                  "reason": "The target image has a noticeable green tint and is slightly cooler. The tint_delta of -12.84 is large, justifying a significant green shift."
+                },
+                {
+                  "tool": "saturation_tool",
+                  "parameters": {
+                    "saturation": 25
+                  },
+                  "reason": "The target image is more saturated, particularly the blue water. A global saturation boost is a straightforward way to address the saturation_delta of +10.98."
+                },
+                {
+                  "tool": "hsl_tool",
+                  "parameters": {
+                    "adjustments": [
+                      {
+                        "color": "blues",
+                        "saturation": 50
+                      }
+                    ]
+                  },
+                  "reason": "The most significant color difference is in the water. The HSL residual for blues is highest, and the water in the current image is very washed out. This directly boosts the blue saturation."
+                },
+                {
+                  "tool": "tone_tool",
+                  "parameters": {
+                    "shadows": -20
+                  },
+                  "reason": "The shadows in the current image are brighter than the target (shadow_delta: -7.00). Lowering the shadows will increase depth and contrast, especially in the groom's suit."
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "action": null
+    },
+    {
+      "node_id": 1,
+      "parent_id": 0,
+      "depth": 1,
+      "image_path": "trajectories_compare_delta_e/cmp_delta_e/tree_nodes/node_000001.jpg",
+      "metrics": {
+        "psnr": 18.84,
+        "ssim": 0.949,
+        "delta_e": 11.76,
+        "l1": 0.1061,
+        "l2": 0.1142,
+        "lpips": 0.07
+      },
+      "score": 11.76,
+      "params_accumulated": {
+        "input_color_space": "srgb",
+        "tone_mapper": "basic",
+        "exposure": -8.0,
+        "brightness": -5.0,
+        "contrast": 0.0,
+        "highlights": 0.0,
+        "shadows": 0.0,
+        "whites": 0.0,
+        "blacks": 0.0,
+        "temperature": 0.0,
+        "tint": 0.0,
+        "saturation": 0.0,
+        "vibrance": 0.0,
+        "hsl": {
+          "reds": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "oranges": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "yellows": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "greens": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "aquas": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "blues": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "purples": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "magentas": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          }
+        },
+        "color_grading": {
+          "shadows": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "midtones": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "highlights": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "blending": 50.0,
+          "balance": 0.0
+        }
+      },
+      "visits": 1,
+      "value_sum": -3.13,
+      "q_value": -3.13,
+      "prior": 1.0,
+      "terminal_reason": "regression",
+      "children": [],
+      "planner_meta": {},
+      "action": {
+        "round": 0,
+        "tool": "exposure_tool",
+        "parameters": {
+          "exposure": -8,
+          "brightness": -5
+        },
+        "delta_parameters": {
+          "exposure": -8,
+          "brightness": -5
+        },
+        "proposal": {
+          "tool": "exposure_tool",
+          "parameters": {
+            "exposure": -8,
+            "brightness": -5
+          },
+          "reason": "The current image is significantly brighter than the target, indicated by negative brightness and L-channel deltas. Reducing exposure and brightness will help bring down the overall luminosity."
+        },
+        "step_quality": {
+          "psnr": 18.84,
+          "ssim": 0.949,
+          "delta_e": 11.76,
+          "l1": 0.1061,
+          "l2": 0.1142,
+          "lpips": 0.07
+        },
+        "score_before": 8.63,
+        "score_after": 11.76,
+        "score_gain": -3.129999999999999,
+        "action_signature": "{\"delta_parameters\":{\"brightness\":-5,\"exposure\":-8},\"tool\":\"exposure_tool\"}",
+        "planner_call_id": 0,
+        "planner_temperature": 0.4
+      }
+    },
+    {
+      "node_id": 2,
+      "parent_id": 0,
+      "depth": 1,
+      "image_path": "trajectories_compare_delta_e/cmp_delta_e/tree_nodes/node_000002.jpg",
+      "metrics": {
+        "psnr": 24.43,
+        "ssim": 0.973,
+        "delta_e": 7.4,
+        "l1": 0.0437,
+        "l2": 0.06,
+        "lpips": 0.047
+      },
+      "score": 7.4,
+      "params_accumulated": {
+        "input_color_space": "srgb",
+        "tone_mapper": "basic",
+        "exposure": 0.0,
+        "brightness": 0.0,
+        "contrast": 0.0,
+        "highlights": -10.0,
+        "shadows": 0.0,
+        "whites": -5.0,
+        "blacks": 0.0,
+        "temperature": 0.0,
+        "tint": 0.0,
+        "saturation": 0.0,
+        "vibrance": 0.0,
+        "hsl": {
+          "reds": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "oranges": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "yellows": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "greens": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "aquas": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "blues": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "purples": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "magentas": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          }
+        },
+        "color_grading": {
+          "shadows": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "midtones": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "highlights": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "blending": 50.0,
+          "balance": 0.0
+        }
+      },
+      "visits": 3,
+      "value_sum": -2.56,
+      "q_value": -0.8533,
+      "prior": 0.5,
+      "terminal_reason": "",
+      "children": [
+        7,
+        8
+      ],
+      "planner_meta": {
+        "source": "planner",
+        "traces": [
+          {
+            "call_index": 0,
+            "temperature": 0.4,
+            "raw_response": "```json\n{\n  \"candidates\": [\n    {\n      \"tool\": \"hsl_tool\",\n      \"parameters\": {\n        \"adjustments\": [\n          {\n            \"color\": \"blues\",\n            \"saturation\": 35,\n            \"luminance\": -10\n          }\n        ]\n      },\n      \"reason\": \"The residual statistics and visual inspection show the largest difference is in the blue channel, corresponding to the water. The target water is much more saturated and slightly darker.\"\n    },\n    {\n      \"tool\": \"exposure_tool\",\n      \"parameters\": {\n        \"exposure\": -8,\n        \"brightness\": -5\n      },\n      \"reason\": \"The current image is significantly brighter than the target, as shown by the large negative brightness_delta (-8.37). Reducing exposure and brightness will correct this.\"\n    },\n    {\n      \"tool\": \"white_balance_tool\",\n      \"parameters\": {\n        \"temperature\": 10,\n        \"tint\": 8\n      },\n      \"reason\": \"The current image is too cool and has a green tint compared to the target (temperature_delta: -5.63, tint_delta: -7.36). Adding warmth and magenta will correct the color balance.\"\n    },\n    {\n      \"tool\": \"saturation_tool\",\n      \"parameters\": {\n        \"saturation\": 15\n      },\n      \"reason\": \"The current image is undersaturated overall compared to the target (saturation_delta: +10.90). A global saturation boost is needed.\"\n    },\n    {\n      \"tool\": \"hsl_tool\",\n      \"parameters\": {\n        \"adjustments\": [\n          {\n            \"color\": \"oranges\",\n            \"saturation\": 20\n          }\n        ]\n      },\n      \"reason\": \"The skin tones (oranges) are washed out in the current image. The HSL residuals for oranges are significant. Boosting their saturation will make them look more natural and closer to the target.\"\n    },\n    {\n      \"tool\": \"tone_tool\",\n      \"parameters\": {\n        \"shadows\": -15\n      },\n      \"reason\": \"The shadows in the current image are too bright (shadow_delta: -5.00). Darkening the shadows will increase contrast and bring the tonal range closer to the target.\"\n    }\n  ]\n}\n```",
+            "parsed": {
+              "main_issue": "",
+              "candidates": [
+                {
+                  "tool": "hsl_tool",
+                  "parameters": {
+                    "adjustments": [
+                      {
+                        "color": "blues",
+                        "saturation": 35,
+                        "luminance": -10
+                      }
+                    ]
+                  },
+                  "reason": "The residual statistics and visual inspection show the largest difference is in the blue channel, corresponding to the water. The target water is much more saturated and slightly darker."
+                },
+                {
+                  "tool": "exposure_tool",
+                  "parameters": {
+                    "exposure": -8,
+                    "brightness": -5
+                  },
+                  "reason": "The current image is significantly brighter than the target, as shown by the large negative brightness_delta (-8.37). Reducing exposure and brightness will correct this."
+                },
+                {
+                  "tool": "white_balance_tool",
+                  "parameters": {
+                    "temperature": 10,
+                    "tint": 8
+                  },
+                  "reason": "The current image is too cool and has a green tint compared to the target (temperature_delta: -5.63, tint_delta: -7.36). Adding warmth and magenta will correct the color balance."
+                },
+                {
+                  "tool": "saturation_tool",
+                  "parameters": {
+                    "saturation": 15
+                  },
+                  "reason": "The current image is undersaturated overall compared to the target (saturation_delta: +10.90). A global saturation boost is needed."
+                },
+                {
+                  "tool": "hsl_tool",
+                  "parameters": {
+                    "adjustments": [
+                      {
+                        "color": "oranges",
+                        "saturation": 20
+                      }
+                    ]
+                  },
+                  "reason": "The skin tones (oranges) are washed out in the current image. The HSL residuals for oranges are significant. Boosting their saturation will make them look more natural and closer to the target."
+                },
+                {
+                  "tool": "tone_tool",
+                  "parameters": {
+                    "shadows": -15
+                  },
+                  "reason": "The shadows in the current image are too bright (shadow_delta: -5.00). Darkening the shadows will increase contrast and bring the tonal range closer to the target."
+                }
+              ]
+            }
+          },
+          {
+            "call_index": 1,
+            "temperature": 0.9,
+            "raw_response": "```json\n{\n  \"candidates\": [\n    {\n      \"tool\": \"exposure_tool\",\n      \"parameters\": {\n        \"exposure\": -10,\n        \"brightness\": -5\n      },\n      \"reason\": \"The current image is significantly brighter than the target, as indicated by the large negative brightness_delta (-8.37). A global reduction in exposure and brightness is the most direct way to correct this.\"\n    },\n    {\n      \"tool\": \"white_balance_tool\",\n      \"parameters\": {\n        \"temperature\": -15,\n        \"tint\": +20\n      },\n      \"reason\": \"The residual statistics show the image is too warm (temperature_delta: -5.63) and too green (tint_delta: -7.36). This change will cool the image and shift the tint towards magenta to match the target's color balance.\"\n    },\n    {\n      \"tool\": \"saturation_tool\",\n      \"parameters\": {\n        \"saturation\": +20\n      },\n      \"reason\": \"The current image is undersaturated (saturation_delta: +10.90), which is visible in the washed-out colors, especially the water. Increasing global saturation will make the colors richer and more similar to the target.\"\n    },\n    {\n      \"tool\": \"hsl_tool\",\n      \"parameters\": {\n        \"adjustments\": [\n          {\n            \"color\": \"blues\",\n            \"saturation\": +40,\n            \"luminance\": -15\n          }\n        ]\n      },\n      \"reason\": \"HSL is the dominant issue, with blues having the highest residual. The water in the target is much more saturated and deeper. This targeted adjustment boosts the blue saturation and darkens it to match.\"\n    },\n    {\n      \"tool\": \"tone_tool\",\n      \"parameters\": {\n        \"shadows\": -20\n      },\n      \"reason\": \"The shadows are too bright (shadow_delta: -5.00). Lowering the shadows will create more depth and contrast in the image, particularly in the man's suit and the couple's hair.\"\n    },\n    {\n      \"tool\": \"hsl_tool\",\n      \"parameters\": {\n        \"adjustments\": [\n          {\n            \"color\": \"greens\",\n            \"saturation\": +30\n          }\n        ]\n      },\n      \"reason\": \"Greens have the second-highest HSL residual, likely contributing to the water's color. Boosting green saturation could help achieve the target's more turquoise water appearance.\"\n    }\n  ]\n}\n```",
+            "parsed": {
+              "main_issue": "",
+              "candidates": [
+                {
+                  "tool": "exposure_tool",
+                  "parameters": {
+                    "exposure": -10,
+                    "brightness": -5
+                  },
+                  "reason": "The current image is significantly brighter than the target, as indicated by the large negative brightness_delta (-8.37). A global reduction in exposure and brightness is the most direct way to correct this."
+                },
+                {
+                  "tool": "white_balance_tool",
+                  "parameters": {
+                    "temperature": -15,
+                    "tint": 20
+                  },
+                  "reason": "The residual statistics show the image is too warm (temperature_delta: -5.63) and too green (tint_delta: -7.36). This change will cool the image and shift the tint towards magenta to match the target's color balance."
+                },
+                {
+                  "tool": "saturation_tool",
+                  "parameters": {
+                    "saturation": 20
+                  },
+                  "reason": "The current image is undersaturated (saturation_delta: 10.90), which is visible in the washed-out colors, especially the water. Increasing global saturation will make the colors richer and more similar to the target."
+                },
+                {
+                  "tool": "hsl_tool",
+                  "parameters": {
+                    "adjustments": [
+                      {
+                        "color": "blues",
+                        "saturation": 40,
+                        "luminance": -15
+                      }
+                    ]
+                  },
+                  "reason": "HSL is the dominant issue, with blues having the highest residual. The water in the target is much more saturated and deeper. This targeted adjustment boosts the blue saturation and darkens it to match."
+                },
+                {
+                  "tool": "tone_tool",
+                  "parameters": {
+                    "shadows": -20
+                  },
+                  "reason": "The shadows are too bright (shadow_delta: -5.00). Lowering the shadows will create more depth and contrast in the image, particularly in the man's suit and the couple's hair."
+                },
+                {
+                  "tool": "hsl_tool",
+                  "parameters": {
+                    "adjustments": [
+                      {
+                        "color": "greens",
+                        "saturation": 30
+                      }
+                    ]
+                  },
+                  "reason": "Greens have the second-highest HSL residual, likely contributing to the water's color. Boosting green saturation could help achieve the target's more turquoise water appearance."
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "action": {
+        "round": 0,
+        "tool": "tone_tool",
+        "parameters": {
+          "highlights": -10,
+          "whites": -5
+        },
+        "delta_parameters": {
+          "contrast": 0,
+          "highlights": -10,
+          "shadows": 0,
+          "whites": -5,
+          "blacks": 0
+        },
+        "proposal": {
+          "tool": "tone_tool",
+          "parameters": {
+            "highlights": -10,
+            "whites": -5
+          },
+          "reason": "The target has lower highlights and whites. Reducing these will help recover detail in the brightest areas and bring the overall tone closer to the target."
+        },
+        "step_quality": {
+          "psnr": 24.43,
+          "ssim": 0.973,
+          "delta_e": 7.4,
+          "l1": 0.0437,
+          "l2": 0.06,
+          "lpips": 0.047
+        },
+        "score_before": 8.63,
+        "score_after": 7.4,
+        "score_gain": 1.2300000000000004,
+        "action_signature": "{\"delta_parameters\":{\"highlights\":-10,\"whites\":-5},\"tool\":\"tone_tool\"}",
+        "planner_call_id": 0,
+        "planner_temperature": 0.4
+      }
+    },
+    {
+      "node_id": 3,
+      "parent_id": 0,
+      "depth": 1,
+      "image_path": "trajectories_compare_delta_e/cmp_delta_e/tree_nodes/node_000003.jpg",
+      "metrics": {
+        "psnr": 23.34,
+        "ssim": 0.968,
+        "delta_e": 7.73,
+        "l1": 0.0565,
+        "l2": 0.0681,
+        "lpips": 0.051
+      },
+      "score": 7.73,
+      "params_accumulated": {
+        "input_color_space": "srgb",
+        "tone_mapper": "basic",
+        "exposure": 0.0,
+        "brightness": 0.0,
+        "contrast": 0.0,
+        "highlights": 0.0,
+        "shadows": 0.0,
+        "whites": 0.0,
+        "blacks": 0.0,
+        "temperature": -6.0,
+        "tint": -10.0,
+        "saturation": 0.0,
+        "vibrance": 0.0,
+        "hsl": {
+          "reds": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "oranges": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "yellows": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "greens": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "aquas": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "blues": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "purples": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "magentas": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          }
+        },
+        "color_grading": {
+          "shadows": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "midtones": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "highlights": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "blending": 50.0,
+          "balance": 0.0
+        }
+      },
+      "visits": 2,
+      "value_sum": -4.18,
+      "q_value": -2.09,
+      "prior": 0.3333,
+      "terminal_reason": "",
+      "children": [
+        9
+      ],
+      "planner_meta": {
+        "source": "planner",
+        "traces": [
+          {
+            "call_index": 0,
+            "temperature": 0.4,
+            "raw_response": "```json\n{\n  \"candidates\": [\n    {\n      \"tool\": \"exposure_tool\",\n      \"parameters\": {\n        \"exposure\": -10,\n        \"brightness\": -5\n      },\n      \"reason\": \"The current image is significantly brighter than the target, with large negative brightness and highlight residuals. This is a strong global adjustment to reduce overall brightness.\"\n    },\n    {\n      \"tool\": \"tone_tool\",\n      \"parameters\": {\n        \"highlights\": -15,\n        \"whites\": -5\n      },\n      \"reason\": \"The highlights on the bride's dress and the water are too bright compared to the target. This specifically targets those bright areas to bring them down.\"\n    },\n    {\n      \"tool\": \"white_balance_tool\",\n      \"parameters\": {\n        \"tint\": -12\n      },\n      \"reason\": \"The residual statistics show a large negative tint delta (-13.97), indicating the current image is still too magenta. This moves the image towards green to correct the color cast.\"\n    },\n    {\n      \"tool\": \"hsl_tool\",\n      \"parameters\": {\n        \"adjustments\": [\n          {\n            \"color\": \"blues\",\n            \"saturation\": 15,\n            \"luminance\": -10\n          }\n        ]\n      },\n      \"reason\": \"The water in the target is a richer, deeper blue. The HSL residuals for blues are high. Increasing saturation and decreasing luminance of the blues should help match the water color.\"\n    },\n    {\n      \"tool\": \"hsl_tool\",\n      \"parameters\": {\n        \"adjustments\": [\n          {\n            \"color\": \"aquas\",\n            \"saturation\": 10,\n            \"luminance\": -8\n          }\n        ]\n      },\n      \"reason\": \"The water has a strong aqua component. Making the aquas darker and more saturated is an alternative way to address the water color difference, which is a dominant issue.\"\n    },\n    {\n      \"tool\": \"saturation_tool\",\n      \"parameters\": {\n        \"saturation\": 8\n      },\n      \"reason\": \"The residual statistics show a positive saturation delta, meaning the target is more saturated. A small global saturation boost will help close this gap.\"\n    }\n  ]\n}\n```",
+            "parsed": {
+              "main_issue": "",
+              "candidates": [
+                {
+                  "tool": "exposure_tool",
+                  "parameters": {
+                    "exposure": -10,
+                    "brightness": -5
+                  },
+                  "reason": "The current image is significantly brighter than the target, with large negative brightness and highlight residuals. This is a strong global adjustment to reduce overall brightness."
+                },
+                {
+                  "tool": "tone_tool",
+                  "parameters": {
+                    "highlights": -15,
+                    "whites": -5
+                  },
+                  "reason": "The highlights on the bride's dress and the water are too bright compared to the target. This specifically targets those bright areas to bring them down."
+                },
+                {
+                  "tool": "white_balance_tool",
+                  "parameters": {
+                    "tint": -12
+                  },
+                  "reason": "The residual statistics show a large negative tint delta (-13.97), indicating the current image is still too magenta. This moves the image towards green to correct the color cast."
+                },
+                {
+                  "tool": "hsl_tool",
+                  "parameters": {
+                    "adjustments": [
+                      {
+                        "color": "blues",
+                        "saturation": 15,
+                        "luminance": -10
+                      }
+                    ]
+                  },
+                  "reason": "The water in the target is a richer, deeper blue. The HSL residuals for blues are high. Increasing saturation and decreasing luminance of the blues should help match the water color."
+                },
+                {
+                  "tool": "hsl_tool",
+                  "parameters": {
+                    "adjustments": [
+                      {
+                        "color": "aquas",
+                        "saturation": 10,
+                        "luminance": -8
+                      }
+                    ]
+                  },
+                  "reason": "The water has a strong aqua component. Making the aquas darker and more saturated is an alternative way to address the water color difference, which is a dominant issue."
+                },
+                {
+                  "tool": "saturation_tool",
+                  "parameters": {
+                    "saturation": 8
+                  },
+                  "reason": "The residual statistics show a positive saturation delta, meaning the target is more saturated. A small global saturation boost will help close this gap."
+                }
+              ]
+            }
+          },
+          {
+            "call_index": 1,
+            "temperature": 0.9,
+            "raw_response": "```json\n{\n  \"candidates\": [\n    {\n      \"tool\": \"exposure_tool\",\n      \"parameters\": {\n        \"exposure\": -10,\n        \"brightness\": -5\n      },\n      \"reason\": \"The current image is significantly brighter than the target, as indicated by the large negative brightness_delta (-12.55). This action reduces the overall brightness to match the target.\"\n    },\n    {\n      \"tool\": \"white_balance_tool\",\n      \"parameters\": {\n        \"temperature\": -5,\n        \"tint\": -15\n      },\n      \"reason\": \"A strong magenta cast remains, as shown by the very large tint_delta (-13.97). This action adds green to correct the color balance and applies a slight cooling effect.\"\n    },\n    {\n      \"tool\": \"tone_tool\",\n      \"parameters\": {\n        \"highlights\": -15,\n        \"shadows\": -10,\n        \"contrast\": 5\n      },\n      \"reason\": \"The highlights are too bright (-11.00 delta) and the image lacks punch. This action aims to recover highlight detail, deepen the shadows, and add a small amount of contrast.\"\n    },\n    {\n      \"tool\": \"saturation_tool\",\n      \"parameters\": {\n        \"vibrance\": 20,\n        \"saturation\": 5\n      },\n      \"reason\": \"The current image is less colorful than the target (saturation_delta: +7.10). This action boosts vibrance and saturation to make the colors, especially the water and skin tones, richer.\"\n    },\n    {\n      \"tool\": \"hsl_tool\",\n      \"parameters\": {\n        \"adjustments\": [\n          {\n            \"color\": \"blues\",\n            \"saturation\": 15,\n            \"luminance\": -10\n          }\n        ]\n      },\n      \"reason\": \"The color of the water is a key difference, and the 'blues' HSL band has the highest residual. This action makes the blue water deeper and more saturated, matching the target.\"\n    },\n    {\n      \"tool\": \"tone_tool\",\n      \"parameters\": {\n        \"highlights\": -20,\n        \"whites\": -10\n      },\n      \"reason\": \"The highlights on the bride's dress and the man's hat are clipped. This is an aggressive move focused on recovering that lost detail by pulling down the brightest parts of the image.\"\n    }\n  ]\n}\n```",
+            "parsed": {
+              "main_issue": "",
+              "candidates": [
+                {
+                  "tool": "exposure_tool",
+                  "parameters": {
+                    "exposure": -10,
+                    "brightness": -5
+                  },
+                  "reason": "The current image is significantly brighter than the target, as indicated by the large negative brightness_delta (-12.55). This action reduces the overall brightness to match the target."
+                },
+                {
+                  "tool": "white_balance_tool",
+                  "parameters": {
+                    "temperature": -5,
+                    "tint": -15
+                  },
+                  "reason": "A strong magenta cast remains, as shown by the very large tint_delta (-13.97). This action adds green to correct the color balance and applies a slight cooling effect."
+                },
+                {
+                  "tool": "tone_tool",
+                  "parameters": {
+                    "highlights": -15,
+                    "shadows": -10,
+                    "contrast": 5
+                  },
+                  "reason": "The highlights are too bright (-11.00 delta) and the image lacks punch. This action aims to recover highlight detail, deepen the shadows, and add a small amount of contrast."
+                },
+                {
+                  "tool": "saturation_tool",
+                  "parameters": {
+                    "vibrance": 20,
+                    "saturation": 5
+                  },
+                  "reason": "The current image is less colorful than the target (saturation_delta: +7.10). This action boosts vibrance and saturation to make the colors, especially the water and skin tones, richer."
+                },
+                {
+                  "tool": "hsl_tool",
+                  "parameters": {
+                    "adjustments": [
+                      {
+                        "color": "blues",
+                        "saturation": 15,
+                        "luminance": -10
+                      }
+                    ]
+                  },
+                  "reason": "The color of the water is a key difference, and the 'blues' HSL band has the highest residual. This action makes the blue water deeper and more saturated, matching the target."
+                },
+                {
+                  "tool": "tone_tool",
+                  "parameters": {
+                    "highlights": -20,
+                    "whites": -10
+                  },
+                  "reason": "The highlights on the bride's dress and the man's hat are clipped. This is an aggressive move focused on recovering that lost detail by pulling down the brightest parts of the image."
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "action": {
+        "round": 0,
+        "tool": "white_balance_tool",
+        "parameters": {
+          "temperature": -6,
+          "tint": -10
+        },
+        "delta_parameters": {
+          "temperature": -6,
+          "tint": -10
+        },
+        "proposal": {
+          "tool": "white_balance_tool",
+          "parameters": {
+            "temperature": -6,
+            "tint": -10
+          },
+          "reason": "The target image is cooler and has a stronger green tint compared to the current image. Adjusting temperature and tint accordingly will help correct the color balance."
+        },
+        "step_quality": {
+          "psnr": 23.34,
+          "ssim": 0.968,
+          "delta_e": 7.73,
+          "l1": 0.0565,
+          "l2": 0.0681,
+          "lpips": 0.051
+        },
+        "score_before": 8.63,
+        "score_after": 7.73,
+        "score_gain": 0.9000000000000004,
+        "action_signature": "{\"delta_parameters\":{\"temperature\":-6,\"tint\":-10},\"tool\":\"white_balance_tool\"}",
+        "planner_call_id": 0,
+        "planner_temperature": 0.4
+      }
+    },
+    {
+      "node_id": 4,
+      "parent_id": 0,
+      "depth": 1,
+      "image_path": "trajectories_compare_delta_e/cmp_delta_e/tree_nodes/node_000004.jpg",
+      "metrics": {
+        "psnr": 22.39,
+        "ssim": 0.968,
+        "delta_e": 9.0,
+        "l1": 0.0632,
+        "l2": 0.0759,
+        "lpips": 0.061
+      },
+      "score": 9.0,
+      "params_accumulated": {
+        "input_color_space": "srgb",
+        "tone_mapper": "basic",
+        "exposure": 0.0,
+        "brightness": 0.0,
+        "contrast": 0.0,
+        "highlights": 0.0,
+        "shadows": 0.0,
+        "whites": 0.0,
+        "blacks": 0.0,
+        "temperature": 0.0,
+        "tint": 0.0,
+        "saturation": 10.0,
+        "vibrance": 0.0,
+        "hsl": {
+          "reds": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "oranges": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "yellows": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "greens": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "aquas": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "blues": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "purples": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "magentas": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          }
+        },
+        "color_grading": {
+          "shadows": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "midtones": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "highlights": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "blending": 50.0,
+          "balance": 0.0
+        }
+      },
+      "visits": 2,
+      "value_sum": -0.74,
+      "q_value": -0.37,
+      "prior": 0.25,
+      "terminal_reason": "regression",
+      "children": [],
+      "planner_meta": {},
+      "action": {
+        "round": 0,
+        "tool": "saturation_tool",
+        "parameters": {
+          "saturation": 10
+        },
+        "delta_parameters": {
+          "saturation": 10,
+          "vibrance": 0
+        },
+        "proposal": {
+          "tool": "saturation_tool",
+          "parameters": {
+            "saturation": 10
+          },
+          "reason": "The target image has slightly more saturation overall. Increasing saturation will help match the target's color intensity."
+        },
+        "step_quality": {
+          "psnr": 22.39,
+          "ssim": 0.968,
+          "delta_e": 9.0,
+          "l1": 0.0632,
+          "l2": 0.0759,
+          "lpips": 0.061
+        },
+        "score_before": 8.63,
+        "score_after": 9.0,
+        "score_gain": -0.3699999999999992,
+        "action_signature": "{\"delta_parameters\":{\"saturation\":10},\"tool\":\"saturation_tool\"}",
+        "planner_call_id": 0,
+        "planner_temperature": 0.4
+      }
+    },
+    {
+      "node_id": 5,
+      "parent_id": 0,
+      "depth": 1,
+      "image_path": "trajectories_compare_delta_e/cmp_delta_e/tree_nodes/node_000005.jpg",
+      "metrics": {
+        "psnr": 22.46,
+        "ssim": 0.969,
+        "delta_e": 8.59,
+        "l1": 0.0615,
+        "l2": 0.0753,
+        "lpips": 0.053
+      },
+      "score": 8.59,
+      "params_accumulated": {
+        "input_color_space": "srgb",
+        "tone_mapper": "basic",
+        "exposure": 0.0,
+        "brightness": 0.0,
+        "contrast": 0.0,
+        "highlights": 0.0,
+        "shadows": 0.0,
+        "whites": 0.0,
+        "blacks": 0.0,
+        "temperature": 0.0,
+        "tint": 0.0,
+        "saturation": 0.0,
+        "vibrance": 0.0,
+        "hsl": {
+          "reds": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "oranges": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "yellows": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "greens": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "aquas": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "blues": {
+            "hue": 0.0,
+            "saturation": 10.0,
+            "luminance": 0.0
+          },
+          "purples": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "magentas": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          }
+        },
+        "color_grading": {
+          "shadows": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "midtones": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "highlights": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "blending": 50.0,
+          "balance": 0.0
+        }
+      },
+      "visits": 2,
+      "value_sum": -7.65,
+      "q_value": -3.825,
+      "prior": 0.2,
+      "terminal_reason": "",
+      "children": [
+        10
+      ],
+      "planner_meta": {
+        "source": "planner",
+        "traces": [
+          {
+            "call_index": 0,
+            "temperature": 0.4,
+            "raw_response": "```json\n{\n  \"candidates\": [\n    {\n      \"tool\": \"exposure_tool\",\n      \"parameters\": {\n        \"exposure\": -12,\n        \"brightness\": -5\n      },\n      \"reason\": \"The current image is significantly brighter than the target (brightness_delta: -13.82). This is the largest error and a global reduction in brightness and exposure is needed.\"\n    },\n    {\n      \"tool\": \"white_balance_tool\",\n      \"parameters\": {\n        \"temperature\": 5,\n        \"tint\": 15\n      },\n      \"reason\": \"The current image has a strong green cast compared to the target (tint_delta: -12.87). Adding magenta with the tint slider is necessary. A small warming adjustment is also needed.\"\n    },\n    {\n      \"tool\": \"tone_tool\",\n      \"parameters\": {\n        \"highlights\": -15,\n        \"shadows\": -10\n      },\n      \"reason\": \"The highlights and shadows are too bright (deltas: -9.00 and -7.00). Lowering them will increase contrast and recover detail in the dress and suit.\"\n    },\n    {\n      \"tool\": \"saturation_tool\",\n      \"parameters\": {\n        \"vibrance\": 20\n      },\n      \"reason\": \"The overall saturation is lower than the target (saturation_delta: +10.78). Increasing vibrance will boost colors, especially in the water, without oversaturating skin tones.\"\n    },\n    {\n      \"tool\": \"hsl_tool\",\n      \"parameters\": {\n        \"adjustments\": [\n          {\n            \"color\": \"blues\",\n            \"luminance\": -15\n          }\n        ]\n      },\n      \"reason\": \"The water in the background is much brighter than the target. Lowering the luminance of the blues will help darken the water to better match the target's deeper tone.\"\n    },\n    {\n      \"tool\": \"tone_tool\",\n      \"parameters\": {\n        \"contrast\": 10,\n        \"blacks\": -10\n      },\n      \"reason\": \"An alternative approach to fix the flat tonality. Increasing contrast and deepening the black point will make the image pop more, similar to the target.\"\n    }\n  ]\n}\n```",
+            "parsed": {
+              "main_issue": "",
+              "candidates": [
+                {
+                  "tool": "exposure_tool",
+                  "parameters": {
+                    "exposure": -12,
+                    "brightness": -5
+                  },
+                  "reason": "The current image is significantly brighter than the target (brightness_delta: -13.82). This is the largest error and a global reduction in brightness and exposure is needed."
+                },
+                {
+                  "tool": "white_balance_tool",
+                  "parameters": {
+                    "temperature": 5,
+                    "tint": 15
+                  },
+                  "reason": "The current image has a strong green cast compared to the target (tint_delta: -12.87). Adding magenta with the tint slider is necessary. A small warming adjustment is also needed."
+                },
+                {
+                  "tool": "tone_tool",
+                  "parameters": {
+                    "highlights": -15,
+                    "shadows": -10
+                  },
+                  "reason": "The highlights and shadows are too bright (deltas: -9.00 and -7.00). Lowering them will increase contrast and recover detail in the dress and suit."
+                },
+                {
+                  "tool": "saturation_tool",
+                  "parameters": {
+                    "vibrance": 20
+                  },
+                  "reason": "The overall saturation is lower than the target (saturation_delta: +10.78). Increasing vibrance will boost colors, especially in the water, without oversaturating skin tones."
+                },
+                {
+                  "tool": "hsl_tool",
+                  "parameters": {
+                    "adjustments": [
+                      {
+                        "color": "blues",
+                        "luminance": -15
+                      }
+                    ]
+                  },
+                  "reason": "The water in the background is much brighter than the target. Lowering the luminance of the blues will help darken the water to better match the target's deeper tone."
+                },
+                {
+                  "tool": "tone_tool",
+                  "parameters": {
+                    "contrast": 10,
+                    "blacks": -10
+                  },
+                  "reason": "An alternative approach to fix the flat tonality. Increasing contrast and deepening the black point will make the image pop more, similar to the target."
+                }
+              ]
+            }
+          },
+          {
+            "call_index": 1,
+            "temperature": 0.9,
+            "raw_response": "```json\n{\n  \"candidates\": [\n    {\n      \"tool\": \"exposure_tool\",\n      \"parameters\": {\n        \"exposure\": -10,\n        \"brightness\": -5\n      },\n      \"reason\": \"The current image is significantly brighter than the target, as shown by the large negative brightness_delta (-13.82). A global reduction in exposure and brightness is the most direct way to address this.\"\n    },\n    {\n      \"tool\": \"white_balance_tool\",\n      \"parameters\": {\n        \"temperature\": -8,\n        \"tint\": -15\n      },\n      \"reason\": \"The current image has a strong magenta cast and is slightly too warm compared to the target. The tint_delta is very large (-12.87), so a significant green shift is needed, along with a cooling adjustment for temperature.\"\n    },\n    {\n      \"tool\": \"tone_tool\",\n      \"parameters\": {\n        \"highlights\": -15,\n        \"shadows\": -10\n      },\n      \"reason\": \"Both highlights (-9.00) and shadows (-7.00) are brighter in the current image. This tool allows for a more targeted reduction in brightness than the global exposure tool.\"\n    },\n    {\n      \"tool\": \"hsl_tool\",\n      \"parameters\": {\n        \"adjustments\": [\n          {\n            \"color\": \"blues\",\n            \"luminance\": -20\n          }\n        ]\n      },\n      \"reason\": \"The HSL residual for blues is the highest. While saturation was increased in the last step, the blue water is still too bright. Lowering the luminance of blues will darken the water to better match the target.\"\n    },\n    {\n      \"tool\": \"saturation_tool\",\n      \"parameters\": {\n        \"saturation\": 15\n      },\n      \"reason\": \"The residual statistics show that the target image is more saturated overall (saturation_delta: +10.78). A global saturation boost is needed.\"\n    },\n    {\n      \"tool\": \"hsl_tool\",\n      \"parameters\": {\n        \"adjustments\": [\n          {\n            \"color\": \"greens\",\n            \"saturation\": -15,\n            \"luminance\": -10\n          }\n        ]\n      },\n      \"reason\": \"The residual for greens is the second highest. The water has a slight cyan/green tint that is too bright and saturated compared to the target. Reducing the saturation and luminance of greens will help correct the water's color.\"\n    }\n  ]\n}\n```",
+            "parsed": {
+              "main_issue": "",
+              "candidates": [
+                {
+                  "tool": "exposure_tool",
+                  "parameters": {
+                    "exposure": -10,
+                    "brightness": -5
+                  },
+                  "reason": "The current image is significantly brighter than the target, as shown by the large negative brightness_delta (-13.82). A global reduction in exposure and brightness is the most direct way to address this."
+                },
+                {
+                  "tool": "white_balance_tool",
+                  "parameters": {
+                    "temperature": -8,
+                    "tint": -15
+                  },
+                  "reason": "The current image has a strong magenta cast and is slightly too warm compared to the target. The tint_delta is very large (-12.87), so a significant green shift is needed, along with a cooling adjustment for temperature."
+                },
+                {
+                  "tool": "tone_tool",
+                  "parameters": {
+                    "highlights": -15,
+                    "shadows": -10
+                  },
+                  "reason": "Both highlights (-9.00) and shadows (-7.00) are brighter in the current image. This tool allows for a more targeted reduction in brightness than the global exposure tool."
+                },
+                {
+                  "tool": "hsl_tool",
+                  "parameters": {
+                    "adjustments": [
+                      {
+                        "color": "blues",
+                        "luminance": -20
+                      }
+                    ]
+                  },
+                  "reason": "The HSL residual for blues is the highest. While saturation was increased in the last step, the blue water is still too bright. Lowering the luminance of blues will darken the water to better match the target."
+                },
+                {
+                  "tool": "saturation_tool",
+                  "parameters": {
+                    "saturation": 15
+                  },
+                  "reason": "The residual statistics show that the target image is more saturated overall (saturation_delta: +10.78). A global saturation boost is needed."
+                },
+                {
+                  "tool": "hsl_tool",
+                  "parameters": {
+                    "adjustments": [
+                      {
+                        "color": "greens",
+                        "saturation": -15,
+                        "luminance": -10
+                      }
+                    ]
+                  },
+                  "reason": "The residual for greens is the second highest. The water has a slight cyan/green tint that is too bright and saturated compared to the target. Reducing the saturation and luminance of greens will help correct the water's color."
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "action": {
+        "round": 0,
+        "tool": "hsl_tool",
+        "parameters": {
+          "adjustments": [
+            {
+              "color": "blues",
+              "saturation": 10
+            }
+          ]
+        },
+        "delta_parameters": {
+          "adjustments": [
+            {
+              "color": "blues",
+              "hue": 0,
+              "saturation": 10,
+              "luminance": 0
+            }
+          ]
+        },
+        "proposal": {
+          "tool": "hsl_tool",
+          "parameters": {
+            "adjustments": [
+              {
+                "color": "blues",
+                "saturation": 10
+              }
+            ]
+          },
+          "reason": "The 'blues' band has the highest residual, suggesting it needs adjustment. Increasing the saturation of blues will help match the target's blue tones."
+        },
+        "step_quality": {
+          "psnr": 22.46,
+          "ssim": 0.969,
+          "delta_e": 8.59,
+          "l1": 0.0615,
+          "l2": 0.0753,
+          "lpips": 0.053
+        },
+        "score_before": 8.63,
+        "score_after": 8.59,
+        "score_gain": 0.040000000000000924,
+        "action_signature": "{\"delta_parameters\":{\"adjustments\":[{\"color\":\"blues\",\"hue\":0,\"luminance\":0,\"saturation\":10}]},\"tool\":\"hsl_tool\"}",
+        "planner_call_id": 0,
+        "planner_temperature": 0.4
+      }
+    },
+    {
+      "node_id": 6,
+      "parent_id": 0,
+      "depth": 1,
+      "image_path": "trajectories_compare_delta_e/cmp_delta_e/tree_nodes/node_000006.jpg",
+      "metrics": {
+        "psnr": 22.42,
+        "ssim": 0.969,
+        "delta_e": 8.62,
+        "l1": 0.0615,
+        "l2": 0.0757,
+        "lpips": 0.053
+      },
+      "score": 8.62,
+      "params_accumulated": {
+        "input_color_space": "srgb",
+        "tone_mapper": "basic",
+        "exposure": 0.0,
+        "brightness": 0.0,
+        "contrast": 0.0,
+        "highlights": 0.0,
+        "shadows": -7.0,
+        "whites": 0.0,
+        "blacks": -5.0,
+        "temperature": 0.0,
+        "tint": 0.0,
+        "saturation": 0.0,
+        "vibrance": 0.0,
+        "hsl": {
+          "reds": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "oranges": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "yellows": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "greens": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "aquas": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "blues": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "purples": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "magentas": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          }
+        },
+        "color_grading": {
+          "shadows": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "midtones": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "highlights": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "blending": 50.0,
+          "balance": 0.0
+        }
+      },
+      "visits": 2,
+      "value_sum": -5.42,
+      "q_value": -2.71,
+      "prior": 0.1667,
+      "terminal_reason": "",
+      "children": [
+        11
+      ],
+      "planner_meta": {
+        "source": "planner",
+        "traces": [
+          {
+            "call_index": 0,
+            "temperature": 0.4,
+            "raw_response": "```json\n{\n  \"candidates\": [\n    {\n      \"tool\": \"exposure_tool\",\n      \"parameters\": {\n        \"exposure\": -10,\n        \"brightness\": -5\n      },\n      \"reason\": \"The current image is significantly brighter than the target (brightness_delta: -13.81). A combination of reducing exposure and brightness will correct the overall luminosity.\"\n    },\n    {\n      \"tool\": \"white_balance_tool\",\n      \"parameters\": {\n        \"temperature\": 5,\n        \"tint\": 15\n      },\n      \"reason\": \"The current image has a strong green cast compared to the target (tint_delta: -12.82) and is slightly cool (temperature_delta: -5.61). Adding warmth and a magenta tint will correct the color balance.\"\n    },\n    {\n      \"tool\": \"tone_tool\",\n      \"parameters\": {\n        \"highlights\": -15,\n        \"shadows\": -5\n      },\n      \"reason\": \"The highlights in the current image are too bright (highlight_delta: -9.00) and the shadows are still brighter than the target (shadow_delta: -7.00). This will recover detail in the dress and deepen the shadows.\"\n    },\n    {\n      \"tool\": \"hsl_tool\",\n      \"parameters\": {\n        \"adjustments\": [\n          {\n            \"color\": \"blues\",\n            \"saturation\": 25,\n            \"luminance\": -10\n          }\n        ]\n      },\n      \"reason\": \"The blue color of the water is washed out compared to the target, which is a dominant issue according to HSL residuals. Increasing saturation and decreasing luminance for blues will make the water richer.\"\n    },\n    {\n      \"tool\": \"saturation_tool\",\n      \"parameters\": {\n        \"saturation\": 10,\n        \"vibrance\": 15\n      },\n      \"reason\": \"The overall image is less saturated than the target (saturation_delta: +10.97). Increasing vibrance and saturation will make the colors more vivid, especially in the water and skin tones.\"\n    },\n    {\n      \"tool\": \"exposure_tool\",\n      \"parameters\": {\n        \"brightness\": -12\n      },\n      \"reason\": \"The image is much too bright. A moderate reduction in brightness is a direct approach to fix the largest remaining error (brightness_delta: -13.81).\"\n    }\n  ]\n}\n```",
+            "parsed": {
+              "main_issue": "",
+              "candidates": [
+                {
+                  "tool": "exposure_tool",
+                  "parameters": {
+                    "exposure": -10,
+                    "brightness": -5
+                  },
+                  "reason": "The current image is significantly brighter than the target (brightness_delta: -13.81). A combination of reducing exposure and brightness will correct the overall luminosity."
+                },
+                {
+                  "tool": "white_balance_tool",
+                  "parameters": {
+                    "temperature": 5,
+                    "tint": 15
+                  },
+                  "reason": "The current image has a strong green cast compared to the target (tint_delta: -12.82) and is slightly cool (temperature_delta: -5.61). Adding warmth and a magenta tint will correct the color balance."
+                },
+                {
+                  "tool": "tone_tool",
+                  "parameters": {
+                    "highlights": -15,
+                    "shadows": -5
+                  },
+                  "reason": "The highlights in the current image are too bright (highlight_delta: -9.00) and the shadows are still brighter than the target (shadow_delta: -7.00). This will recover detail in the dress and deepen the shadows."
+                },
+                {
+                  "tool": "hsl_tool",
+                  "parameters": {
+                    "adjustments": [
+                      {
+                        "color": "blues",
+                        "saturation": 25,
+                        "luminance": -10
+                      }
+                    ]
+                  },
+                  "reason": "The blue color of the water is washed out compared to the target, which is a dominant issue according to HSL residuals. Increasing saturation and decreasing luminance for blues will make the water richer."
+                },
+                {
+                  "tool": "saturation_tool",
+                  "parameters": {
+                    "saturation": 10,
+                    "vibrance": 15
+                  },
+                  "reason": "The overall image is less saturated than the target (saturation_delta: +10.97). Increasing vibrance and saturation will make the colors more vivid, especially in the water and skin tones."
+                },
+                {
+                  "tool": "exposure_tool",
+                  "parameters": {
+                    "brightness": -12
+                  },
+                  "reason": "The image is much too bright. A moderate reduction in brightness is a direct approach to fix the largest remaining error (brightness_delta: -13.81)."
+                }
+              ]
+            }
+          },
+          {
+            "call_index": 1,
+            "temperature": 0.9,
+            "raw_response": "```json\n{\n  \"candidates\": [\n    {\n      \"tool\": \"white_balance_tool\",\n      \"parameters\": {\n        \"temperature\": 10,\n        \"tint\": -20\n      },\n      \"reason\": \"The current image has a strong magenta cast and is cooler than the target. The tint_delta is -12.82, indicating a need for a green shift. This action adds warmth and corrects the magenta tint.\"\n    },\n    {\n      \"tool\": \"exposure_tool\",\n      \"parameters\": {\n        \"exposure\": -12,\n        \"brightness\": -5\n      },\n      \"reason\": \"The current image is significantly brighter than the target (brightness_delta: -13.81). This action aims to reduce the overall brightness and exposure to better match the target's luminosity.\"\n    },\n    {\n      \"tool\": \"saturation_tool\",\n      \"parameters\": {\n        \"saturation\": 10,\n        \"vibrance\": 15\n      },\n      \"reason\": \"The current image is undersaturated compared to the target (saturation_delta: +10.97). This action boosts both vibrance and saturation to make the colors richer and more similar to the target.\"\n    },\n    {\n      \"tool\": \"hsl_tool\",\n      \"parameters\": {\n        \"adjustments\": [\n          {\n            \"color\": \"blues\",\n            \"saturation\": 25,\n            \"luminance\": -10\n          }\n        ]\n      },\n      \"reason\": \"The blues show the highest residual, primarily in the water. The target's water is more saturated and slightly darker. This action targets the blue channel to match the color and luminance of the water.\"\n    },\n    {\n      \"tool\": \"tone_tool\",\n      \"parameters\": {\n        \"highlights\": -15,\n        \"shadows\": -8\n      },\n      \"reason\": \"Both highlights and shadows are brighter in the current image (highlight_delta: -9.00, shadow_delta: -7.00). This action reduces highlight brightness and continues to darken the shadows, adding depth and contrast.\"\n    },\n    {\n      \"tool\": \"hsl_tool\",\n      \"parameters\": {\n        \"adjustments\": [\n          {\n            \"color\": \"oranges\",\n            \"saturation\": 15,\n            \"luminance\": -5\n          }\n        ]\n      },\n      \"reason\": \"The skin tones in the target image are richer and slightly warmer. This action targets the orange color band to increase saturation and slightly decrease luminance, improving the skin tone match.\"\n    }\n  ]\n}\n```",
+            "parsed": {
+              "main_issue": "",
+              "candidates": [
+                {
+                  "tool": "white_balance_tool",
+                  "parameters": {
+                    "temperature": 10,
+                    "tint": -20
+                  },
+                  "reason": "The current image has a strong magenta cast and is cooler than the target. The tint_delta is -12.82, indicating a need for a green shift. This action adds warmth and corrects the magenta tint."
+                },
+                {
+                  "tool": "exposure_tool",
+                  "parameters": {
+                    "exposure": -12,
+                    "brightness": -5
+                  },
+                  "reason": "The current image is significantly brighter than the target (brightness_delta: -13.81). This action aims to reduce the overall brightness and exposure to better match the target's luminosity."
+                },
+                {
+                  "tool": "saturation_tool",
+                  "parameters": {
+                    "saturation": 10,
+                    "vibrance": 15
+                  },
+                  "reason": "The current image is undersaturated compared to the target (saturation_delta: +10.97). This action boosts both vibrance and saturation to make the colors richer and more similar to the target."
+                },
+                {
+                  "tool": "hsl_tool",
+                  "parameters": {
+                    "adjustments": [
+                      {
+                        "color": "blues",
+                        "saturation": 25,
+                        "luminance": -10
+                      }
+                    ]
+                  },
+                  "reason": "The blues show the highest residual, primarily in the water. The target's water is more saturated and slightly darker. This action targets the blue channel to match the color and luminance of the water."
+                },
+                {
+                  "tool": "tone_tool",
+                  "parameters": {
+                    "highlights": -15,
+                    "shadows": -8
+                  },
+                  "reason": "Both highlights and shadows are brighter in the current image (highlight_delta: -9.00, shadow_delta: -7.00). This action reduces highlight brightness and continues to darken the shadows, adding depth and contrast."
+                },
+                {
+                  "tool": "hsl_tool",
+                  "parameters": {
+                    "adjustments": [
+                      {
+                        "color": "oranges",
+                        "saturation": 15,
+                        "luminance": -5
+                      }
+                    ]
+                  },
+                  "reason": "The skin tones in the target image are richer and slightly warmer. This action targets the orange color band to increase saturation and slightly decrease luminance, improving the skin tone match."
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "action": {
+        "round": 0,
+        "tool": "tone_tool",
+        "parameters": {
+          "shadows": -7,
+          "blacks": -5
+        },
+        "delta_parameters": {
+          "contrast": 0,
+          "highlights": 0,
+          "shadows": -7,
+          "whites": 0,
+          "blacks": -5
+        },
+        "proposal": {
+          "tool": "tone_tool",
+          "parameters": {
+            "shadows": -7,
+            "blacks": -5
+          },
+          "reason": "The target image has darker shadows and blacks. Decreasing these values will add more depth and contrast to the darker regions."
+        },
+        "step_quality": {
+          "psnr": 22.42,
+          "ssim": 0.969,
+          "delta_e": 8.62,
+          "l1": 0.0615,
+          "l2": 0.0757,
+          "lpips": 0.053
+        },
+        "score_before": 8.63,
+        "score_after": 8.62,
+        "score_gain": 0.010000000000001563,
+        "action_signature": "{\"delta_parameters\":{\"blacks\":-5,\"shadows\":-7},\"tool\":\"tone_tool\"}",
+        "planner_call_id": 0,
+        "planner_temperature": 0.4
+      }
+    },
+    {
+      "node_id": 7,
+      "parent_id": 2,
+      "depth": 2,
+      "image_path": "trajectories_compare_delta_e/cmp_delta_e/tree_nodes/node_000007.jpg",
+      "metrics": {
+        "psnr": 24.62,
+        "ssim": 0.974,
+        "delta_e": 7.31,
+        "l1": 0.0432,
+        "l2": 0.0587,
+        "lpips": 0.046
+      },
+      "score": 7.31,
+      "params_accumulated": {
+        "input_color_space": "srgb",
+        "tone_mapper": "basic",
+        "exposure": 0.0,
+        "brightness": 0.0,
+        "contrast": 0.0,
+        "highlights": -10.0,
+        "shadows": 0.0,
+        "whites": -5.0,
+        "blacks": 0.0,
+        "temperature": 0.0,
+        "tint": 0.0,
+        "saturation": 0.0,
+        "vibrance": 0.0,
+        "hsl": {
+          "reds": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "oranges": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "yellows": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "greens": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "aquas": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "blues": {
+            "hue": 0.0,
+            "saturation": 18.0,
+            "luminance": -10.0
+          },
+          "purples": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "magentas": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          }
+        },
+        "color_grading": {
+          "shadows": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "midtones": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "highlights": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "blending": 50.0,
+          "balance": 0.0
+        }
+      },
+      "visits": 1,
+      "value_sum": 1.32,
+      "q_value": 1.32,
+      "prior": 1.0,
+      "terminal_reason": "",
+      "children": [],
+      "planner_meta": {},
+      "action": {
+        "round": 1,
+        "tool": "hsl_tool",
+        "parameters": {
+          "adjustments": [
+            {
+              "color": "blues",
+              "saturation": 35,
+              "luminance": -10
+            }
+          ]
+        },
+        "delta_parameters": {
+          "adjustments": [
+            {
+              "color": "blues",
+              "hue": 0,
+              "saturation": 18,
+              "luminance": -10
+            }
+          ]
+        },
+        "proposal": {
+          "tool": "hsl_tool",
+          "parameters": {
+            "adjustments": [
+              {
+                "color": "blues",
+                "saturation": 35,
+                "luminance": -10
+              }
+            ]
+          },
+          "reason": "The residual statistics and visual inspection show the largest difference is in the blue channel, corresponding to the water. The target water is much more saturated and slightly darker."
+        },
+        "step_quality": {
+          "psnr": 24.62,
+          "ssim": 0.974,
+          "delta_e": 7.31,
+          "l1": 0.0432,
+          "l2": 0.0587,
+          "lpips": 0.046
+        },
+        "score_before": 7.4,
+        "score_after": 7.31,
+        "score_gain": 0.09000000000000075,
+        "action_signature": "{\"delta_parameters\":{\"adjustments\":[{\"color\":\"blues\",\"hue\":0,\"luminance\":-10,\"saturation\":18}]},\"tool\":\"hsl_tool\"}",
+        "planner_call_id": 0,
+        "planner_temperature": 0.4
+      }
+    },
+    {
+      "node_id": 8,
+      "parent_id": 2,
+      "depth": 2,
+      "image_path": "trajectories_compare_delta_e/cmp_delta_e/tree_nodes/node_000008.jpg",
+      "metrics": {
+        "psnr": 17.21,
+        "ssim": 0.94,
+        "delta_e": 13.74,
+        "l1": 0.1284,
+        "l2": 0.1379,
+        "lpips": 0.08
+      },
+      "score": 13.74,
+      "params_accumulated": {
+        "input_color_space": "srgb",
+        "tone_mapper": "basic",
+        "exposure": -8.0,
+        "brightness": -5.0,
+        "contrast": 0.0,
+        "highlights": -10.0,
+        "shadows": 0.0,
+        "whites": -5.0,
+        "blacks": 0.0,
+        "temperature": 0.0,
+        "tint": 0.0,
+        "saturation": 0.0,
+        "vibrance": 0.0,
+        "hsl": {
+          "reds": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "oranges": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "yellows": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "greens": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "aquas": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "blues": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "purples": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "magentas": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          }
+        },
+        "color_grading": {
+          "shadows": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "midtones": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "highlights": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "blending": 50.0,
+          "balance": 0.0
+        }
+      },
+      "visits": 1,
+      "value_sum": -5.11,
+      "q_value": -5.11,
+      "prior": 0.5,
+      "terminal_reason": "regression",
+      "children": [],
+      "planner_meta": {},
+      "action": {
+        "round": 1,
+        "tool": "exposure_tool",
+        "parameters": {
+          "exposure": -8,
+          "brightness": -5
+        },
+        "delta_parameters": {
+          "exposure": -8,
+          "brightness": -5
+        },
+        "proposal": {
+          "tool": "exposure_tool",
+          "parameters": {
+            "exposure": -8,
+            "brightness": -5
+          },
+          "reason": "The current image is significantly brighter than the target, as shown by the large negative brightness_delta (-8.37). Reducing exposure and brightness will correct this."
+        },
+        "step_quality": {
+          "psnr": 17.21,
+          "ssim": 0.94,
+          "delta_e": 13.74,
+          "l1": 0.1284,
+          "l2": 0.1379,
+          "lpips": 0.08
+        },
+        "score_before": 7.4,
+        "score_after": 13.74,
+        "score_gain": -6.34,
+        "action_signature": "{\"delta_parameters\":{\"brightness\":-5,\"exposure\":-8},\"tool\":\"exposure_tool\"}",
+        "planner_call_id": 0,
+        "planner_temperature": 0.4
+      }
+    },
+    {
+      "node_id": 9,
+      "parent_id": 3,
+      "depth": 2,
+      "image_path": "trajectories_compare_delta_e/cmp_delta_e/tree_nodes/node_000009.jpg",
+      "metrics": {
+        "psnr": 16.85,
+        "ssim": 0.935,
+        "delta_e": 13.71,
+        "l1": 0.135,
+        "l2": 0.1438,
+        "lpips": 0.085
+      },
+      "score": 13.71,
+      "params_accumulated": {
+        "input_color_space": "srgb",
+        "tone_mapper": "basic",
+        "exposure": -10.0,
+        "brightness": -5.0,
+        "contrast": 0.0,
+        "highlights": 0.0,
+        "shadows": 0.0,
+        "whites": 0.0,
+        "blacks": 0.0,
+        "temperature": -6.0,
+        "tint": -10.0,
+        "saturation": 0.0,
+        "vibrance": 0.0,
+        "hsl": {
+          "reds": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "oranges": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "yellows": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "greens": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "aquas": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "blues": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "purples": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "magentas": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          }
+        },
+        "color_grading": {
+          "shadows": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "midtones": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "highlights": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "blending": 50.0,
+          "balance": 0.0
+        }
+      },
+      "visits": 1,
+      "value_sum": -5.08,
+      "q_value": -5.08,
+      "prior": 1.0,
+      "terminal_reason": "regression",
+      "children": [],
+      "planner_meta": {},
+      "action": {
+        "round": 1,
+        "tool": "exposure_tool",
+        "parameters": {
+          "exposure": -10,
+          "brightness": -5
+        },
+        "delta_parameters": {
+          "exposure": -10,
+          "brightness": -5
+        },
+        "proposal": {
+          "tool": "exposure_tool",
+          "parameters": {
+            "exposure": -10,
+            "brightness": -5
+          },
+          "reason": "The current image is significantly brighter than the target, with large negative brightness and highlight residuals. This is a strong global adjustment to reduce overall brightness."
+        },
+        "step_quality": {
+          "psnr": 16.85,
+          "ssim": 0.935,
+          "delta_e": 13.71,
+          "l1": 0.135,
+          "l2": 0.1438,
+          "lpips": 0.085
+        },
+        "score_before": 7.73,
+        "score_after": 13.71,
+        "score_gain": -5.98,
+        "action_signature": "{\"delta_parameters\":{\"brightness\":-5,\"exposure\":-10},\"tool\":\"exposure_tool\"}",
+        "planner_call_id": 0,
+        "planner_temperature": 0.4
+      }
+    },
+    {
+      "node_id": 10,
+      "parent_id": 5,
+      "depth": 2,
+      "image_path": "trajectories_compare_delta_e/cmp_delta_e/tree_nodes/node_000010.jpg",
+      "metrics": {
+        "psnr": 15.48,
+        "ssim": 0.922,
+        "delta_e": 16.32,
+        "l1": 0.1577,
+        "l2": 0.1683,
+        "lpips": 0.091
+      },
+      "score": 16.32,
+      "params_accumulated": {
+        "input_color_space": "srgb",
+        "tone_mapper": "basic",
+        "exposure": -12.0,
+        "brightness": -5.0,
+        "contrast": 0.0,
+        "highlights": 0.0,
+        "shadows": 0.0,
+        "whites": 0.0,
+        "blacks": 0.0,
+        "temperature": 0.0,
+        "tint": 0.0,
+        "saturation": 0.0,
+        "vibrance": 0.0,
+        "hsl": {
+          "reds": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "oranges": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "yellows": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "greens": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "aquas": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "blues": {
+            "hue": 0.0,
+            "saturation": 10.0,
+            "luminance": 0.0
+          },
+          "purples": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "magentas": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          }
+        },
+        "color_grading": {
+          "shadows": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "midtones": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "highlights": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "blending": 50.0,
+          "balance": 0.0
+        }
+      },
+      "visits": 1,
+      "value_sum": -7.69,
+      "q_value": -7.69,
+      "prior": 1.0,
+      "terminal_reason": "regression",
+      "children": [],
+      "planner_meta": {},
+      "action": {
+        "round": 1,
+        "tool": "exposure_tool",
+        "parameters": {
+          "exposure": -12,
+          "brightness": -5
+        },
+        "delta_parameters": {
+          "exposure": -12,
+          "brightness": -5
+        },
+        "proposal": {
+          "tool": "exposure_tool",
+          "parameters": {
+            "exposure": -12,
+            "brightness": -5
+          },
+          "reason": "The current image is significantly brighter than the target (brightness_delta: -13.82). This is the largest error and a global reduction in brightness and exposure is needed."
+        },
+        "step_quality": {
+          "psnr": 15.48,
+          "ssim": 0.922,
+          "delta_e": 16.32,
+          "l1": 0.1577,
+          "l2": 0.1683,
+          "lpips": 0.091
+        },
+        "score_before": 8.59,
+        "score_after": 16.32,
+        "score_gain": -7.73,
+        "action_signature": "{\"delta_parameters\":{\"brightness\":-5,\"exposure\":-12},\"tool\":\"exposure_tool\"}",
+        "planner_call_id": 0,
+        "planner_temperature": 0.4
+      }
+    },
+    {
+      "node_id": 11,
+      "parent_id": 6,
+      "depth": 2,
+      "image_path": "trajectories_compare_delta_e/cmp_delta_e/tree_nodes/node_000011.jpg",
+      "metrics": {
+        "psnr": 16.97,
+        "ssim": 0.937,
+        "delta_e": 14.06,
+        "l1": 0.1324,
+        "l2": 0.1417,
+        "lpips": 0.081
+      },
+      "score": 14.06,
+      "params_accumulated": {
+        "input_color_space": "srgb",
+        "tone_mapper": "basic",
+        "exposure": -10.0,
+        "brightness": -5.0,
+        "contrast": 0.0,
+        "highlights": 0.0,
+        "shadows": -7.0,
+        "whites": 0.0,
+        "blacks": -5.0,
+        "temperature": 0.0,
+        "tint": 0.0,
+        "saturation": 0.0,
+        "vibrance": 0.0,
+        "hsl": {
+          "reds": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "oranges": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "yellows": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "greens": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "aquas": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "blues": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "purples": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "magentas": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          }
+        },
+        "color_grading": {
+          "shadows": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "midtones": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "highlights": {
+            "hue": 0.0,
+            "saturation": 0.0,
+            "luminance": 0.0
+          },
+          "blending": 50.0,
+          "balance": 0.0
+        }
+      },
+      "visits": 1,
+      "value_sum": -5.43,
+      "q_value": -5.43,
+      "prior": 1.0,
+      "terminal_reason": "regression",
+      "children": [],
+      "planner_meta": {},
+      "action": {
+        "round": 1,
+        "tool": "exposure_tool",
+        "parameters": {
+          "exposure": -10,
+          "brightness": -5
+        },
+        "delta_parameters": {
+          "exposure": -10,
+          "brightness": -5
+        },
+        "proposal": {
+          "tool": "exposure_tool",
+          "parameters": {
+            "exposure": -10,
+            "brightness": -5
+          },
+          "reason": "The current image is significantly brighter than the target (brightness_delta: -13.81). A combination of reducing exposure and brightness will correct the overall luminosity."
+        },
+        "step_quality": {
+          "psnr": 16.97,
+          "ssim": 0.937,
+          "delta_e": 14.06,
+          "l1": 0.1324,
+          "l2": 0.1417,
+          "lpips": 0.081
+        },
+        "score_before": 8.62,
+        "score_after": 14.06,
+        "score_gain": -5.440000000000001,
+        "action_signature": "{\"delta_parameters\":{\"brightness\":-5,\"exposure\":-10},\"tool\":\"exposure_tool\"}",
+        "planner_call_id": 0,
+        "planner_temperature": 0.4
+      }
+    }
+  ]
+}

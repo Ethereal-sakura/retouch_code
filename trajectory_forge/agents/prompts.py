@@ -11,81 +11,89 @@ from typing import Any
 from ..tools.tool_registry import get_tool_schema_text
 
 
-PLANNER_SYSTEM_PROMPT = """\
-You are a professional photo retouching planner.
+MCTS_PLANNER_SYSTEM_PROMPT = """\
+You are a professional photo retouching planner for long-horizon search.
 
 You are given:
 - a CURRENT image
 - a TARGET image
-- quantitative residual statistics
+- residual statistics
 - accepted edit history
-- the subset of tools that are currently allowed
+- the full tool schema
 
-Your job is NOT to output exact final parameter values.
-Your job is to choose the next edit direction:
-- which tool to try now
-- whether to increase or decrease the main effect
-- a coarse magnitude bucket: small, medium, or large
-- a short reason
+Your job is to propose multiple diverse NEXT actions.
+Each candidate must use exactly one tool and provide concrete parameters.
+You are NOT restricted to any shortlist. Any tool in the schema may be used.
+Do NOT assume a fixed tool order. Pick whichever unresolved issue is most promising now.
 
 Important semantics:
 - The renderer always re-renders from the original source image.
-- The editing parameters are accumulated totals built from per-step DELTAS.
-- Think in terms of parameter deltas relative to the CURRENT image.
-- Only choose from the allowed tools in the shortlist.
-- Prefer higher-priority unresolved issues before lower-priority ones.
+- The search tree compares many candidate edits and keeps only strong paths.
+- Every numeric parameter you output is a DELTA relative to the current accumulated slider state.
+- Omitted parameters mean no change for that field.
+- After your delta is applied, the system re-renders from the ORIGINAL source image using the updated accumulated settings.
+- The final accumulated slider state is clamped to the renderer's supported absolute limits.
+- Think like a human editor nudging sliders over multiple turns, not like a one-shot absolute predictor.
+- Prefer values that are easy for a vision-language model to imitate.
+- Prefer integer-looking values when possible.
+- If you use hsl_tool, edit exactly one color band in this step.
 
 Available tools:
 {tool_schema}
 
+## Renderer Response Guide
+- exposure: +16 ≈ about +1 stop brighter, -16 ≈ about -1 stop darker
+- brightness: gentler than exposure; mainly shifts midtones with a filmic response
+- contrast: ±10 subtle, ±20 moderate
+- highlights / shadows: mostly affect bright / dark regions; ±10 subtle, ±20 moderate
+- whites / blacks: endpoint controls; usually use smaller moves than highlights / shadows
+- temperature: +25 noticeably warmer, -25 noticeably cooler
+- tint: +20 mild magenta shift, -20 mild green shift
+- saturation: +10 subtle, +25 moderate, +50 strong
+- vibrance: gentler than saturation and affects dull colors more
+- HSL hue: 1 unit is only a small shift (roughly 0.6 degrees after rendering), so hue changes should usually stay modest
+- Prefer small or moderate deltas first, then refine based on the new rendered result
+
 Return ONLY valid JSON with this schema:
 {{
-  "should_stop": false,
-  "main_issue": "exposure",
-  "proposals": [
+  "candidates": [
     {{
       "tool": "exposure_tool",
-      "direction": "decrease",
-      "magnitude_bucket": "small",
-      "reason": "The current image is still brighter than the target."
+      "parameters": {{
+        "exposure": -6,
+        "brightness": -2
+      }},
+      "reason": "The image is still brighter than the target."
+    }},
+    {{
+      "tool": "tone_tool",
+      "parameters": {{
+        "highlights": -8,
+        "whites": -4
+      }},
+      "reason": "Highlights still clip relative to the target."
     }}
   ]
 }}
 
 Rules:
-- "should_stop" must be true only when the current image is already close enough
-  or no allowed tool is likely to improve the score.
-- "proposals" must contain 1 to 3 items when "should_stop" is false.
-- "tool" must be one of the allowed shortlist tools.
-- "direction" must be one of: increase, decrease, mixed.
-- "magnitude_bucket" must be one of: small, medium, large.
+- "candidates" must contain 1 to {candidate_limit} items.
+- Each candidate must contain exactly one tool call.
+- "tool" must be a valid tool name from the schema.
+- "parameters" must be a JSON object for that tool.
+- Prefer diverse tools and step sizes across candidates.
+- Openly explore different tool orders when plausible.
+- Prefer natural editor-like increments instead of extreme jumps unless the mismatch is obviously large.
 - Do not use Markdown fences.
 """
 
 
-EXPLAIN_SYSTEM_PROMPT = """\
-You are an expert photo retoucher writing short training rationales.
-
-You will be given:
-- the accepted editing step
-- the current residual statistics before the step
-- the accepted parameter delta
-- the resulting improvement summary
-
-Write a concise English explanation inside a <thinking>...</thinking> block.
-The explanation must describe why this accepted step was the right next move.
-Do not mention hidden search, probes, or rejected candidates.
-"""
-
-
-def build_planner_system_prompt() -> str:
-    """Build the planner system prompt with the current tool schema."""
-    return PLANNER_SYSTEM_PROMPT.format(tool_schema=get_tool_schema_text())
-
-
-def build_explainer_system_prompt() -> str:
-    """Return the system prompt used for accepted-step explanations."""
-    return EXPLAIN_SYSTEM_PROMPT
+def build_planner_system_prompt(candidate_limit: int) -> str:
+    """Build the MCTS planner system prompt with the current tool schema."""
+    return MCTS_PLANNER_SYSTEM_PROMPT.format(
+        tool_schema=get_tool_schema_text(),
+        candidate_limit=int(candidate_limit),
+    )
 
 
 def _format_history(history: list[dict], max_items: int = 8) -> str:
@@ -159,13 +167,9 @@ def build_planner_user_prompt(
     delta_stat: dict[str, Any],
     history: list[dict],
     turn: int,
-    shortlist_tools: list[str],
     current_metrics: dict[str, Any],
-    current_score: float,
-    locked_tools: list[str],
-    cooldown_tools: list[str],
 ) -> list[dict]:
-    """Build the planner user message content."""
+    """Build the open-tool planner prompt used by MCTS."""
     text = (
         f"Turn {turn + 1}\n\n"
         f"{_format_delta_stats(delta_stat)}\n\n"
@@ -173,38 +177,9 @@ def build_planner_user_prompt(
         f"- DeltaE: {current_metrics.get('delta_e', 0.0):.2f}\n"
         f"- PSNR: {current_metrics.get('psnr', 0.0):.2f}\n"
         f"- SSIM: {current_metrics.get('ssim', 0.0):.3f}\n"
-        f"- LPIPS: {current_metrics.get('lpips', 0.0):.3f}\n"
-        f"- objective_score: {current_score:.4f}\n\n"
-        f"Allowed shortlist tools: {', '.join(shortlist_tools) if shortlist_tools else 'none'}\n"
-        f"Locked tools: {', '.join(locked_tools) if locked_tools else 'none'}\n"
-        f"Cooldown tools: {', '.join(cooldown_tools) if cooldown_tools else 'none'}\n\n"
+        f"- LPIPS: {current_metrics.get('lpips', 0.0):.3f}\n\n"
         f"{_format_history(history)}\n\n"
         "Return only JSON."
-    )
-    return [{"type": "text", "text": text}]
-
-
-def build_explainer_user_prompt(
-    *,
-    step_record: dict[str, Any],
-    delta_stat: dict[str, Any],
-    score_before: float,
-    score_after: float,
-) -> list[dict]:
-    """Build the explanation prompt for an accepted step."""
-    metrics = step_record.get("step_quality", {})
-    text = (
-        f"Accepted step summary:\n"
-        f"- tool: {step_record.get('tool')}\n"
-        f"- delta_parameters: {_format_params(step_record.get('delta_parameters', {}))}\n"
-        f"- accumulated_parameters: {_format_params(step_record.get('params_accumulated_tool', {}))}\n"
-        f"- score_before: {score_before:.4f}\n"
-        f"- score_after: {score_after:.4f}\n"
-        f"- DeltaE_after: {metrics.get('delta_e', 0.0):.2f}\n"
-        f"- PSNR_after: {metrics.get('psnr', 0.0):.2f}\n"
-        f"- SSIM_after: {metrics.get('ssim', 0.0):.3f}\n\n"
-        f"{_format_delta_stats(delta_stat)}\n\n"
-        "Write a short rationale for why this accepted step was the best next move."
     )
     return [{"type": "text", "text": text}]
 
@@ -225,26 +200,3 @@ def build_image_content(
             "image_url": {"url": f"data:{media_type};base64,{target_img_b64}"},
         },
     ]
-
-
-def build_system_prompt() -> str:
-    """Backward-compatible alias for the planner prompt."""
-    return build_planner_system_prompt()
-
-
-def build_user_prompt(
-    delta_stat: dict,
-    history: list[dict],
-    turn: int,
-) -> list[dict]:
-    """Backward-compatible alias for planner prompt text without constraints."""
-    return build_planner_user_prompt(
-        delta_stat=delta_stat,
-        history=history,
-        turn=turn,
-        shortlist_tools=[],
-        current_metrics={},
-        current_score=0.0,
-        locked_tools=[],
-        cooldown_tools=[],
-    )

@@ -1,0 +1,396 @@
+{
+  "id": "cmp_delta_e",
+  "source": "samples/src/0_0.tif",
+  "target": "samples/tgt/0_0.tif",
+  "initial_quality": {
+    "psnr": 22.42,
+    "ssim": 0.969,
+    "delta_e": 8.63,
+    "l1": 0.0616,
+    "l2": 0.0757,
+    "lpips": 0.053
+  },
+  "final_quality": {
+    "psnr": 24.62,
+    "ssim": 0.974,
+    "delta_e": 7.31,
+    "l1": 0.0432,
+    "l2": 0.0587,
+    "lpips": 0.046
+  },
+  "final_score": 7.31,
+  "best_node_id": 7,
+  "node_path": [
+    0,
+    2,
+    7
+  ],
+  "steps": [
+    {
+      "round": 0,
+      "input_image": "trajectories_compare_delta_e/cmp_delta_e/best_path_images/step_00_input.jpg",
+      "cot": "The target has lower highlights and whites. Reducing these will help recover detail in the brightest areas and bring the overall tone closer to the target.",
+      "tool": "tone_tool",
+      "parameters": {
+        "highlights": -10,
+        "whites": -5
+      },
+      "delta_parameters": {
+        "contrast": 0,
+        "highlights": -10,
+        "shadows": 0,
+        "whites": -5,
+        "blacks": 0
+      },
+      "params_accumulated": {
+        "input_color_space": "srgb",
+        "tone_mapper": "basic",
+        "exposure": 0,
+        "brightness": 0,
+        "contrast": 0,
+        "highlights": -10,
+        "shadows": 0,
+        "whites": -5,
+        "blacks": 0,
+        "temperature": 0,
+        "tint": 0,
+        "saturation": 0,
+        "vibrance": 0,
+        "hsl": {
+          "reds": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "oranges": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "yellows": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "greens": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "aquas": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "blues": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "purples": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "magentas": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          }
+        },
+        "color_grading": {
+          "shadows": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "midtones": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "highlights": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "blending": 50,
+          "balance": 0
+        }
+      },
+      "params_accumulated_tool": {
+        "contrast": 0,
+        "highlights": -10,
+        "shadows": 0,
+        "whites": -5,
+        "blacks": 0
+      },
+      "output_image": "trajectories_compare_delta_e/cmp_delta_e/best_path_images/step_00_output.jpg",
+      "step_quality": {
+        "psnr": 24.43,
+        "ssim": 0.973,
+        "delta_e": 7.4,
+        "l1": 0.0437,
+        "l2": 0.06,
+        "lpips": 0.047
+      },
+      "delta_stat": {
+        "brightness_delta": -13.83,
+        "l_channel_delta": -13.43,
+        "contrast_delta": -2.18,
+        "highlight_delta": -9.0,
+        "shadow_delta": -7.0,
+        "temperature_delta": -5.61,
+        "tint_delta": -12.84,
+        "saturation_delta": 10.98,
+        "hue_band_residuals": {
+          "reds": 0.2535,
+          "oranges": 0.3896,
+          "yellows": 0.3401,
+          "greens": 0.7045,
+          "aquas": 0.2691,
+          "blues": 0.9038,
+          "purples": 0.227,
+          "magentas": 0.1021
+        },
+        "dominant_hsl_band": "blues",
+        "dominant_issue": "hsl"
+      },
+      "proposal": {
+        "tool": "tone_tool",
+        "parameters": {
+          "highlights": -10,
+          "whites": -5
+        },
+        "reason": "The target has lower highlights and whites. Reducing these will help recover detail in the brightest areas and bring the overall tone closer to the target."
+      },
+      "score_before": 8.63,
+      "score_after": 7.4,
+      "score_gain": 1.2300000000000004,
+      "accepted": true,
+      "action_signature": "{\"delta_parameters\":{\"highlights\":-10,\"whites\":-5},\"tool\":\"tone_tool\"}",
+      "planner_call_id": 0,
+      "planner_temperature": 0.4,
+      "mcts_summary": {
+        "node_id": 2,
+        "visit_count": 3,
+        "value": -0.8533,
+        "prior": 0.5,
+        "candidate_rank": 0,
+        "terminal_reason": ""
+      }
+    },
+    {
+      "round": 1,
+      "input_image": "trajectories_compare_delta_e/cmp_delta_e/best_path_images/step_01_input.jpg",
+      "cot": "The residual statistics and visual inspection show the largest difference is in the blue channel, corresponding to the water. The target water is much more saturated and slightly darker.",
+      "tool": "hsl_tool",
+      "parameters": {
+        "adjustments": [
+          {
+            "color": "blues",
+            "saturation": 35,
+            "luminance": -10
+          }
+        ]
+      },
+      "delta_parameters": {
+        "adjustments": [
+          {
+            "color": "blues",
+            "hue": 0,
+            "saturation": 18,
+            "luminance": -10
+          }
+        ]
+      },
+      "params_accumulated": {
+        "input_color_space": "srgb",
+        "tone_mapper": "basic",
+        "exposure": 0,
+        "brightness": 0,
+        "contrast": 0,
+        "highlights": -10,
+        "shadows": 0,
+        "whites": -5,
+        "blacks": 0,
+        "temperature": 0,
+        "tint": 0,
+        "saturation": 0,
+        "vibrance": 0,
+        "hsl": {
+          "reds": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "oranges": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "yellows": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "greens": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "aquas": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "blues": {
+            "hue": 0,
+            "saturation": 18,
+            "luminance": -10
+          },
+          "purples": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "magentas": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          }
+        },
+        "color_grading": {
+          "shadows": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "midtones": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "highlights": {
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          "blending": 50,
+          "balance": 0
+        }
+      },
+      "params_accumulated_tool": {
+        "adjustments": [
+          {
+            "color": "reds",
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          {
+            "color": "oranges",
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          {
+            "color": "yellows",
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          {
+            "color": "greens",
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          {
+            "color": "aquas",
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          {
+            "color": "blues",
+            "hue": 0,
+            "saturation": 18,
+            "luminance": -10
+          },
+          {
+            "color": "purples",
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          },
+          {
+            "color": "magentas",
+            "hue": 0,
+            "saturation": 0,
+            "luminance": 0
+          }
+        ]
+      },
+      "output_image": "trajectories_compare_delta_e/cmp_delta_e/best_path_images/step_01_output.jpg",
+      "step_quality": {
+        "psnr": 24.62,
+        "ssim": 0.974,
+        "delta_e": 7.31,
+        "l1": 0.0432,
+        "l2": 0.0587,
+        "lpips": 0.046
+      },
+      "delta_stat": {
+        "brightness_delta": -8.37,
+        "l_channel_delta": -8.35,
+        "contrast_delta": -0.53,
+        "highlight_delta": -3.0,
+        "shadow_delta": -5.0,
+        "temperature_delta": -5.63,
+        "tint_delta": -7.36,
+        "saturation_delta": 10.9,
+        "hue_band_residuals": {
+          "reds": 0.2651,
+          "oranges": 0.408,
+          "yellows": 0.3365,
+          "greens": 0.7601,
+          "aquas": 0.2366,
+          "blues": 0.8976,
+          "purples": 0.2154,
+          "magentas": 0.0967
+        },
+        "dominant_hsl_band": "blues",
+        "dominant_issue": "hsl"
+      },
+      "proposal": {
+        "tool": "hsl_tool",
+        "parameters": {
+          "adjustments": [
+            {
+              "color": "blues",
+              "saturation": 35,
+              "luminance": -10
+            }
+          ]
+        },
+        "reason": "The residual statistics and visual inspection show the largest difference is in the blue channel, corresponding to the water. The target water is much more saturated and slightly darker."
+      },
+      "score_before": 7.4,
+      "score_after": 7.31,
+      "score_gain": 0.09000000000000075,
+      "accepted": true,
+      "action_signature": "{\"delta_parameters\":{\"adjustments\":[{\"color\":\"blues\",\"hue\":0,\"luminance\":-10,\"saturation\":18}]},\"tool\":\"hsl_tool\"}",
+      "planner_call_id": 0,
+      "planner_temperature": 0.4,
+      "mcts_summary": {
+        "node_id": 7,
+        "visit_count": 1,
+        "value": 1.32,
+        "prior": 1.0,
+        "candidate_rank": 1,
+        "terminal_reason": ""
+      }
+    }
+  ]
+}

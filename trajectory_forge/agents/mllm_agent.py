@@ -5,6 +5,7 @@ Supports GPT-4o and any OpenAI-compatible endpoint (e.g., Azure, local vLLM).
 
 from __future__ import annotations
 
+import ast
 import json
 import logging
 import os
@@ -56,6 +57,7 @@ class MLLMAgent:
         messages: list[dict],
         max_retries: int = 3,
         retry_delay: float = 5.0,
+        temperature: float | None = None,
     ) -> str:
         """Call the MLLM with system prompt and message history.
 
@@ -84,7 +86,7 @@ class MLLMAgent:
                     model=self.model,
                     messages=full_messages,
                     max_tokens=self.max_tokens,
-                    temperature=self.temperature,
+                    temperature=self.temperature if temperature is None else float(temperature),
                 )
                 return response.choices[0].message.content or ""
             except Exception as e:
@@ -98,57 +100,8 @@ class MLLMAgent:
                     raise
 
 
-def parse_tool_call(response: str) -> tuple[str | None, dict | None]:
-    """Parse a <tool_call>...</tool_call> block from the model response.
-
-    Handles two formats:
-    1. Simple key: value lines (for scalar tools)
-    2. JSON values (for hsl_tool adjustments list)
-
-    Returns
-    -------
-    (tool_name, params) or (None, None) if parsing fails.
-    """
-    tool_block = _extract_tag(response, "tool_call")
-    if not tool_block:
-        return None, None
-
-    lines = [line.strip() for line in tool_block.strip().splitlines() if line.strip()]
-    if not lines:
-        return None, None
-
-    tool_name = None
-    params: dict = {}
-
-    for line in lines:
-        if ":" not in line:
-            continue
-        key, _, val = line.partition(":")
-        key = key.strip()
-        val = val.strip()
-
-        if key == "tool":
-            tool_name = val
-            continue
-
-        # Try JSON parse first (handles lists and nested objects)
-        try:
-            params[key] = json.loads(val)
-        except json.JSONDecodeError:
-            # Try numeric parse
-            try:
-                params[key] = float(val)
-            except ValueError:
-                params[key] = val  # Keep as string
-
-    if not tool_name:
-        return None, None
-
-    return tool_name, params
-
-
 def extract_json_object(response: str) -> dict[str, Any] | None:
-    """Extract the first valid JSON object from a model response."""
+    """Extract the first valid JSON-like object from a model response."""
     response = response.strip()
     if not response:
         return None
@@ -167,10 +120,7 @@ def extract_json_object(response: str) -> dict[str, Any] | None:
         candidate = candidate.strip()
         if not candidate:
             continue
-        try:
-            parsed = json.loads(candidate)
-        except json.JSONDecodeError:
-            continue
+        parsed = _parse_json_like(candidate)
         if isinstance(parsed, dict):
             return parsed
     return None
@@ -182,27 +132,26 @@ def parse_planner_response(response: str) -> dict[str, Any] | None:
     if not payload:
         return None
 
-    proposals = []
-    raw_proposals = payload.get("proposals", [])
-    if isinstance(raw_proposals, list):
-        for item in raw_proposals:
+    candidates = []
+    raw_candidates = payload.get("candidates", [])
+    if isinstance(raw_candidates, list):
+        for item in raw_candidates:
             if not isinstance(item, dict):
                 continue
-            proposals.append(
+            parameters = item.get("parameters", {})
+            if not isinstance(parameters, dict):
+                parameters = {}
+            candidates.append(
                 {
                     "tool": str(item.get("tool", "")).strip(),
-                    "direction": str(item.get("direction", "mixed")).strip().lower(),
-                    "magnitude_bucket": str(
-                        item.get("magnitude_bucket", "medium")
-                    ).strip().lower(),
+                    "parameters": parameters,
                     "reason": str(item.get("reason", "")).strip(),
                 }
             )
 
     return {
-        "should_stop": bool(payload.get("should_stop", False)),
         "main_issue": str(payload.get("main_issue", "")).strip().lower(),
-        "proposals": proposals,
+        "candidates": candidates,
     }
 
 
@@ -211,13 +160,41 @@ def parse_thinking(response: str) -> str:
     return _extract_tag(response, "thinking") or ""
 
 
-def is_stop(response: str) -> bool:
-    """Check if the response contains a <stop> signal."""
-    return bool(re.search(r"<stop>", response, re.IGNORECASE))
-
-
 def _extract_tag(text: str, tag: str) -> str | None:
     """Extract content between <tag>...</tag>."""
     pattern = rf"<{tag}>(.*?)</{tag}>"
     match = re.search(pattern, text, re.DOTALL | re.IGNORECASE)
     return match.group(1).strip() if match else None
+
+
+def _parse_json_like(candidate: str) -> dict[str, Any] | None:
+    """Parse slightly-invalid JSON that VLMs commonly emit."""
+    parsers = (
+        lambda text: json.loads(text),
+        lambda text: json.loads(_sanitize_json_like(text)),
+        lambda text: ast.literal_eval(_pythonize_json_literals(_sanitize_json_like(text))),
+    )
+    for parser in parsers:
+        try:
+            parsed = parser(candidate)
+        except Exception:
+            continue
+        if isinstance(parsed, dict):
+            return parsed
+    return None
+
+
+def _sanitize_json_like(text: str) -> str:
+    text = text.strip()
+    text = re.sub(r"```(?:json)?", "", text, flags=re.IGNORECASE)
+    text = text.replace("```", "")
+    text = re.sub(r":\s*\+(\d+(?:\.\d+)?)", r": \1", text)
+    text = re.sub(r",\s*([}\]])", r"\1", text)
+    return text
+
+
+def _pythonize_json_literals(text: str) -> str:
+    text = re.sub(r"\btrue\b", "True", text, flags=re.IGNORECASE)
+    text = re.sub(r"\bfalse\b", "False", text, flags=re.IGNORECASE)
+    text = re.sub(r"\bnull\b", "None", text, flags=re.IGNORECASE)
+    return text
